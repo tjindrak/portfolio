@@ -50,7 +50,7 @@ const sluzby = [
       {vybrane.map((p) => (
         <li class="karta">
           <a href={`/projekty/${p.id}`} class="karta__odkaz">
-            <Obrazek src={prvniExistujici(p.id, ['karta.png', 'cover.png'])} alt={p.data.nazev} class="karta__img" showCaption={false} />
+            <Obrazek src={prvniExistujici(p.id, ['karta.webp', 'cover.webp'])} alt={p.data.nazev} class="karta__img" showCaption={false} />
             <span class="karta__scrim" aria-hidden="true"></span>
             <span class="karta__popisek">
               <span class="karta__text">

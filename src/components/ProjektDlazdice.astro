@@ -14,7 +14,7 @@ interface Props {
 
 const { projekt, siroka = false, class: className, style, ...rest } = Astro.props;
 const { nazev, typ, rok } = projekt.data;
-const src = prvniExistujici(projekt.id, siroka ? ['sirsi.png', 'cover.png'] : ['cover.png']);
+const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : ['cover.webp']);
 ---
 <a href={`/projekty/${projekt.id}`} class:list={['dlazdice', { 'dlazdice--siroka': siroka }, className]} style={style} {...rest}>
   <Obrazek src={src} alt={nazev} class="dlazdice__img" showCaption={false} />

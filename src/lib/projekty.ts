@@ -19,7 +19,7 @@ export function obrazekProjektu(id: string, soubor: string): string {
   return `/img/projekty/${id}/${soubor}`;
 }
 
-/** První existující soubor z výčtu (např. karta.png, pak cover.png). */
+/** První existující soubor z výčtu (např. karta.webp, pak cover.webp). */
 export function prvniExistujici(id: string, soubory: string[]): string {
   for (const soubor of soubory) {
     const src = obrazekProjektu(id, soubor);

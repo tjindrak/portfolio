@@ -35,7 +35,7 @@ vyzva:
   nadpis: Jaký byl problém.
   odstavce:
     - Odstavec textu.
-  # obrazek: { src: /img/projekty/muj-projekt/vyzva.png, popisek: Popis }
+  # obrazek: { src: /img/projekty/muj-projekt/vyzva.webp, popisek: Popis }
   # obrazekPozice: pod  # pod | vedle
 
 proces:
@@ -52,6 +52,6 @@ reseni:
     - Odstavec textu.
     - "> Odstavec začínající > je zvýrazněná citace."
   obrazky:
-    - src: /img/projekty/muj-projekt/reseni-1.png
+    - src: /img/projekty/muj-projekt/reseni-1.webp
       popisek: Popis obrázku
 ---

@@ -30,7 +30,7 @@ vyzva:
   odstavce:
     - Jarda se na mě obrátil, když jsem zareagoval na jeho příspěvek, že potřebují pomoct s webem. Dostal jsem na starost udělat to co mají vizuálně atraktivnější. Už na první schůzce, kde jsem se poprvé potkal s Jardou, mým oblíbeným influencerem, a s Martinem, jsem věděl, že je to projekt přímo pro mě. Od začátku jsem měl hlavu plnou nápadů a ze schůzky jsem odcházel nadšený, k jakému projektu jsem se dostal.
   obrazek:
-    src: /img/projekty/jardova-mapa/vyzva.png
+    src: /img/projekty/jardova-mapa/vyzva.webp
     popisek: Původní fialová verze
   obrazekPozice: pod
 
@@ -57,8 +57,8 @@ reseni:
     - "> „Neřeknu ti kam máš jít, ale ukážu ti co jde zažít.“"
     - Jarda na rozdíl od většiny influencerů neříká, kam máte jet. Chce předat myšlenku a inspiraci, jak si hory užít po svém. Na mapě najdete jeho poznatky, zážitky a doporučení a naplánujete si výlet tak, abyste byli spokojení hlavně vy.
   obrazky:
-    - src: /img/projekty/jardova-mapa/reseni-1.png
+    - src: /img/projekty/jardova-mapa/reseni-1.webp
       popisek: Hlavní obrazovka s mapou
-    - src: /img/projekty/jardova-mapa/reseni-2.png
+    - src: /img/projekty/jardova-mapa/reseni-2.webp
       popisek: Detail trasy
 ---

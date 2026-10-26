@@ -50,8 +50,8 @@ reseni:
     - Do výroby hra nakonec nešla. Zkušeným vydavatelům přišly hlavní mechaniky trochu zastaralé a trh si dnes žádá jiný typ hraní. Pro mě a celý tým to ale byla neskutečně cenná zpětná vazba z praxe.
     - Byl to můj první velký test, jak navrhnout složitý produkt od nuly a pod tlakem času. Naučil jsem se nemyslet jen na grafiku, ale hlavně na to, jak se hráči u stolu cítí a jak pravidla mění jejich chování. Poprvé jsem vlastní nápad prezentoval velkým hráčům na trhu a pochopil, jak velký je rozdíl mezi „hezkým nápadem“ a hotovým produktem pro masový trh.
   obrazky:
-    - src: /img/projekty/ein-berliner/reseni-1.png
+    - src: /img/projekty/ein-berliner/reseni-1.webp
       popisek: Karty a měna
-    - src: /img/projekty/ein-berliner/reseni-2.png
+    - src: /img/projekty/ein-berliner/reseni-2.webp
       popisek: Fyzický prototyp
 ---

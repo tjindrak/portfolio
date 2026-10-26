@@ -29,7 +29,7 @@ vyzva:
   odstavce:
     - Martin Burda přišel s nápadem dostat do škol chytrou hrazdu, která sama počítá shyby. Kluci z Czech IT Academy se postarali o hardware a aplikaci, na mně bylo dát celému produktu tvář. Hrazda s heslem „Soutěž a staň se hvězdou“ potřebovala brand, který chytne děti ve škole.
   obrazek:
-    src: /img/projekty/pull-up-star/vyzva.png
+    src: /img/projekty/pull-up-star/vyzva.webp
     popisek: Aplikace Pull Up Star
   obrazekPozice: vedle
 
@@ -54,6 +54,6 @@ reseni:
     - "> „Kolik shybů zvládneš?“"
     - Výrazná červenooranžová, hvězda a soutěžní tón drží pohromadě aplikaci, web i tiskoviny. Hrazda počítá, aplikace ukazuje výsledky a děti mají důvod zkusit ještě jeden shyb.
   siroky:
-    src: /img/projekty/pull-up-star/reseni-appstore.png
+    src: /img/projekty/pull-up-star/reseni-appstore.webp
     popisek: Náhledy aplikace do App Store
 ---

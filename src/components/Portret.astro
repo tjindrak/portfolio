@@ -8,7 +8,7 @@ interface Props {
   class?: string;
 }
 const { class: className } = Astro.props;
-const foto = '/img/portret-foto.png';
+const foto = '/img/portret-foto.webp';
 const maska = '/img/portret-maska.svg';
 const ready = [foto, maska].every((f) => existsSync(join(process.cwd(), 'public', f)));
 ---
@@ -35,8 +35,8 @@ const ready = [foto, maska].every((f) => existsSync(join(process.cwd(), 'public'
     width: 405.56%;
     height: 221.22%;
     max-width: none;
-    object-fit: cover;
-    object-position: bottom;
+    /* Ořez je převzatý z Figmy, kde je fotka roztažená přesně na tyto rozměry */
+    object-fit: fill;
     filter: grayscale(1);
   }
   .portret--placeholder {

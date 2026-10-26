@@ -38,7 +38,7 @@ const metaPolozky = [
 
 const jeCitat = (t: string) => t.startsWith('> ');
 const bezCitace = (t: string) => t.replace(/^>\s*/, '');
-const heroSrc = brzy ? prvniExistujici(id, ['hero.png', 'cover.png']) : obrazekProjektu(id, 'hero.png');
+const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obrazekProjektu(id, 'hero.webp');
 ---
 <Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`}>
   <article class="detail">
@@ -87,7 +87,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.png', 'cover.png']) : obrazekP
           <Obrazek src={obrazekProjektu(id, 'hero-logo.svg')} alt="" class="kolaz__logo" fit="contain" showCaption={false} />
         </div>
         <div class="kolaz__maly">
-          <Obrazek src={obrazekProjektu(id, 'hero-mobil.png')} alt={d.hero.popisekMobil ?? d.hero.popisek} />
+          <Obrazek src={obrazekProjektu(id, 'hero-mobil.webp')} alt={d.hero.popisekMobil ?? d.hero.popisek} />
         </div>
       </div>
     ) : (
