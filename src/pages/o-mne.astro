@@ -1,0 +1,252 @@
+---
+import Base from '../layouts/Base.astro';
+import Portret from '../components/Portret.astro';
+import Osa from '../components/Osa.astro';
+import Obrazek from '../components/Obrazek.astro';
+
+// Roky jsou zatím zástupné (20XX), doplň je.
+const studium = [
+  { roky: '20XX – 20XX', nazev: 'SPŠSE a VOŠ Liberec', popis: 'Technické lyceum se zaměřením na multimédia a web design. Tady to všechno začalo.' },
+  { roky: '20XX – 20XX', nazev: 'FJFI ČVUT', popis: 'Fakulta jaderná a fyzikálně inženýrská. Zajímavá zkušenost, jenže to nebyl můj šálek espressa.' },
+  { roky: '20XX – 20XX', nazev: 'VŠKK', popis: 'Grafický a mediální design. Souběžný začátek s FJFI, ale nakonec jsem pochopil, že tohle je cesta, která mě baví.' },
+  { roky: '20XX – dnes', nazev: 'VŠE FIS', popis: 'UX výzkum a design. Učím se navrhovat podle toho, co lidé opravdu potřebují.' },
+];
+const prace = [
+  { nazev: 'Kreativní kancl', popis: 'Content creator.' },
+  { nazev: 'Laba', popis: 'Social media specialist.' },
+  { nazev: 'Czech IT Academy', popis: 'Externista v oblasti UX/UI a grafického designu' },
+  { nazev: 'Freelance', popis: 'UX/UI, weby a vizuální identity' },
+];
+const smery = [
+  { nazev: 'Předávat design dál', popis: 'Workshopy o digitálním designu, výuka Figmy a hlavně způsob, jak o rozhraní přemýšlet. Chci, aby si lidé odnesli víc než jen klávesové zkratky.' },
+  { nazev: 'Vést designový proces', popis: 'Práce s týmem, společná rozhodnutí a produkt, který nevzniká jako hromádka obrazovek, ale jako promyšlený celek.' },
+];
+const fotky = [
+  { src: '/img/o-mne/houpacka.png', alt: 'Na houpačce v horách', cls: 'f1' },
+  { src: '/img/o-mne/na-kole.png', alt: 'Na kole', cls: 'f2' },
+  { src: '/img/o-mne/lyze.png', alt: 'Na běžkách', cls: 'f3' },
+  { src: '/img/o-mne/hory.png', alt: 'V horách', cls: 'f4' },
+  { src: '/img/o-mne/stelvio.png', alt: 'Průsmyk Stelvio', cls: 'f5' },
+];
+---
+<Base title="O mně" description="Tomáš Jindrák: designér na pomezí UX, UI a grafiky. Studium, praxe a co mě baví mimo práci.">
+  <header class="container hero">
+    <Portret class="hero__portret" />
+    <p class="bg-word hero__slovo" aria-hidden="true">O mně</p>
+    <h1 class="title-xl hero__nazev">Tomáš Jindrák</h1>
+    <p class="lead gradient-text gradient-text--soft hero__shrnuti">
+      Designér na pomezí UX, UI a grafiky. Začínal jsem u webu, odbočil k fyzice a nakonec se naplno vrátil k tomu, co mě baví nejvíc.
+    </p>
+  </header>
+
+  <section class="container sekce">
+    <p class="bg-word" aria-hidden="true">Studium</p>
+    <div class="sloupec sloupec--vpravo" data-reveal>
+      <h2 class="subhead gradient-text">K designu se zastávkou u fyziky</h2>
+      <div class="prose">
+        <p>Moje cesta k designu nebyla úplně přímá. Začínal jsem u fotky a videí, přešel k webu, pak jsem zkusil fyziku a nakonec jsem pochopil, že mě to nejvíce táhne k tomu, dělat věci hezké a funkční a pro lidi.</p>
+        <p>Každá zastávka mi ale něco dala.</p>
+      </div>
+    </div>
+    <div class="osa-wrap"><Osa polozky={studium} /></div>
+  </section>
+
+  <section class="container sekce">
+    <p class="bg-word bg-word--vpravo" aria-hidden="true">Práce</p>
+    <div class="sloupec" data-reveal>
+      <h2 class="subhead gradient-text">Praxe, která mě posunula.</h2>
+      <div class="prose">
+        <p>Vedle školy jsem prošel několik skvělých týmů, od kreativní agentury až po vývoj chytré hrazdy. Dnes pracuju hlavně na volné noze a beru projekty, které mají smysl a které mě baví.</p>
+      </div>
+    </div>
+    <div class="osa-wrap"><Osa polozky={prace} /></div>
+  </section>
+
+  <section class="container sekce">
+    <p class="bg-word bg-word--odsazene" aria-hidden="true">Kam dál</p>
+    <div class="sloupec sloupec--vpravo" data-reveal>
+      <h2 class="subhead gradient-text">Kam chci svou práci posouvat.</h2>
+      <div class="prose">
+        <p>Design mě čím dál víc baví i jako něco, co se dá sdílet a vést. Do budoucna se chci naplno věnovat dvěma směrům.</p>
+      </div>
+      <ul class="smery">
+        {smery.map((s, i) => (
+          <li data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+            <h3 class="smery__nazev">{s.nazev}</h3>
+            <p class="smery__popis">{s.popis}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container sekce">
+    <p class="bg-word" aria-hidden="true">Mimo práci</p>
+    <div class="sloupec sloupec--mimo" data-reveal>
+      <h2 class="subhead gradient-text">Nejlíp je mi venku</h2>
+      <div class="prose">
+        <p>Když zrovna nedesignuju, jsem nejradši v přírodě. Miluju hory a sport, takže mě najdeš na kole, na běžkách nebo na discgolfovém hřišti. A když venku zrovna nejsem, sahám po kytaře nebo sedám ke klavíru.</p>
+      </div>
+    </div>
+    <div class="kolaz">
+      {fotky.map((f, i) => (
+        <div class={`foto ${f.cls}`} data-reveal style={`--reveal-delay:${(i % 3) * 0.1}s`}>
+          <Obrazek src={f.src} alt={f.alt} />
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: 269px;
+  }
+  .hero :global(.hero__portret) {
+    position: absolute;
+    left: calc(var(--gutter) + 756px);
+    top: 145px;
+    width: 532px;
+  }
+  .hero__slovo,
+  .hero__nazev,
+  .hero__shrnuti {
+    position: relative;
+  }
+  .hero__nazev {
+    margin-top: clamp(-76px, -5.3vw, -36px);
+  }
+  .hero__shrnuti {
+    max-width: 800px;
+    margin-top: 54px;
+  }
+  .sekce {
+    position: relative;
+    margin-top: 250px;
+  }
+  .sekce:first-of-type {
+    margin-top: 420px;
+  }
+  .bg-word--vpravo {
+    text-align: right;
+  }
+  .bg-word--odsazene {
+    padding-left: 21%;
+  }
+  .sloupec {
+    position: relative;
+    max-width: 820px;
+    margin-top: -40px;
+  }
+  .sloupec--vpravo {
+    margin-left: var(--col-offset);
+  }
+  .sloupec--mimo {
+    margin-left: 32%;
+  }
+  .sloupec .prose {
+    margin-top: 40px;
+  }
+  .osa-wrap {
+    margin-top: 120px;
+  }
+  .smery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin: 72px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .smery__nazev {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(26px, 2.5vw, 36px);
+    line-height: 1.2;
+  }
+  .smery__popis {
+    margin-top: 12px;
+    font-size: clamp(18px, 1.55vw, 22px);
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  .kolaz {
+    position: relative;
+    aspect-ratio: 1312 / 1280;
+    margin-top: 110px;
+  }
+  .foto {
+    position: absolute;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+  }
+  .f1 { left: 0; top: 0; width: 39.6%; height: 51.6%; }
+  .f2 { left: 43.3%; top: 9.4%; width: 27.4%; height: 35.9%; }
+  .f3 { left: 74.4%; top: 3.1%; width: 25.6%; height: 39.1%; }
+  .f4 { left: 11.9%; top: 56.3%; width: 32%; height: 42.2%; }
+  .f5 { left: 48.2%; top: 50%; width: 42.7%; height: 50%; }
+
+  @media (max-width: 1200px) {
+    .hero :global(.hero__portret) {
+      left: auto;
+      right: 0;
+      width: 38%;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero {
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .hero :global(.hero__portret) {
+      position: relative;
+      right: auto;
+      top: 0;
+      width: 64%;
+      margin: 0 auto -40%;
+    }
+    .sekce,
+    .sekce:first-of-type {
+      margin-top: 120px;
+    }
+    .sloupec {
+      margin-top: -16px;
+    }
+    .sloupec--mimo {
+      margin-left: 0;
+    }
+    .bg-word--odsazene {
+      padding-left: 0;
+    }
+    .osa-wrap {
+      margin-top: 56px;
+    }
+    .smery {
+      grid-template-columns: 1fr;
+      gap: 36px;
+      margin-top: 48px;
+    }
+    .kolaz {
+      aspect-ratio: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 56px;
+    }
+    .foto {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      height: auto;
+      aspect-ratio: 3 / 4;
+    }
+    .f1,
+    .f5 {
+      grid-column: span 2;
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

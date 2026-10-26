@@ -1,0 +1,129 @@
+---
+// Svislá časová osa (Figma: Osa · Studium / Práce). Poslední bod svítí,
+// milníky se objevují postupně při scrollu.
+interface Polozka {
+  roky?: string;
+  nazev: string;
+  popis: string;
+}
+interface Props {
+  polozky: Polozka[];
+}
+const { polozky } = Astro.props;
+---
+<ol class="osa">
+  {polozky.map((p, i) => (
+    <li class:list={['osa__polozka', { 'osa__polozka--aktualni': i === polozky.length - 1 }]} data-reveal>
+      {p.roky && <span class="osa__roky">{p.roky}</span>}
+      <span class="osa__bod" aria-hidden="true"></span>
+      <h3 class="osa__nazev">{p.nazev}</h3>
+      <p class="osa__popis">{p.popis}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .osa {
+    --osa-x: 536px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .osa::before {
+    content: '';
+    position: absolute;
+    left: var(--osa-x);
+    top: 20px;
+    bottom: 60px;
+    width: 1px;
+    background: var(--fg-24);
+  }
+  .osa__polozka {
+    position: relative;
+    padding-left: calc(var(--osa-x) + 60px);
+    max-width: calc(var(--osa-x) + 60px + 640px);
+  }
+  .osa__polozka + .osa__polozka {
+    margin-top: 100px;
+  }
+  .osa__roky {
+    position: absolute;
+    right: calc(100% - var(--osa-x) + 56px);
+    top: 10px;
+    width: 480px;
+    text-align: right;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--fg-40);
+    white-space: nowrap;
+  }
+  .osa__bod {
+    position: absolute;
+    left: calc(var(--osa-x) - 8px);
+    top: 12px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 1px solid var(--fg-40);
+    background: var(--bg);
+  }
+  .osa__polozka--aktualni .osa__bod {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 6px rgb(179 174 142 / 0.16), 0 0 24px 6px rgb(179 174 142 / 0.35);
+  }
+  .osa__nazev {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(26px, 2.5vw, 36px);
+    line-height: 1.2;
+  }
+  .osa__popis {
+    margin-top: 12px;
+    font-size: clamp(18px, 1.55vw, 22px);
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  @media (max-width: 1200px) {
+    .osa {
+      --osa-x: 30%;
+    }
+    .osa__polozka {
+      padding-left: calc(30% + 48px);
+      max-width: none;
+    }
+    .osa__roky {
+      right: auto;
+      left: 0;
+      width: calc(30% - 40px);
+    }
+  }
+  @media (max-width: 720px) {
+    .osa {
+      --osa-x: 8px;
+    }
+    .osa::before {
+      left: 8px;
+    }
+    .osa__polozka {
+      padding-left: 44px;
+    }
+    .osa__polozka + .osa__polozka {
+      margin-top: 56px;
+    }
+    .osa__bod {
+      left: 0;
+      top: 4px;
+    }
+    .osa__roky {
+      position: static;
+      display: block;
+      width: auto;
+      margin-bottom: 8px;
+      text-align: left;
+      font-size: 16px;
+    }
+  }
+</style>

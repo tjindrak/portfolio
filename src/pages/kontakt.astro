@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import KontaktFormular from '../components/KontaktFormular.astro';
+import { site } from '../data/site';
+
+const udaje = [
+  { label: 'E-mail', hodnota: site.email, href: `mailto:${site.email}` },
+  { label: 'Telefon', hodnota: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
+  { label: 'IČO', hodnota: site.ico },
+];
+---
+<Base title="Kontakt" description="Máš nápad nebo projekt? Napiš Tomášovi Jindrákovi.">
+  <header class="container hero">
+    <p class="bg-word hero__slovo" aria-hidden="true">Kontakt</p>
+    <h1 class="title-xl hero__nazev">Tomáš Jindrák</h1>
+    <p class="lead gradient-text gradient-text--soft hero__shrnuti">Máš nápad nebo projekt? Napiš mi.</p>
+  </header>
+
+  <section class="container obsah">
+    <dl class="udaje">
+      {udaje.map((u, i) => (
+        <div class="udaj" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <dt class="label">{u.label}</dt>
+          <dd>{u.href ? <a href={u.href}>{u.hodnota}</a> : u.hodnota}</dd>
+        </div>
+      ))}
+    </dl>
+    <KontaktFormular class="obsah__formular" />
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: 180px;
+  }
+  .hero__slovo {
+    position: absolute;
+    top: 60px;
+    left: var(--gutter);
+  }
+  .hero__nazev,
+  .hero__shrnuti {
+    position: relative;
+  }
+  .hero__shrnuti {
+    margin-top: 24px;
+  }
+  .obsah {
+    display: grid;
+    grid-template-columns: var(--col-offset) 1fr;
+    margin-top: 120px;
+  }
+  .udaje {
+    display: grid;
+    align-content: start;
+    gap: 40px;
+    margin: 0;
+  }
+  .udaj dd {
+    margin: 6px 0 0;
+    font-size: clamp(22px, 2.2vw, 32px);
+    font-weight: 500;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  .udaj a {
+    transition: color 0.2s ease;
+  }
+  .udaj a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 900px) {
+    .obsah {
+      grid-template-columns: 1fr;
+      gap: 72px;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero {
+      padding-top: 96px;
+    }
+    .hero__slovo {
+      top: 24px;
+    }
+    .obsah {
+      margin-top: 72px;
+    }
+  }
+</style>

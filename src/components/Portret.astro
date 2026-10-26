@@ -1,0 +1,53 @@
+---
+// Vyříznutý portrét z hlavní stránky (Figma: Mask group, IMG_3480).
+// Fotka je maskovaná siluetou a dole se ztrácí do pozadí.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const foto = '/img/portret-foto.png';
+const maska = '/img/portret-maska.svg';
+const ready = [foto, maska].every((f) => existsSync(join(process.cwd(), 'public', f)));
+---
+<div class:list={['portret', { 'portret--placeholder': !ready }, className]} style={ready ? `--maska:url(${maska})` : undefined}>
+  {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Portrét Tomáše Jindráka (doplní se)"></span>}
+</div>
+
+<style>
+  .portret {
+    position: relative;
+    aspect-ratio: 592 / 1253;
+    overflow: hidden;
+    -webkit-mask-image: var(--maska), linear-gradient(180deg, #000 55%, transparent 92%);
+    mask-image: var(--maska), linear-gradient(180deg, #000 55%, transparent 92%);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .portret__foto {
+    position: absolute;
+    left: -178.72%;
+    top: -118.51%;
+    width: 405.56%;
+    height: 221.22%;
+    max-width: none;
+    object-fit: cover;
+    object-position: bottom;
+    filter: grayscale(1);
+  }
+  .portret--placeholder {
+    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 85%);
+    mask-image: linear-gradient(180deg, #000 45%, transparent 85%);
+  }
+  .portret__silueta {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(18% 9% at 50% 9%, rgb(var(--fg-rgb) / 0.22) 98%, transparent 100%),
+      radial-gradient(45% 30% at 50% 42%, rgb(var(--fg-rgb) / 0.14) 98%, transparent 100%);
+  }
+</style>

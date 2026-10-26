@@ -1,0 +1,178 @@
+---
+// Typografický formulář (Figma: Formulář, Kontakt – v2). Bez backendu:
+// odeslání otevře e-mail s předvyplněnou zprávou.
+import { site } from '../data/site';
+
+const temata = ['Web', 'Aplikace', 'Identita', 'UX výzkum', 'Něco jiného'];
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+<form class:list={['formular', className]} data-formular data-email={site.email} novalidate>
+  <fieldset class="formular__temata">
+    <legend class="label">S čím ti můžu pomoct?</legend>
+    <div class="formular__chips">
+      {temata.map((t, i) => (
+        <label class="tema">
+          <input type="radio" name="tema" value={t} checked={i === 0} />
+          <span>{t}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="formular__radek">
+    <label class="pole">
+      <span class="label">Jméno</span>
+      <input type="text" name="jmeno" placeholder="Jak ti mám říkat?" autocomplete="name" required />
+    </label>
+    <label class="pole">
+      <span class="label">E-mail</span>
+      <input type="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required />
+    </label>
+  </div>
+
+  <label class="pole pole--zprava">
+    <span class="label">Zpráva</span>
+    <textarea name="zprava" rows="5" placeholder="Napiš mi pár vět o projektu…" required></textarea>
+  </label>
+
+  <div class="formular__pata">
+    <p class="label" data-formular-stav aria-live="polite">Údaje použiju jen k odpovědi.</p>
+    <button type="submit" class="btn btn--accent">Odeslat zprávu</button>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-formular]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const stav = form.querySelector('[data-formular-stav]');
+      if (!form.checkValidity()) {
+        if (stav) stav.textContent = 'Vyplň prosím jméno, e-mail a zprávu.';
+        form.reportValidity();
+        return;
+      }
+      const d = new FormData(form);
+      const subject = `Poptávka z webu: ${d.get('tema')}`;
+      const body = `${d.get('zprava')}\n\n${d.get('jmeno')}\n${d.get('email')}`;
+      window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (stav) stav.textContent = 'Otevírám e-mail s připravenou zprávou.';
+    });
+  });
+</script>
+
+<style>
+  .formular {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .formular__temata {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .formular__temata legend {
+    padding: 0;
+    margin-bottom: 16px;
+  }
+  .formular__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .tema {
+    position: relative;
+    cursor: pointer;
+  }
+  .tema input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tema span {
+    display: block;
+    padding: 10px 20px;
+    border: 1px solid var(--fg-16);
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--fg-60);
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+  .tema:hover span {
+    border-color: var(--fg-40);
+  }
+  .tema input:checked + span {
+    border-color: var(--accent-5);
+    background: var(--accent-alpha-16);
+    color: var(--accent-soft);
+  }
+  .tema input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .formular__radek {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 61px;
+  }
+  .pole {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pole input,
+  .pole textarea {
+    width: 100%;
+    padding: 0 0 16px;
+    border: 0;
+    border-bottom: 1px solid var(--fg-24);
+    border-radius: 0;
+    background: none;
+    font-size: 24px;
+    line-height: 1.25;
+    color: var(--fg);
+    transition: border-color 0.2s ease;
+  }
+  .pole textarea {
+    resize: vertical;
+    min-height: 184px;
+  }
+  .pole input::placeholder,
+  .pole textarea::placeholder {
+    color: var(--fg-30);
+  }
+  .pole input:focus,
+  .pole textarea:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+  .formular__pata {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: -8px;
+  }
+  @media (max-width: 720px) {
+    .formular {
+      gap: 40px;
+    }
+    .formular__radek {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .pole input,
+    .pole textarea {
+      font-size: 20px;
+    }
+    .formular__pata {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+  }
+</style>
