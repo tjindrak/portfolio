@@ -1,0 +1,322 @@
+---
+import Base from '../layouts/Base.astro';
+import Obrazek from '../components/Obrazek.astro';
+import Icon from '../components/Icon.astro';
+
+// CV ke stažení: nahraj PDF do public/cv.pdf.
+const CV = '/cv.pdf';
+
+const vzdelani = [
+  { logo: '/img/zivotopis/logo-vse.png', skola: 'VŠE, Fakulta informatiky a statistiky', obor: 'UX výzkum a design', titul: 'Ing.', roky: '2025 – dnes' },
+  { logo: '/img/zivotopis/logo-vskk.png', skola: 'Vysoká škola kreativní komunikace', obor: 'Grafický a mediální design', titul: 'BcA.', roky: '2022 – 2025' },
+  { logo: '/img/zivotopis/logo-spsse.png', skola: 'SPŠSE a VOŠ Liberec', obor: 'Technické lyceum, multimédia a web design', titul: 'Maturita', roky: '2018 – 2022' },
+];
+const klienti = [
+  { logo: '/img/zivotopis/logo-jardova-mapa.png', nazev: 'Jarda Havelka', rok: '2026', popis: 'Redesign webové aplikace s mapou a plánovačem výletů do hor' },
+  { logo: '/img/zivotopis/logo-czechitacademy.png', nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: 'Brand, aplikace, web a tisk pro chytrou hrazdu Pull Up Star' },
+  { logo: '/img/zivotopis/logo-laba.png', nazev: 'Laba', rok: '2024', popis: 'Social media specialist, content creator' },
+  { logo: '/img/zivotopis/logo-dike.svg', nazev: 'DIKÉ', rok: '2025', popis: 'Řízení projektu rebrandingu a redesignu webových stránek' },
+  { logo: '/img/zivotopis/logo-kreativni-kancl.png', nazev: 'Kreativní kancl', rok: '2024', popis: 'Tvorba obsahu pro sociální sítě' },
+];
+const dalsiKlienti = ['Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
+// Loga dalších klientů ve stejném pořadí jako ve Figmě
+const dalsiLoga = ['logo-dalsi-1.png', 'logo-dalsi-2.png', 'logo-dalsi-3.png', 'logo-dalsi-4.svg', 'logo-dalsi-5.png'];
+const dovednosti = [
+  { nazev: 'UX výzkum a design', popis: 'Zjišťuju, co lidé opravdu potřebují. Rozhovory, testování a z nich jasná struktura produktu.' },
+  { nazev: 'UI design', popis: 'Navrhuju rozhraní pro web, mobil i aplikace. Čistá, přehledná a připravená rovnou do vývoje.' },
+  { nazev: 'Vizuální identita a grafika', popis: 'Od loga přes barvy a písmo až po tisk. Brand, který drží pohromadě na webu i v ruce.' },
+];
+const jazyky = [
+  { nazev: 'Čeština', popis: 'Rodilý mluvčí.' },
+  { nazev: 'Angličtina', popis: 'Vysoká komunikační úroveň' },
+];
+---
+<Base title="Životopis" description="Životopis Tomáše Jindráka: vzdělání, klienti, dovednosti a jazyky.">
+  <header class="container hero">
+    <p class="bg-word hero__slovo" aria-hidden="true">Životopis</p>
+    <div class="hero__radek">
+      <div class="hero__osoba">
+        <div class="hero__foto"><Obrazek src="/img/zivotopis/portret.png" alt="Tomáš Jindrák" showCaption={false} eager /></div>
+        <div>
+          <h1 class="title-xl">Tomáš Jindrák</h1>
+          <p class="lead gradient-text gradient-text--soft hero__role">UX/UI designer</p>
+          <p class="hero__misto">Praha / Liberec&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
+        </div>
+      </div>
+      <a class="btn btn--accent" href={CV} download><Icon name="download" />Stáhnout CV</a>
+    </div>
+  </header>
+
+  <section class="container blok">
+    <h2 class="blok__nadpis">Vzdělání</h2>
+    <ul class="blok__obsah seznam">
+      {vzdelani.map((v, i) => (
+        <li class="polozka" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <div class="logo logo--64"><Obrazek src={v.logo} alt={v.skola} showCaption={false} fit="contain" /></div>
+          <div class="polozka__text">
+            <h3 class="polozka__nazev">{v.skola}</h3>
+            <p class="polozka__popis">{v.obor} · {v.titul}</p>
+          </div>
+          <p class="polozka__rok">{v.roky}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok">
+    <h2 class="blok__nadpis">Klienti</h2>
+    <ul class="blok__obsah klienti">
+      {klienti.map((k, i) => (
+        <li class="klient" data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
+          <div class="logo logo--56"><Obrazek src={k.logo} alt={k.nazev} showCaption={false} fit="contain" /></div>
+          <div>
+            <h3 class="polozka__nazev">{k.nazev} <span class="polozka__rok polozka__rok--inline">{k.rok}</span></h3>
+            <p class="polozka__popis">{k.popis}</p>
+          </div>
+        </li>
+      ))}
+      <li class="klient" data-reveal style="--reveal-delay:0.08s">
+        <div class="loga-dalsi">
+          {dalsiKlienti.map((n, i) => (
+            <div class="logo logo--40"><Obrazek src={`/img/zivotopis/${dalsiLoga[i]}`} alt={n} showCaption={false} fit="contain" /></div>
+          ))}
+        </div>
+        <div>
+          <h3 class="polozka__nazev">Další klienti</h3>
+          <p class="polozka__popis">{dalsiKlienti.join(', ')}</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="container blok">
+    <h2 class="blok__nadpis">Dovednosti</h2>
+    <ul class="blok__obsah seznam">
+      {dovednosti.map((d, i) => (
+        <li class="dovednost" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <h3 class="polozka__nazev">{d.nazev}</h3>
+          <p class="polozka__popis">{d.popis}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok">
+    <h2 class="blok__nadpis">Jazyky</h2>
+    <ul class="blok__obsah klienti">
+      {jazyky.map((j) => (
+        <li class="dovednost" data-reveal>
+          <h3 class="polozka__nazev">{j.nazev}</h3>
+          <p class="polozka__popis">{j.popis}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <div class="container zaver">
+    <a class="btn btn--accent" href={CV} download><Icon name="download" />Stáhnout CV</a>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: 120px;
+  }
+  .hero__slovo {
+    position: absolute;
+    top: 40px;
+    left: var(--gutter);
+  }
+  .hero__radek {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    padding-top: 100px;
+  }
+  .hero__osoba {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .hero__foto {
+    flex: none;
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--fg-8);
+  }
+  .hero__foto :global(.obrazek) {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(1);
+  }
+  .hero__role {
+    margin-top: 6px;
+  }
+  .hero__misto {
+    margin-top: 12px;
+    font-size: 17px;
+    color: var(--fg-40);
+  }
+  .blok {
+    display: grid;
+    grid-template-columns: var(--col-offset) 1fr;
+    margin-top: 160px;
+  }
+  .blok + .blok {
+    margin-top: 120px;
+  }
+  .blok__nadpis {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg-30);
+  }
+  .blok__obsah {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .seznam {
+    display: grid;
+    gap: 40px;
+  }
+  .klienti {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 40px;
+  }
+  .polozka {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+  .klient {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+  }
+  .logo {
+    overflow: hidden;
+    background: var(--fg-8);
+  }
+  .logo :global(.obrazek) {
+    width: 100%;
+    height: 100%;
+  }
+  .logo :global(.obrazek__icon) {
+    width: 40%;
+    height: 40%;
+  }
+  .logo--64 {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+  .logo--56 {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+  }
+  .logo--40 {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .loga-dalsi {
+    display: flex;
+    gap: 8px;
+    min-height: 56px;
+    align-items: center;
+  }
+  .polozka__nazev {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(20px, 1.7vw, 24px);
+    line-height: 1.3;
+  }
+  .polozka__popis {
+    margin-top: 6px;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--fg-60);
+  }
+  .polozka__rok {
+    font-size: 17px;
+    color: var(--fg-40);
+    white-space: nowrap;
+  }
+  .polozka__rok--inline {
+    margin-left: 8px;
+    font-weight: 400;
+  }
+  .dovednost .polozka__popis {
+    max-width: 640px;
+  }
+  .zaver {
+    display: flex;
+    justify-content: center;
+    margin-top: 160px;
+  }
+
+  @media (max-width: 900px) {
+    .hero__radek {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .blok {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero {
+      padding-top: 40px;
+    }
+    .hero__slovo {
+      top: 0;
+    }
+    .hero__radek {
+      padding-top: 64px;
+    }
+    .hero__osoba {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    .hero__foto {
+      width: 120px;
+      height: 120px;
+    }
+    .blok,
+    .blok + .blok {
+      margin-top: 96px;
+    }
+    .klienti {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .polozka {
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+    }
+    .polozka .logo--64 {
+      width: 56px;
+      height: 56px;
+    }
+    .polozka__rok {
+      grid-column: 2;
+      margin-top: -12px;
+    }
+    .zaver {
+      margin-top: 96px;
+    }
+  }
+</style>

@@ -1,0 +1,535 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Obrazek from '../../components/Obrazek.astro';
+import ProjektDlazdice from '../../components/ProjektDlazdice.astro';
+import Icon from '../../components/Icon.astro';
+import { vsechnyProjekty, obrazekProjektu, prvniExistujici, type Projekt } from '../../lib/projekty';
+
+export const getStaticPaths = (async () => {
+  const projekty = await vsechnyProjekty();
+  return projekty.map((projekt) => ({
+    params: { slug: projekt.id },
+    props: {
+      projekt,
+      dalsi: projekty.find((p) => p.id === projekt.data.dalsi) ?? projekty.find((p) => p.id !== projekt.id && p.data.stav === 'hotovo'),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  projekt: Projekt;
+  dalsi?: Projekt;
+}
+
+const { projekt, dalsi } = Astro.props;
+const { id } = projekt;
+const d = projekt.data;
+const slovo = d.slovo ?? d.nazev;
+const brzy = d.stav === 'brzy';
+
+const metaPolozky = [
+  ['Klient', d.meta?.klient],
+  ['Moje role', d.meta?.role],
+  ['Rok', d.meta?.rok],
+  ['Výstup', d.meta?.vystup],
+  ['Spolupráce', d.meta?.spoluprace],
+].filter((m): m is [string, string] => !!m[1]);
+
+const jeCitat = (t: string) => t.startsWith('> ');
+const bezCitace = (t: string) => t.replace(/^>\s*/, '');
+const heroSrc = brzy ? prvniExistujici(id, ['hero.png', 'cover.png']) : obrazekProjektu(id, 'hero.png');
+---
+<Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`}>
+  <article class="detail">
+    <!-- Hero -->
+    <header class="container hero">
+      <a href="/projekty" class="btn btn--text hero__zpet"><Icon name="arrow-left" />Všechny projekty</a>
+      <p class="bg-word hero__slovo" aria-hidden="true">{slovo}</p>
+      <h1 class="title-xl hero__nazev">{d.nazev}</h1>
+
+      {!brzy && (
+        <>
+          {d.stitky.length > 0 && (
+            <ul class="hero__stitky">
+              {d.stitky.map((s) => <li class="chip">{s}</li>)}
+            </ul>
+          )}
+          <div class="hero__radek">
+            <div class="hero__levy">
+              {d.shrnuti && <p class="lead gradient-text gradient-text--soft hero__shrnuti">{d.shrnuti}</p>}
+              {d.web?.url && (
+                <a href={d.web.url} class="btn btn--accent hero__web" target="_blank" rel="noopener">
+                  Navštívit web <Icon name="arrow-up-right" />
+                </a>
+              )}
+            </div>
+            {metaPolozky.length > 0 && (
+              <dl class="meta">
+                {metaPolozky.map(([k, v]) => (
+                  <div class="meta__polozka">
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        </>
+      )}
+    </header>
+
+    <!-- Hlavní obrázek -->
+    {d.hero?.rozlozeni === 'kolaz' ? (
+      <div class="container kolaz" data-reveal>
+        <div class="kolaz__velky">
+          <Obrazek src={heroSrc} alt={d.hero.popisek} eager />
+          <Obrazek src={obrazekProjektu(id, 'hero-logo.svg')} alt="" class="kolaz__logo" fit="contain" showCaption={false} />
+        </div>
+        <div class="kolaz__maly">
+          <Obrazek src={obrazekProjektu(id, 'hero-mobil.png')} alt={d.hero.popisekMobil ?? d.hero.popisek} />
+        </div>
+      </div>
+    ) : (
+      <div class:list={['container hero-obrazek', { 'hero-obrazek--brzy': brzy }]} data-reveal>
+        <Obrazek src={heroSrc} alt={d.hero?.popisek ?? d.nazev} eager />
+      </div>
+    )}
+
+    {brzy ? (
+      <p class="container brzy subhead gradient-text" data-reveal>
+        Copy se ještě píše a pixely se skládají.<br />
+        Detaily o tomhle projektu tu najdeš už brzy.
+      </p>
+    ) : (
+      <>
+        <!-- Výzva -->
+        {d.vyzva && (
+          <section class="container sekce">
+            <p class="bg-word" aria-hidden="true">Výzva</p>
+            <div class:list={['sekce__obsah', { 'sekce__obsah--s-obrazkem': d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek }]}>
+              {d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek && (
+                <div class="obrazek-vedle" data-reveal>
+                  <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} />
+                </div>
+              )}
+              <div class="sloupec sloupec--vpravo" data-reveal>
+                <h2 class="subhead gradient-text">{d.vyzva.nadpis}</h2>
+                <div class="prose">
+                  {d.vyzva.odstavce.map((o) => <p>{o}</p>)}
+                </div>
+              </div>
+            </div>
+            {d.vyzva.obrazekPozice === 'pod' && d.vyzva.obrazek && (
+              <div class="obrazek-pod" data-reveal>
+                <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} />
+              </div>
+            )}
+          </section>
+        )}
+
+        <!-- Proces -->
+        {d.proces && (
+          <section class="container sekce">
+            <p class="bg-word bg-word--vpravo" aria-hidden="true">Proces</p>
+            <div class="sloupec" data-reveal>
+              <h2 class="subhead gradient-text">{d.proces.nadpis}</h2>
+              <div class="prose">
+                {d.proces.odstavce.map((o) => <p>{o}</p>)}
+              </div>
+            </div>
+            {d.proces.kroky.length > 0 && (
+              <ol class="kroky">
+                {d.proces.kroky.map((k, i) => (
+                  <li class="krok" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+                    <span class="krok__linka" aria-hidden="true"></span>
+                    <h3 class="krok__nazev">{k.nazev}</h3>
+                    <p class="krok__popis">{k.popis}</p>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        )}
+
+        <!-- Řešení -->
+        {d.reseni && (
+          <section class="container sekce">
+            <p class="bg-word bg-word--zalom" aria-hidden="true">{d.reseni.slovo ?? 'Řešení'}</p>
+            <div class="sloupec sloupec--vpravo" data-reveal>
+              <h2 class="subhead gradient-text">{d.reseni.nadpis}</h2>
+              <div class="prose">
+                {d.reseni.odstavce.map((o) => (jeCitat(o) ? <p class="quote gradient-text">{bezCitace(o)}</p> : <p>{o}</p>))}
+              </div>
+            </div>
+            {d.reseni.obrazky.length > 0 && (
+              <div class:list={['galerie', `galerie--${Math.min(d.reseni.obrazky.length, 2)}`, `galerie--${id}`]}>
+                {d.reseni.obrazky.map((o, i) => (
+                  <div class="galerie__item" data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+                    <Obrazek src={o.src} alt={o.popisek} />
+                  </div>
+                ))}
+              </div>
+            )}
+            {d.reseni.siroky && (
+              <div class="siroky" data-reveal>
+                <Obrazek src={d.reseni.siroky.src} alt={d.reseni.siroky.popisek} />
+              </div>
+            )}
+            {d.web && (
+              <p class="web-odkaz subhead" data-reveal>
+                {d.web.url ? (
+                  <a href={d.web.url} target="_blank" rel="noopener" class="gradient-text">{d.web.popisek}</a>
+                ) : (
+                  <span class="gradient-text">{d.web.popisek}</span>
+                )}
+              </p>
+            )}
+          </section>
+        )}
+      </>
+    )}
+
+    <!-- Další projekt -->
+    {dalsi && (
+      <section class="container dalsi" aria-label="Další projekt">
+        <p class="bg-word bg-word--stred" aria-hidden="true">Další projekt</p>
+        <div data-reveal>
+          <ProjektDlazdice projekt={dalsi} siroka class="dalsi__dlazdice" />
+        </div>
+      </section>
+    )}
+  </article>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    padding-top: 49px;
+  }
+  .hero__zpet {
+    margin-left: -5px;
+  }
+  .hero__slovo {
+    margin-top: 18px;
+  }
+  .hero__nazev {
+    position: relative;
+    margin-top: clamp(-76px, -5.3vw, -36px);
+  }
+  .hero__stitky {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hero__radek {
+    display: flex;
+    justify-content: space-between;
+    gap: 48px;
+    margin-top: 47px;
+  }
+  .hero__levy {
+    max-width: 800px;
+  }
+  .hero__web {
+    margin-top: 40px;
+  }
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin: 8px 0 0;
+    min-width: 260px;
+    max-width: 360px;
+  }
+  .meta dt {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-60);
+  }
+  .meta dd {
+    margin: 4px 0 0;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  /* Hlavní obrázek */
+  .hero-obrazek {
+    margin-top: 80px;
+  }
+  .hero-obrazek :global(.obrazek) {
+    aspect-ratio: 1312 / 720;
+    height: auto;
+  }
+  .hero-obrazek--brzy {
+    margin-top: 80px;
+  }
+  .kolaz {
+    position: relative;
+    margin-top: 80px;
+    padding-bottom: 228px;
+  }
+  .kolaz__velky {
+    position: relative;
+    margin-left: 14.9%;
+    margin-right: -0.4%;
+    aspect-ratio: 1112 / 640;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+  }
+  .kolaz__velky :global(.obrazek) {
+    position: absolute;
+    inset: 0;
+  }
+  .kolaz__velky :global(.kolaz__logo) {
+    pointer-events: none;
+  }
+  .kolaz__velky :global(.obrazek--placeholder.kolaz__logo) {
+    display: none;
+  }
+  .kolaz__maly {
+    position: absolute;
+    left: calc(var(--gutter) + 2.3%);
+    top: 228px;
+    width: 33.6%;
+    aspect-ratio: 441 / 640;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    box-shadow: 0 40px 80px rgb(0 0 0 / 0.35);
+  }
+
+  /* Sekce s velkým slovem v pozadí */
+  .sekce {
+    position: relative;
+    margin-top: 200px;
+  }
+  .bg-word--vpravo {
+    text-align: right;
+  }
+  .bg-word--stred {
+    text-align: center;
+  }
+  .bg-word--zalom {
+    white-space: normal;
+  }
+  .sekce__obsah--s-obrazkem {
+    display: grid;
+    grid-template-columns: var(--col-offset) 1fr;
+    align-items: start;
+  }
+  .sekce__obsah--s-obrazkem .sloupec--vpravo {
+    margin-left: 0;
+  }
+  .obrazek-vedle {
+    width: 441px;
+    max-width: calc(100% - 48px);
+    aspect-ratio: 441 / 640;
+    margin-top: 120px;
+    overflow: hidden;
+  }
+  .sloupec {
+    position: relative;
+    max-width: 820px;
+    margin-top: -40px;
+  }
+  .sloupec--vpravo {
+    margin-left: var(--col-offset);
+  }
+  .sloupec .prose {
+    margin-top: 40px;
+  }
+  .obrazek-pod {
+    width: 67.7%;
+    aspect-ratio: 888 / 780;
+    margin: 70px 0 0 6%;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+  }
+
+  .kroky {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 64px;
+    margin: 120px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .krok__linka {
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .krok__nazev {
+    margin-top: 26px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.2;
+  }
+  .krok__popis {
+    margin-top: 12px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+
+  .galerie {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    margin-top: 120px;
+  }
+  .galerie__item {
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    aspect-ratio: 620 / 440;
+  }
+  .galerie__item:nth-child(2) {
+    margin-top: 80px;
+  }
+  .galerie--1 {
+    grid-template-columns: 1fr;
+  }
+  /* Jardova mapa: vyšší telefon vlevo, širší detail vpravo (jako ve Figmě) */
+  .galerie--jardova-mapa {
+    grid-template-columns: 566fr 662fr;
+    gap: 17px;
+    padding-left: 5%;
+  }
+  .galerie--jardova-mapa .galerie__item:nth-child(1) {
+    aspect-ratio: 566 / 694;
+  }
+  .galerie--jardova-mapa .galerie__item:nth-child(2) {
+    aspect-ratio: 662 / 509;
+    margin-top: 251px;
+  }
+  .siroky {
+    margin-top: 120px;
+    aspect-ratio: 1312 / 546;
+    overflow: hidden;
+  }
+  .web-odkaz {
+    margin-top: 160px;
+    text-align: center;
+  }
+  .web-odkaz a {
+    transition: opacity 0.2s ease;
+  }
+  .web-odkaz a:hover {
+    opacity: 0.8;
+  }
+
+  .brzy {
+    margin-top: 160px;
+    text-align: center;
+  }
+
+  .dalsi {
+    position: relative;
+    margin-top: 220px;
+  }
+  .dalsi :global(.dalsi__dlazdice) {
+    margin-top: -40px;
+    height: 460px;
+  }
+
+  @media (max-width: 1100px) {
+    .hero__radek {
+      flex-direction: column;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      max-width: none;
+    }
+    .kroky {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 48px;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero {
+      padding-top: 24px;
+    }
+    .hero__radek {
+      margin-top: 32px;
+    }
+    .hero-obrazek :global(.obrazek) {
+      aspect-ratio: 4 / 3;
+    }
+    .kolaz {
+      padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .kolaz__velky {
+      margin: 0;
+    }
+    .kolaz__maly {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: 60%;
+    }
+    .sekce {
+      margin-top: 120px;
+    }
+    .sloupec {
+      margin-top: -16px;
+    }
+    .sekce__obsah--s-obrazkem {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 40px;
+    }
+    .obrazek-vedle {
+      margin-top: 0;
+      max-width: 100%;
+      width: 100%;
+    }
+    .obrazek-pod {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 48px;
+    }
+    .kroky {
+      grid-template-columns: 1fr;
+      gap: 36px;
+      margin-top: 64px;
+    }
+    .galerie,
+    .galerie--jardova-mapa {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 0;
+      margin-top: 64px;
+    }
+    .galerie__item:nth-child(2),
+    .galerie--jardova-mapa .galerie__item:nth-child(2) {
+      margin-top: 0;
+    }
+    .siroky {
+      aspect-ratio: 4 / 3;
+      margin-top: 64px;
+    }
+    .web-odkaz,
+    .brzy {
+      margin-top: 96px;
+    }
+    .dalsi {
+      margin-top: 120px;
+    }
+    .dalsi :global(.dalsi__dlazdice) {
+      height: 320px;
+      margin-top: -16px;
+    }
+  }
+</style>

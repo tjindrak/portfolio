@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Stránka nenalezena">
+  <section class="container chyba">
+    <p class="bg-word" aria-hidden="true">404</p>
+    <h1 class="title-xl chyba__nadpis">Tahle stránka tu není.</h1>
+    <p class="lead gradient-text gradient-text--soft chyba__text">Možná se přesunula, nebo jsi jen zabloudil.</p>
+    <div class="chyba__akce">
+      <a class="btn btn--accent" href="/">Zpět na úvod</a>
+      <a class="btn btn--dark" href="/projekty">Projekty</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chyba {
+    padding-block: 140px 80px;
+  }
+  .chyba__nadpis {
+    position: relative;
+    margin-top: clamp(-76px, -5.3vw, -36px);
+  }
+  .chyba__text {
+    margin-top: 24px;
+  }
+  .chyba__akce {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+</style>

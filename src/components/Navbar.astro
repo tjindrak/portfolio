@@ -1,0 +1,252 @@
+---
+import { nav, site } from '../data/site';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="navbar container">
+  <a href="/" class="navbar__logo" aria-label={`${site.name}, úvodní stránka`}>{site.name}</a>
+
+  <nav class="navbar__nav" aria-label="Hlavní navigace">
+    <ul class="navbar__links">
+      {nav.map((item) => (
+        <li>
+          <a href={item.href} class:list={['navbar__link', { 'is-active': isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <span class="navbar__divider" aria-hidden="true"></span>
+    <div class="navbar__tools">
+      <span class="navbar__lang">
+        <span class="navbar__lang-active" aria-current="true">CZ</span>
+        <span aria-hidden="true">/</span>
+        <span title="Anglická verze se připravuje">EN</span>
+      </span>
+      <button type="button" class="navbar__theme" data-theme-toggle aria-label="Přepnout světlý a tmavý motiv">
+        <Icon name="moon" class="icon-moon" />
+        <Icon name="sun" class="icon-sun" />
+      </button>
+    </div>
+  </nav>
+
+  <button type="button" class="navbar__burger" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+    <span class="sr-only">Menu</span>
+    <span class="navbar__burger-line"></span>
+    <span class="navbar__burger-line"></span>
+  </button>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <ul>
+    {nav.map((item) => (
+      <li>
+        <a href={item.href} class:list={{ 'is-active': isActive(item.href) }}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+  <button type="button" class="mobile-menu__theme" data-theme-toggle>Přepnout motiv</button>
+</div>
+
+<script>
+  const root = document.documentElement;
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {}
+    });
+  });
+
+  const burger = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.getElementById('mobile-menu');
+  burger?.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') !== 'true';
+    burger.setAttribute('aria-expanded', String(open));
+    if (menu) menu.hidden = !open;
+    document.body.classList.toggle('menu-open', open);
+  });
+</script>
+
+<style>
+  .navbar {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 77px;
+    margin-top: 24px;
+  }
+  .navbar__logo {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--fg);
+  }
+  .navbar__nav {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+  .navbar__links {
+    display: flex;
+    gap: 36px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .navbar__link {
+    position: relative;
+    display: block;
+    font-size: 17px;
+    color: var(--fg-70);
+    transition: color 0.2s ease;
+  }
+  .navbar__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 27px;
+    width: 16px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .navbar__link:hover {
+    color: var(--fg);
+  }
+  .navbar__link.is-active {
+    color: var(--fg);
+  }
+  .navbar__link.is-active::after,
+  .navbar__link:hover::after {
+    transform: scaleX(1);
+  }
+  .navbar__divider {
+    width: 1px;
+    height: 20px;
+    background: var(--fg-8);
+  }
+  .navbar__tools {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .navbar__lang {
+    display: flex;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--fg-60);
+  }
+  .navbar__lang-active {
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .navbar__theme {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin: -7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .navbar__theme svg {
+    width: 20px;
+    height: 20px;
+  }
+  .icon-sun {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .icon-sun {
+    display: block;
+  }
+  :global(:root[data-theme='light']) .icon-moon {
+    display: none;
+  }
+  .navbar__burger {
+    display: none;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    position: relative;
+  }
+  .navbar__burger-line {
+    position: absolute;
+    left: 11px;
+    width: 22px;
+    height: 2px;
+    background: var(--fg);
+    transition: transform 0.25s ease;
+  }
+  .navbar__burger-line:first-of-type {
+    top: 17px;
+  }
+  .navbar__burger-line:last-of-type {
+    top: 25px;
+  }
+  .navbar__burger[aria-expanded='true'] .navbar__burger-line:first-of-type {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .navbar__burger[aria-expanded='true'] .navbar__burger-line:last-of-type {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    padding: 140px var(--gutter) 40px;
+    background: var(--bg);
+  }
+  .mobile-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mobile-menu a {
+    display: block;
+    padding: 10px 0;
+    font-family: var(--font-heading);
+    font-size: 40px;
+    color: var(--fg-70);
+  }
+  .mobile-menu a.is-active {
+    color: var(--fg);
+  }
+  .mobile-menu__theme {
+    margin-top: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fg-60);
+    cursor: pointer;
+  }
+  @media (max-width: 900px) {
+    .navbar {
+      height: 56px;
+      margin-top: 16px;
+    }
+    .navbar__nav {
+      display: none;
+    }
+    .navbar__burger {
+      display: block;
+    }
+  }
+</style>

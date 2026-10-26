@@ -1,0 +1,70 @@
+---
+import { site, version, commit } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer container">
+  <div class="footer__inner">
+    <p class="footer__copy">
+      © {year} {site.name}
+      <span class="footer__version" title={commit ? `Commit ${commit}` : undefined}>v{version}{commit && ` · ${commit}`}</span>
+    </p>
+    <ul class="footer__contacts">
+      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <a href="#top" class="footer__top">↑ Nahoru</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 80px;
+    padding-bottom: 40px;
+  }
+  .footer__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 28px;
+    border-top: 1px solid var(--fg-12);
+    font-size: 14px;
+  }
+  .footer__copy {
+    color: var(--fg-50);
+  }
+  .footer__version {
+    margin-left: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-30);
+  }
+  .footer__contacts {
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .footer__contacts a,
+  .footer__top {
+    color: var(--fg-70);
+    transition: color 0.2s ease;
+  }
+  .footer__contacts a:hover,
+  .footer__top:hover {
+    color: var(--fg);
+  }
+  @media (max-width: 900px) {
+    .footer__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer__contacts {
+      flex-wrap: wrap;
+      gap: 12px 24px;
+    }
+  }
+</style>
