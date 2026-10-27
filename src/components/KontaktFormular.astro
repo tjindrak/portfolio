@@ -187,8 +187,18 @@ const { class: className, kompaktni = false } = Astro.props;
   .formular--kompaktni .label {
     line-height: normal;
   }
+  /* Na hlavní stránce je otázka nad štítky jen pro čtečky, místo po ní zůstává (Figma) */
+  .formular--kompaktni .formular__temata {
+    position: relative;
+    padding-top: 32px;
+  }
   .formular--kompaktni .formular__temata legend {
-    margin-bottom: 13px;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .formular--kompaktni .pole {
     gap: 17px;
