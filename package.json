@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "release": "npm version minor",
-    "release:patch": "npm version patch"
+    "release:patch": "npm version patch",
+    "cv": "astro build && node scripts/cv.mjs"
   },
   "dependencies": {
     "astro": "^5.18.2"

@@ -1,0 +1,378 @@
+---
+// Tisková podoba životopisu (A4). Z ní `npm run cv` vyrobí public/cv.pdf a public/cv-en.pdf.
+// Stránka není v menu a nemá se indexovat.
+import type { GetStaticPaths } from 'astro';
+import '../../styles/global.css';
+import { site } from '../../data/site';
+import { zivotopis } from '../../data/zivotopis';
+import { odkaz, t, type Lang } from '../../i18n';
+
+export const getStaticPaths = (() => [{ params: { lang: 'cs' } }, { params: { lang: 'en' } }]) satisfies GetStaticPaths;
+
+const lang = Astro.params.lang as Lang;
+const { vzdelani, klienti, dalsiKlienti, dovednosti, software, jazyky } = zivotopis(lang);
+const web = new URL(odkaz(lang, 'domu'), Astro.site);
+const webText = web.host + (web.pathname === '/' ? '' : web.pathname);
+const kontakty = [
+  { text: site.email, href: `mailto:${site.email}` },
+  { text: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
+  { text: webText, href: web.href },
+  { text: 'LinkedIn', href: site.linkedin },
+  { text: 'Instagram @tjindrak_design', href: site.instagram },
+];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>{t(lang, 'Životopis', 'CV')} · {site.fullName}</title>
+  </head>
+  <body>
+    <main class="list">
+      <p class="slovo" aria-hidden="true">{t(lang, 'Životopis', 'Resume')}</p>
+
+      <header class="hlava">
+        <div>
+          <h1 class="jmeno">{site.fullName}</h1>
+          <p class="role">UX/UI designer</p>
+          <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')} · CZ / EN</p>
+        </div>
+        <img class="foto" src="/img/zivotopis/portret.webp" alt="" />
+      </header>
+
+      <ul class="kontakty">
+        {kontakty.map((k) => <li><a href={k.href}>{k.text}</a></li>)}
+      </ul>
+
+      <p class="profil">
+        {t(
+          lang,
+          'Jsem designer, který se nejdřív ptá a teprve potom tvoří. Navrhuju digitální produkty od prvního rozhovoru s uživateli až po finální pixel a pomáhám týmům a značkám proměnit to, co lidé opravdu potřebují, v rozhraní, která se dobře používají a hezky vypadají.',
+          'I’m a designer who asks questions first and designs second. I design digital products from the first user interview to the final pixel, and help teams and brands turn what people really need into interfaces that are easy to use and look good.',
+        )}
+      </p>
+
+      <div class="sloupce">
+        <div class="sloupec">
+          <section>
+            <h2>{t(lang, 'Klienti a praxe', 'Clients and experience')}</h2>
+            <ul class="polozky">
+              {klienti.map((k) => (
+                <li class="polozka">
+                  <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
+                  <div>
+                    <p class="polozka__hlava"><span class="polozka__nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
+                    <p class="popis">{k.popis}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p class="dalsi"><span>{t(lang, 'Další klienti', 'Other clients')}</span> {dalsiKlienti.join(', ')}</p>
+          </section>
+
+          <section>
+            <h2>{t(lang, 'Dovednosti', 'Skills')}</h2>
+            <ul class="dovednosti">
+              {dovednosti.map((d) => (
+                <li>
+                  <p class="polozka__nazev">{d.nazev}</p>
+                  <p class="popis">{d.popis}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <div class="sloupec">
+          <section>
+            <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
+            <ul class="polozky">
+              {vzdelani.map((v) => (
+                <li class="skola">
+                  <p class="rok">{v.roky}</p>
+                  <p class="polozka__nazev">{v.skola}</p>
+                  <p class="popis">{v.obor} · {v.titul}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2>Software</h2>
+            <ul class="software">
+              {software.map((s) => (
+                <li><img src={`/img/zivotopis/software/${s.soubor}.svg`} alt={s.nazev} title={s.nazev} /></li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
+            <ul class="polozky polozky--tesne">
+              {jazyky.map((j) => (
+                <li>
+                  <p class="polozka__nazev">{j.nazev}</p>
+                  <p class="popis">{j.popis.replace(/\.$/, '')}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <footer class="pata">
+        <span>{site.fullName} · UX/UI designer</span>
+        <a href={web.href}>{t(lang, 'Portfolio', 'Portfolio')}: {webText}</a>
+      </footer>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  /* Světlá tisková verze barev webu: Ink Charcoal na bílé, akcent Dolomite Sand */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  :root {
+    --ink: 20 20 20;
+    --pisek: #b3ae8e;
+    --pisek-tmavy: #8f8b72;
+  }
+  html,
+  body {
+    margin: 0;
+    background: #fff;
+    color: rgb(var(--ink));
+    font-family: var(--font-body);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .list {
+    position: relative;
+    box-sizing: border-box;
+    width: 210mm;
+    height: 297mm;
+    padding: 14mm 16mm 12mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .list p,
+  .list h1,
+  .list h2,
+  .list ul {
+    margin: 0;
+    padding: 0;
+  }
+  .list ul {
+    list-style: none;
+  }
+  .list a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Velké slovo v pozadí jako na webu */
+  .slovo {
+    position: absolute;
+    top: 9mm;
+    left: 13mm;
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 600;
+    font-size: 92pt;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: rgb(var(--ink) / 0.045);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .hlava {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8mm;
+    padding-top: 13mm;
+  }
+  .jmeno {
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 400;
+    font-size: 34pt;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .role {
+    margin-top: 3mm !important;
+    font-size: 15pt;
+    line-height: 1.2;
+    color: var(--pisek-tmavy);
+  }
+  .misto {
+    margin-top: 2mm !important;
+    font-size: 9pt;
+    color: rgb(var(--ink) / 0.55);
+  }
+  .foto {
+    width: 30mm;
+    height: 30mm;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 18%;
+    border: 0.75pt solid rgb(var(--ink) / 0.12);
+    background: #ececea;
+  }
+  .kontakty {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5mm 5mm;
+    margin-top: 6mm !important;
+    padding-bottom: 4.5mm !important;
+    border-bottom: 0.75pt solid rgb(var(--ink) / 0.12);
+    font-size: 8.5pt;
+    color: rgb(var(--ink) / 0.75);
+  }
+  .kontakty li + li::before {
+    content: '';
+    display: inline-block;
+    width: 3pt;
+    height: 3pt;
+    margin: 0 5mm 1.5pt -2.5mm;
+    border-radius: 50%;
+    background: var(--pisek);
+    transform: translateX(-50%);
+  }
+  .profil {
+    margin-top: 5mm !important;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: rgb(var(--ink) / 0.8);
+  }
+  .sloupce {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 11mm;
+    margin-top: 6.5mm;
+    flex: 1;
+  }
+  .sloupec {
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+  }
+  h2 {
+    margin-bottom: 3.5mm !important;
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 500;
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pisek-tmavy);
+  }
+  h2::after {
+    content: '';
+    display: block;
+    width: 8mm;
+    height: 1.5pt;
+    margin-top: 2mm;
+    background: var(--pisek);
+  }
+  .polozky {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+  .polozky--tesne {
+    gap: 2.5mm;
+  }
+  .polozka {
+    display: grid;
+    grid-template-columns: 9mm 1fr;
+    gap: 3mm;
+    align-items: start;
+  }
+  .logo {
+    width: 9mm;
+    height: 9mm;
+    object-fit: contain;
+    border-radius: 2mm;
+    background: #f3f3f1;
+  }
+  .logo--siroke {
+    background: #fff;
+    border: 0.75pt solid rgb(var(--ink) / 0.08);
+    box-sizing: border-box;
+  }
+  .polozka__hlava {
+    display: flex;
+    justify-content: space-between;
+    gap: 3mm;
+  }
+  .polozka__nazev {
+    font-size: 10pt;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .rok {
+    font-size: 8.5pt;
+    color: rgb(var(--ink) / 0.5);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .skola .rok {
+    margin-bottom: 0.5mm !important;
+  }
+  .popis {
+    margin-top: 0.6mm !important;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: rgb(var(--ink) / 0.68);
+  }
+  .dalsi {
+    margin-top: 4mm !important;
+    font-size: 8.75pt;
+    line-height: 1.45;
+    color: rgb(var(--ink) / 0.68);
+  }
+  .dalsi span {
+    font-weight: 500;
+    color: rgb(var(--ink));
+  }
+  .dovednosti {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 6mm;
+  }
+  .software {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4mm;
+  }
+  .software img {
+    display: block;
+    width: 9mm;
+    height: 9mm;
+  }
+  .pata {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 4mm;
+    border-top: 0.75pt solid rgb(var(--ink) / 0.12);
+    font-size: 8pt;
+    color: rgb(var(--ink) / 0.5);
+  }
+  .pata a {
+    color: var(--pisek-tmavy) !important;
+  }
+  @media screen {
+    body {
+      background: #e9e9e6;
+      padding: 24px 0;
+    }
+    .list {
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 10px 40px rgb(0 0 0 / 0.12);
+    }
+  }
+</style>
