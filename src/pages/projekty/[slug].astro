@@ -45,7 +45,7 @@ const vrstevnice = `/img/projekty/${id}/vrstevnice.svg`;
 const maVrstevnice = existsSync(join(process.cwd(), 'public', vrstevnice));
 const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obrazekProjektu(id, 'hero.webp');
 ---
-<Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`} glow={brzy ? 'brzy' : 'default'}>
+<Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`} glow={brzy ? 'brzy' : 'default'} glowBarva={brzy ? undefined : d.barva}>
   <article
     class:list={['detail', { 'detail--barva': !brzy && d.barva, 'detail--brzy': brzy }]}
     style={!brzy && d.barva ? `--projekt: ${d.barva}` : undefined}

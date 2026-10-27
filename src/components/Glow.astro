@@ -3,13 +3,17 @@
 interface Props {
   // home = všechny tři, brzy = bez spodní (jako ve Figmě)
   variant?: 'default' | 'home' | 'brzy';
+  // Barva projektu: horní skvrna zůstává béžová, ostatní jsou v barvě a pokračují každých 1500 px až k patičce
+  barva?: string;
 }
-const { variant = 'default' } = Astro.props;
+const { variant = 'default', barva } = Astro.props;
+const dalsi = barva ? [4200, 5700, 7200, 8700, 10200, 11700] : [];
 ---
-<div class="glows" aria-hidden="true">
+<div class:list={['glows', { 'glows--barva': barva }]} style={barva ? `--glow-barva: ${barva}` : undefined} aria-hidden="true">
   <span class="glow glow--a"></span>
-  {variant !== 'default' && <span class="glow glow--b"></span>}
+  {(variant !== 'default' || barva) && <span class="glow glow--b"></span>}
   {variant !== 'brzy' && <span class="glow glow--c"></span>}
+  {dalsi.map((top, i) => <span class:list={['glow glow--dalsi', i % 2 ? 'glow--vpravo' : 'glow--vlevo']} style={`top: ${top}px`}></span>)}
 </div>
 
 <style>
@@ -45,5 +49,22 @@ const { variant = 'default' } = Astro.props;
     left: 55%;
     top: 2700px;
     opacity: 0.8;
+  }
+
+  .glows--barva .glow--b,
+  .glows--barva .glow--c {
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--glow-barva) 7%, transparent), transparent);
+    opacity: 1;
+  }
+  .glow--dalsi {
+    width: 900px;
+    height: 800px;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--glow-barva) 6%, transparent), transparent);
+  }
+  .glow--vlevo {
+    left: -450px;
+  }
+  .glow--vpravo {
+    left: 55%;
   }
 </style>

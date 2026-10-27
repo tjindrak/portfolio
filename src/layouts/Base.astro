@@ -9,9 +9,11 @@ interface Props {
   title?: string;
   description?: string;
   glow?: 'default' | 'home' | 'brzy';
+  // Barva spodních skvrn v pozadí (detail hotového projektu)
+  glowBarva?: string;
 }
 
-const { title, description = site.description, glow = 'default' } = Astro.props;
+const { title, description = site.description, glow = 'default', glowBarva } = Astro.props;
 const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · Grafický a UI/UX designer`;
 ---
 <!doctype html>
@@ -39,7 +41,7 @@ const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · 
   <body id="top">
     <slot name="before" />
     <div class="page">
-      <Glow variant={glow} />
+      <Glow variant={glow} barva={glowBarva} />
       <Navbar />
       <main>
         <slot />
