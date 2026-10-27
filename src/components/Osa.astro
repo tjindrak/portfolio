@@ -73,13 +73,14 @@ const { polozky } = Astro.props;
     width: 17px;
     height: 17px;
     border-radius: 50%;
-    border: 1px solid var(--accent);
+    border: 2px solid var(--accent);
     background: var(--bg);
   }
   .osa__polozka--aktualni .osa__bod {
-    border-color: var(--accent);
+    border: 0;
     background: var(--accent);
-    box-shadow: 0 0 0 6px rgb(179 174 142 / 0.16), 0 0 24px 6px rgb(179 174 142 / 0.35);
+    /* Figma: Drop shadow 0 0, rozostření 20, roztažení 5, Accent 80 % */
+    box-shadow: 0 0 20px 5px rgb(179 174 142 / 0.8);
   }
   .osa__nazev {
     font-family: var(--font-body);
