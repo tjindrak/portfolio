@@ -443,26 +443,26 @@ const sluzby = [
   }
   .napis__slovo {
     font-size: var(--fs);
-    text-align: center;
+    letter-spacing: -0.05em;
   }
-  /* Úvod i formulář tvoří jeden sloupec 821 px uprostřed (Figma: Frame 33) */
+  /* Dva sloupce jako na detailech (Figma: Frame 33): vlevo úvod 400 px, vpravo formulář 821 px.
+     Formulář začíná 44 px pod slovem (výška slova 0,9 × 280 px), úvod o 4 px níž. */
   .napis__obsah {
     position: relative;
-    max-width: 821px;
-    margin-inline: auto;
-    /* úvod začíná 24 px pod slovem (výška slova 0,9 × 280 px) */
-    margin-top: calc(var(--fs) * 0.0857);
+    display: grid;
+    grid-template-columns: minmax(0, 400px) minmax(0, 821px);
+    justify-content: space-between;
+    align-items: start;
+    gap: 48px;
+    margin-top: calc(var(--fs) * 0.157);
   }
   .napis__intro {
-    max-width: 560px;
+    margin-top: 4px;
     font-weight: 500;
     font-size: clamp(24px, 2.1vw, 30px);
     line-height: 1.25;
     letter-spacing: -0.015em;
     color: var(--fg-90);
-  }
-  .napis :global(.napis__formular) {
-    margin-top: 64px;
   }
 
   /* Parallax: horní světlo zůstává v pozadí na místě (Glow, varianta home) a sekce přes něj
@@ -547,8 +547,8 @@ const sluzby = [
     .napis {
       margin-top: 96px;
     }
-    .napis :global(.napis__formular) {
-      margin-top: 48px;
+    .napis__obsah {
+      grid-template-columns: 1fr;
     }
   }
 </style>

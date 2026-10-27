@@ -27,7 +27,7 @@ const { class: className, kompaktni = false } = Astro.props;
   <div class="formular__radek">
     <label class="pole">
       <span class="label">Jméno</span>
-      <input type="text" name="jmeno" placeholder="Jak ti mám říkat?" autocomplete="name" required />
+      <input type="text" name="jmeno" placeholder={kompaktni ? 'Jméno Příjmení' : 'Jak ti mám říkat?'} autocomplete="name" required />
     </label>
     <label class="pole">
       <span class="label">E-mail</span>
@@ -189,6 +189,9 @@ const { class: className, kompaktni = false } = Astro.props;
   }
   .formular--kompaktni .pole {
     gap: 17px;
+  }
+  .formular--kompaktni .formular__radek {
+    gap: 40px;
   }
   .formular--kompaktni .pole input,
   .formular--kompaktni .pole textarea {
