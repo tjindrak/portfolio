@@ -137,6 +137,11 @@ const sluzby = [
     left: calc(var(--gutter) + 666px);
     top: 79px;
     width: 592px;
+    /* Fotka se ztrácí do pozadí přesně na spodní hraně okna (portrét začíná 180 px od vrchu stránky).
+       Na velmi vysokých oknech končí tam, kde končí přechod už v samotné fotce. */
+    --konec: min(calc(100svh - 180px), 877px);
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(var(--konec) - 320px), transparent var(--konec));
+    mask-image: linear-gradient(180deg, #000 calc(var(--konec) - 320px), transparent var(--konec));
   }
   .hero__text {
     position: relative;
@@ -449,6 +454,8 @@ const sluzby = [
       top: 0;
       width: 72%;
       margin: 8px auto -45%;
+      -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
+      mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
     }
     .hero__text {
       padding-top: 0;
