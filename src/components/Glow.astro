@@ -9,7 +9,7 @@ interface Props {
 const { variant = 'default', barva } = Astro.props;
 const dalsi = barva ? [4200, 5700, 7200, 8700, 10200, 11700] : [];
 ---
-<div class:list={['glows', { 'glows--barva': barva }]} style={barva ? `--glow-barva: ${barva}` : undefined} aria-hidden="true">
+<div class:list={['glows', `glows--${variant}`, { 'glows--barva': barva }]} style={barva ? `--glow-barva: ${barva}` : undefined} aria-hidden="true">
   <span class="glow glow--a"></span>
   {(variant !== 'default' || barva) && <span class="glow glow--b"></span>}
   {variant !== 'brzy' && <span class="glow glow--c"></span>}
@@ -49,6 +49,11 @@ const dalsi = barva ? [4200, 5700, 7200, 8700, 10200, 11700] : [];
     left: 55%;
     top: 2700px;
     opacity: 0.8;
+  }
+
+  /* Hlavní stránka: horní světlo zůstává při scrollu na místě a sekce přes něj přijíždějí */
+  .glows--home .glow--a {
+    position: fixed;
   }
 
   .glows--barva .glow--b,

@@ -471,6 +471,20 @@ const sluzby = [
     margin-top: 64px;
   }
 
+  /* Parallax: horní světlo zůstává v pozadí na místě (Glow, varianta home) a sekce přes něj
+     přijíždějí s delší pauzou navíc (30 % výšky okna). Na mobilu zůstávají mezery z Figmy. */
+  @media (min-width: 901px) {
+    .vybrane {
+      margin-top: calc(316px + 30vh);
+    }
+    .omne {
+      margin-top: calc(338px + 30vh);
+    }
+    .napis {
+      margin-top: calc(399px + 30vh);
+    }
+  }
+
   @media (max-width: 1200px) {
     .hero :global(.hero__portret) {
       left: auto;
