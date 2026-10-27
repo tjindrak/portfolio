@@ -72,6 +72,8 @@
   --fg-8: rgb(var(--fg-rgb) / 0.08);
   --fg-4: rgb(var(--fg-rgb) / 0.04);
   --accent: var(--accent-5);
+  /* Hover: pomalejší ease-in-out tam i zpět */
+  --hover: 0.45s cubic-bezier(0.42, 0, 0.58, 1);
   --accent-soft: var(--accent-3);
   --accent-alpha-16: rgb(179 174 142 / 0.16);
   --on-accent: var(--grayscale-10);
@@ -282,7 +284,7 @@ h4 {
   line-height: 24px;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  transition: background-color var(--hover), transform var(--hover), color var(--hover);
 }
 .btn svg {
   width: 20px;
@@ -294,7 +296,7 @@ h4 {
   color: var(--grayscale-10);
 }
 .btn--accent:hover {
-  background: var(--accent-4);
+  background: var(--accent-3);
 }
 .btn--accent:active {
   transform: scale(0.98);
@@ -320,7 +322,7 @@ h4 {
 .btn--text svg {
   width: 16px;
   height: 16px;
-  transition: transform 0.2s ease;
+  transition: transform var(--hover);
 }
 .btn--text:hover {
   color: var(--fg);
@@ -350,7 +352,7 @@ h4 {
 }
 button.chip {
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--hover), border-color var(--hover), color var(--hover);
 }
 button.chip:hover {
   border-color: var(--fg-40);

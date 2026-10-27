@@ -351,6 +351,11 @@ const sluzby = [
     border-radius: 50%;
     background: var(--accent-5);
     color: var(--grayscale-10);
+    transition: background-color var(--hover);
+  }
+  .karta.is-open .karta__odkaz:hover .karta__sipka,
+  .karta.is-open .karta__odkaz:focus-visible .karta__sipka {
+    background: var(--accent-3);
   }
   .karta__sipka :global(svg) {
     width: 20px;
