@@ -122,6 +122,11 @@ const fotky = [
   .subhead {
     font-weight: 400;
   }
+  /* Světlé nadpisy: shrnutí i podnadpisy jdou z bílé do 60 % bílé (Figma 316:447) */
+  .gradient-text,
+  .gradient-text--soft {
+    background-image: linear-gradient(90deg, var(--fg) 0%, rgb(var(--fg-rgb) / 0.6) 100%);
+  }
   .hero__slovo,
   .hero__nazev,
   .hero__shrnuti {
