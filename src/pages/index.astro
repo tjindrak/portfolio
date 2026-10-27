@@ -62,14 +62,14 @@ const sluzby = [
         </li>
       ))}
     </ul>
-    <div class="vybrane__pata">
+    <div class="vybrane__pata" data-reveal>
       <a href="/projekty" class="btn btn--accent">Všechny projekty</a>
     </div>
   </section>
 
   <!-- O mně -->
   <section class="omne container" aria-labelledby="omne-nadpis">
-    <p class="bg-word omne__slovo" aria-hidden="true">O mně</p>
+    <p class="bg-word omne__slovo" aria-hidden="true" data-reveal>O mně</p>
     <div class="omne__obsah">
       <div class="omne__intro">
         <h2 id="omne-nadpis" class="omne__claim" data-pismena>Jsem designer, který se nejdřív ptá a&nbsp;teprve potom tvoří.</h2>
@@ -87,16 +87,16 @@ const sluzby = [
           </li>
         ))}
       </ul>
-      <a href="/o-mne" class="btn btn--accent omne__btn">Celý příběh o mně</a>
+      <a href="/o-mne" class="btn btn--accent omne__btn" data-reveal>Celý příběh o mně</a>
     </div>
   </section>
 
   <!-- Napiš mi -->
   <section class="napis container" aria-labelledby="napis-nadpis">
-    <p class="bg-word napis__slovo" aria-hidden="true">Napiš mi</p>
+    <p class="bg-word napis__slovo" aria-hidden="true" data-reveal>Napiš mi</p>
     <div class="napis__obsah">
       <h2 id="napis-nadpis" class="napis__intro" data-pismena>Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.</h2>
-      <KontaktFormular class="napis__formular" kompaktni />
+      <div data-reveal><KontaktFormular class="napis__formular" kompaktni /></div>
     </div>
   </section>
 </Base>
