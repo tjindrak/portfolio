@@ -5,9 +5,20 @@ import Portret from '../components/Portret.astro';
 import Obrazek from '../components/Obrazek.astro';
 import Icon from '../components/Icon.astro';
 import KontaktFormular from '../components/KontaktFormular.astro';
+import sharp from 'sharp';
+import { join } from 'node:path';
 import { vybraneProjekty, prvniExistujici } from '../lib/projekty';
 
 const vybrane = await vybraneProjekty();
+
+// Poměr stran fotky karty: zavřená karta ukazuje fotku na plnou výšku jako ve Figmě
+const karty = await Promise.all(
+  vybrane.map(async (p) => {
+    const src = prvniExistujici(p.id, ['karta.webp', 'cover.webp']);
+    const { width = 4, height = 3 } = await sharp(join(process.cwd(), 'public', src)).metadata().catch(() => ({}));
+    return { p, src, pomer: width / height };
+  })
+);
 
 const sluzby = [
   { nazev: 'UI a produktový design', stitky: ['Weby', 'Aplikace', 'Design systémy'] },
@@ -35,10 +46,10 @@ const sluzby = [
   <section class="vybrane container" aria-labelledby="vybrane-nadpis">
     <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-reveal>Vybrané projekty</h2>
     <ul class="karty" data-reveal>
-      {vybrane.map((p, i) => (
-        <li class:list={['karta', { 'is-open': i === 0 }]}>
+      {karty.map(({ p, src, pomer }, i) => (
+        <li class:list={['karta', { 'is-open': i === 0 }]} style={`--pomer: ${pomer.toFixed(4)}`}>
           <a href={`/projekty/${p.id}`} class="karta__odkaz">
-            <Obrazek src={prvniExistujici(p.id, ['karta.webp', 'cover.webp'])} alt={p.data.nazev} class="karta__img" showCaption={false} />
+            <Obrazek src={src} alt={p.data.nazev} class="karta__img" showCaption={false} />
             <span class="karta__scrim" aria-hidden="true"></span>
             <span class="karta__popisek">
               <span class="karta__text">
@@ -192,16 +203,20 @@ const sluzby = [
     inset: 0;
     display: block;
   }
-  /* Fotka má pořád šířku otevřené karty a karta ji jen odkrývá,
-     takže se při animaci nepřepočítává ořez (to dělalo cuknutí). */
+  /* Zavřená karta ukazuje fotku na plnou výšku (jako ve Figmě), otevřená na šířku karty.
+     Šířka fotky se animuje stejně jako karta, takže se plynule zvětší bez cuknutí. */
   .karta :global(.karta__img) {
     position: absolute;
     top: 0;
     left: 50%;
-    width: var(--otevrena);
+    width: calc(450px * var(--pomer, 1.3333));
     max-width: none;
     height: 100%;
     transform: translateX(-50%);
+    transition: width 1.3s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  .karta.is-open :global(.karta__img) {
+    width: max(var(--otevrena), calc(450px * var(--pomer, 1.3333)));
   }
   .karta__scrim {
     position: absolute;
@@ -384,7 +399,8 @@ const sluzby = [
       width: auto;
       height: 280px;
     }
-    .karta :global(.karta__img) {
+    .karta :global(.karta__img),
+    .karta.is-open :global(.karta__img) {
       left: 0;
       width: 100%;
       transform: none;
