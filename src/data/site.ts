@@ -9,7 +9,7 @@ export const site = {
   phone: '+420 775 038 062',
   ico: '21680078',
   // Doplň skutečné odkazy na profily.
-  linkedin: 'https://www.linkedin.com/',
+  linkedin: 'https://www.linkedin.com/in/tom%C3%A1%C5%A1-jindr%C3%A1k-868535301/',
   instagram: 'https://www.instagram.com/',
 };
 
