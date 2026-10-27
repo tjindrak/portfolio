@@ -140,7 +140,7 @@ const sluzby = [
   }
   .hero__text {
     position: relative;
-    padding-top: 339px;
+    padding-top: 329px;
     max-width: 780px;
   }
   .hero__nadpis {
@@ -291,6 +291,12 @@ const sluzby = [
     margin-top: 338px;
     --fs: clamp(100px, 18.06vw, 260px);
   }
+  /* Slova v pozadí jsou na hlavní stránce v Nohemi SemiBold (Figma Mainpage) */
+  .omne__slovo,
+  .napis__slovo {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
   .omne__slovo {
     font-size: var(--fs);
     letter-spacing: -0.05em;
@@ -351,7 +357,7 @@ const sluzby = [
   .sluzba__stitky {
     font-size: 15px;
     line-height: 1.2;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--fg-40);
     white-space: pre-wrap;
   }
@@ -360,6 +366,7 @@ const sluzby = [
   .napis {
     position: relative;
     margin-top: 399px;
+    padding-bottom: 5px;
     --fs: clamp(100px, 19.5vw, 280px);
   }
   .napis__slovo {
