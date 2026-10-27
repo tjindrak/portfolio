@@ -102,13 +102,16 @@ const fotky = [
   /* Rozměry podle Figmy (O mně, rámec 1440 px) */
   .hero {
     position: relative;
-    padding-top: 269px;
+    padding-top: 169px;
   }
   .hero :global(.hero__portret) {
     position: absolute;
     left: calc(var(--gutter) + 756px);
-    top: 169px;
+    top: 69px;
     width: 532px;
+    /* Figma: maska Rectangle 2, přechod z plné do průhledné mezi y 535 a 919 */
+    -webkit-mask-image: linear-gradient(180deg, #000 32.4%, transparent 66.5%);
+    mask-image: linear-gradient(180deg, #000 32.4%, transparent 66.5%);
   }
   /* Slova v pozadí jsou Nohemi SemiBold, texty Delight Regular (Figma O mně 316:447) */
   .bg-word {
@@ -138,7 +141,7 @@ const fotky = [
     margin-top: 360px;
   }
   .sekce--studium {
-    margin-top: 621px;
+    margin-top: 721px;
   }
   .sekce--kam {
     margin-top: 364px;
