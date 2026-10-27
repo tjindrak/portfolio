@@ -83,7 +83,6 @@ const LIMIT = 12;
       grid!.replaceChildren(...sloupce);
       grid!.classList.add('is-masonry');
       if (prazdno) prazdno.hidden = viditelne.length > 0;
-      nastavPosun();
     }
 
     function aplikovat() {
@@ -109,39 +108,8 @@ const LIMIT = 12;
       aplikovat();
     });
 
-    // Parallax: každý sloupec jede při scrollu jinou rychlostí (jen víc sloupců a bez omezeného pohybu)
-    const RYCHLOSTI = [0.02, 0.09, 0.05, 0.12];
-    const klid = matchMedia('(prefers-reduced-motion: reduce)');
-    let cil = 0;
-    let ted = 0;
-    let bezi = false;
-    function nastavPosun() {
-      const sloupce = grid!.querySelectorAll<HTMLElement>('.grid__col');
-      const zapnuto = sloupce.length > 1 && !klid.matches;
-      sloupce.forEach((s, i) => (s.style.translate = zapnuto ? `0 ${(-ted * RYCHLOSTI[i % 4]).toFixed(1)}px` : ''));
-    }
-    const krok = () => {
-      ted += (cil - ted) * 0.1;
-      if (Math.abs(cil - ted) < 0.1) ted = cil;
-      nastavPosun();
-      bezi = ted !== cil;
-      if (bezi) requestAnimationFrame(krok);
-    };
-    const posun = () => {
-      cil = Math.max(0, scrollY);
-      if (!bezi) {
-        bezi = true;
-        requestAnimationFrame(krok);
-      }
-    };
-
     aplikovat();
-    posun();
-    addEventListener('scroll', posun, { passive: true });
-    addEventListener('resize', () => {
-      rozlozit();
-      posun();
-    });
+    addEventListener('resize', () => rozlozit());
   }
 </script>
 
