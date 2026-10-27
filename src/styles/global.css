@@ -201,7 +201,8 @@ h4 {
   font-weight: 600;
   font-size: clamp(88px, 15.5vw, 224px);
   line-height: 0.9;
-  letter-spacing: -0.05em;
+  /* bez prostrkání, aby se písmena nepřekrývala */
+  letter-spacing: 0;
   color: var(--fg-4);
   white-space: nowrap;
   pointer-events: none;
