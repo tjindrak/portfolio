@@ -8,6 +8,7 @@ const lang = jazykZUrl(Astro.url);
 const udaje = [
   { label: t(lang, 'E-mail', 'Email'), hodnota: site.email, href: `mailto:${site.email}` },
   { label: 'Instagram', hodnota: '@tjindrak_design', href: site.instagram, externi: true },
+  { label: 'LinkedIn', hodnota: 'Tomáš Jindrák', href: site.linkedin, externi: true },
   { label: t(lang, 'Telefon', 'Phone'), hodnota: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
   { label: t(lang, 'IČO', 'Company ID (IČO)'), hodnota: site.ico },
 ];
