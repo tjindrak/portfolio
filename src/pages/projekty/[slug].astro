@@ -61,7 +61,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
         <>
           {d.stitky.length > 0 && (
             <ul class="hero__stitky">
-              {d.stitky.map((s) => <li class="chip">{s}</li>)}
+              {d.stitky.map((s) => <li>{s}</li>)}
             </ul>
           )}
           <div class="hero__radek">
@@ -264,16 +264,23 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     position: relative;
     margin-top: 24px;
   }
+  /* Štítky jako jemný text; řádek drží výšku původních chipů */
   .hero__stitky {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
+    align-items: center;
+    gap: 20px;
+    min-height: 39px;
     margin: 32px 0 0;
     padding: 0;
     list-style: none;
-  }
-  .hero__stitky .chip {
+    font-size: 14px;
     font-weight: 500;
+    line-height: 1.2;
+    color: rgb(var(--fg-rgb) / 0.7);
+  }
+  .hero__stitky li {
+    white-space: nowrap;
   }
   .hero__radek {
     display: grid;
