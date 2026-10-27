@@ -48,15 +48,11 @@ const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : 
   .dlazdice:hover :global(.dlazdice__img) {
     transform: scale(1.04);
   }
+  /* Ztmavení přes celou dlaždici, bez hrany uprostřed (Figma: 0 % až do 45 %, dole 80 %) */
   .dlazdice__scrim {
     position: absolute;
-    inset: auto 0 0 0;
-    height: 170px;
-    background: linear-gradient(180deg, rgb(20 20 20 / 0.04), rgb(20 20 20 / 0.8));
-  }
-  .dlazdice--siroka .dlazdice__scrim {
-    height: 100%;
-    background: linear-gradient(180deg, rgb(20 20 20 / 0.04) 35%, rgb(20 20 20 / 0.8));
+    inset: 0;
+    background: linear-gradient(180deg, rgb(20 20 20 / 0) 45%, rgb(20 20 20 / 0.8));
   }
   .dlazdice__popisek {
     position: absolute;
