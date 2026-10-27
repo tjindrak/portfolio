@@ -1,5 +1,6 @@
 ---
 nazev: Ein Berliner
+dlazdice: Berliner
 stav: hotovo
 typ: Desková hra
 rok: "2023"

@@ -1,6 +1,7 @@
 ---
 nazev: Zahradní centrum DIKÉ
 slovo: DIKÉ
+dlazdice: Diké
 stav: hotovo
 typ: Web & Branding
 rok: "2025"

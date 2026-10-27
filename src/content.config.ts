@@ -18,6 +18,10 @@ const projekty = defineCollection({
     nazev: z.string(),
     // Velké slovo v pozadí hero (když se liší od názvu)
     slovo: z.string().optional(),
+    // Název na dlaždici v gridu Projekty (když se liší od názvu)
+    dlazdice: z.string().optional(),
+    // Barva pod obrázkem na dlaždici (pro obrázky s průhledným pozadím)
+    pozadi: z.string().optional(),
     stav: z.enum(['hotovo', 'brzy']).default('hotovo'),
     typ: z.string(),
     rok: z.string(),

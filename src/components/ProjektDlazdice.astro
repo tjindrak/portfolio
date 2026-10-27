@@ -13,14 +13,14 @@ interface Props {
 }
 
 const { projekt, siroka = false, class: className, style, ...rest } = Astro.props;
-const { nazev, typ, rok } = projekt.data;
+const { nazev, dlazdice, pozadi, typ, rok } = projekt.data;
 const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : ['cover.webp']);
 ---
-<a href={`/projekty/${projekt.id}`} class:list={['dlazdice', { 'dlazdice--siroka': siroka }, className]} style={style} {...rest}>
+<a href={`/projekty/${projekt.id}`} class:list={['dlazdice', { 'dlazdice--siroka': siroka }, className]} style={[style, pozadi && `background:${pozadi}`].filter(Boolean).join(';')} {...rest}>
   <Obrazek src={src} alt={nazev} class="dlazdice__img" showCaption={false} />
   <span class="dlazdice__scrim" aria-hidden="true"></span>
   <span class="dlazdice__popisek">
-    <span class="dlazdice__nazev">{nazev}</span>
+    <span class="dlazdice__nazev">{dlazdice ?? nazev}</span>
     <span class="dlazdice__typ">{typ}</span>
     <span class="dlazdice__rok">{rok}</span>
   </span>
@@ -33,7 +33,11 @@ const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : 
     display: block;
     overflow: hidden;
     border-radius: var(--radius-tile);
-    background: var(--tile-bg);
+    /* Figma: Pozadí – jemná záře zespodu a přechod z #333 do #282828 */
+    background:
+      radial-gradient(50% 50% at 50% 85%, rgb(179 174 142 / 0.16), transparent),
+      linear-gradient(180deg, #333, rgb(40 40 40 / 0)),
+      #282828;
     isolation: isolate;
   }
   .dlazdice :global(.dlazdice__img) {
@@ -65,10 +69,9 @@ const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : 
     color: var(--grayscale-0);
   }
   .dlazdice__nazev {
-    font-family: var(--font-heading);
     font-weight: 500;
     font-size: 24px;
-    line-height: 1.1;
+    line-height: 1.2;
     letter-spacing: -0.01em;
     text-transform: uppercase;
   }

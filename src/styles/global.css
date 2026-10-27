@@ -186,9 +186,9 @@ h4 {
 /* ------------------------------------------------------------------
    Typografie
 ------------------------------------------------------------------ */
-/* Velké slabé slovo v pozadí za nadpisem sekce */
+/* Velké slabé slovo v pozadí za nadpisem sekce (Figma: Delight Medium) */
 .bg-word {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(88px, 15.5vw, 224px);
   line-height: 0.9;
@@ -333,7 +333,7 @@ h4 {
   border: 1px solid var(--fg-16);
   background: var(--fg-4);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.2;
   color: var(--fg-80);
   white-space: nowrap;
@@ -350,6 +350,7 @@ button.chip:hover {
   border-color: var(--fg-40);
 }
 .chip[aria-pressed='true'] {
+  font-weight: 500;
   background: var(--accent-5);
   border-color: var(--accent-5);
   color: var(--grayscale-10);

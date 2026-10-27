@@ -1,5 +1,6 @@
 ---
 nazev: 100 Krále Sýrů
+pozadi: "#dcdcd5"
 stav: brzy
 typ: Packaging – Soutěž
 rok: "2023"
