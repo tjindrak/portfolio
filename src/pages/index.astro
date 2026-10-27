@@ -35,8 +35,8 @@ const sluzby = [
   <section class="vybrane container" aria-labelledby="vybrane-nadpis">
     <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-reveal>Vybrané projekty</h2>
     <ul class="karty" data-reveal>
-      {vybrane.map((p) => (
-        <li class="karta">
+      {vybrane.map((p, i) => (
+        <li class:list={['karta', { 'is-open': i === 0 }]}>
           <a href={`/projekty/${p.id}`} class="karta__odkaz">
             <Obrazek src={prvniExistujici(p.id, ['karta.webp', 'cover.webp'])} alt={p.data.nazev} class="karta__img" showCaption={false} />
             <span class="karta__scrim" aria-hidden="true"></span>
@@ -89,6 +89,20 @@ const sluzby = [
     </div>
   </section>
 </Base>
+
+<script>
+  // Vybrané projekty: první kliknutí kartu rozbalí, další kliknutí na rozbalenou otevře detail.
+  // Na mobilu (karty pod sebou) vede kliknutí rovnou na detail.
+  const karty = document.querySelectorAll<HTMLElement>('.karta');
+  const pod = matchMedia('(max-width: 900px)');
+  karty.forEach((karta) => {
+    karta.querySelector('a')?.addEventListener('click', (e) => {
+      if (pod.matches || karta.classList.contains('is-open')) return;
+      e.preventDefault();
+      karty.forEach((k) => k.classList.toggle('is-open', k === karta));
+    });
+  });
+</script>
 
 <style>
   /* Hero */
@@ -164,14 +178,9 @@ const sluzby = [
     background: var(--tile-bg);
     transition: flex 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  .karta:first-child,
-  .karty:hover .karta:hover,
-  .karty:focus-within .karta:focus-within {
+  /* Otevřená karta se rozbalí po kliknutí (skript dole), druhé kliknutí vede na detail */
+  .karta.is-open {
     flex: 1 1 auto;
-  }
-  .karty:hover .karta:not(:hover),
-  .karty:focus-within .karta:not(:focus-within) {
-    flex: 0 0 160px;
   }
   .karta__odkaz {
     position: absolute;
@@ -199,16 +208,9 @@ const sluzby = [
     opacity: 0;
     transition: opacity 0.3s ease;
   }
-  .karta:first-child .karta__popisek,
-  .karty:hover .karta:hover .karta__popisek,
-  .karty:focus-within .karta:focus-within .karta__popisek {
+  .karta.is-open .karta__popisek {
     opacity: 1;
     transition-delay: 0.25s;
-  }
-  .karty:hover .karta:not(:hover) .karta__popisek,
-  .karty:focus-within .karta:not(:focus-within) .karta__popisek {
-    opacity: 0;
-    transition-delay: 0s;
   }
   .karta__text {
     display: flex;
@@ -364,15 +366,11 @@ const sluzby = [
       height: auto;
     }
     .karta,
-    .karta:first-child,
-    .karty:hover .karta:not(:hover),
-    .karty:focus-within .karta:not(:focus-within) {
+    .karta.is-open {
       flex: 0 0 auto;
       height: 280px;
     }
-    .karta__popisek,
-    .karty:hover .karta:not(:hover) .karta__popisek,
-    .karty:focus-within .karta:not(:focus-within) .karta__popisek {
+    .karta__popisek {
       opacity: 1;
       padding: 20px;
     }
