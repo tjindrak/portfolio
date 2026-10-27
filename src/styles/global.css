@@ -189,7 +189,7 @@ h4 {
 /* Velké slabé slovo v pozadí za nadpisem sekce (Figma: Delight Medium) */
 .bg-word {
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(88px, 15.5vw, 224px);
   line-height: 0.9;
   letter-spacing: -0.05em;

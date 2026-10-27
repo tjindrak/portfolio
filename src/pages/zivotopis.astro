@@ -146,6 +146,8 @@ const jazyky = [
   }
   .hero__text {
     flex: 1;
+    /* text začíná 24 px pod slovem Životopis */
+    margin-top: 76px;
   }
   .hero__role {
     margin-top: 8px;
@@ -157,18 +159,18 @@ const jazyky = [
     color: var(--fg-40);
   }
   .hero__cv {
-    margin-top: 20px;
+    margin-top: 96px;
   }
   .blok {
     display: grid;
     grid-template-columns: var(--col-offset) 1fr;
-    margin-top: 200px;
+    margin-top: 360px;
   }
   .blok--vzdelani {
-    margin-top: 197px;
+    margin-top: 359px;
   }
   .blok--dovednosti {
-    margin-top: 167px;
+    margin-top: 327px;
   }
   .blok__nadpis {
     font-family: var(--font-body);
@@ -300,6 +302,7 @@ const jazyky = [
     .hero__radek {
       flex-wrap: wrap;
     }
+    .hero__text,
     .hero__cv {
       margin-top: 0;
     }
