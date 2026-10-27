@@ -24,6 +24,8 @@ hero:
   rozlozeni: kolaz
   popisek: Úvodní stránka Jardovy mapy
   popisekMobil: Mobilní verze
+  vyrez: 100.84 131.64 -0.84 -31.64
+  vyrezMobil: 252.15 130.31 -73.24 -15.16
 
 vyzva:
   nadpis: Funkční web, který potřeboval tvář.
@@ -53,12 +55,14 @@ proces:
 reseni:
   nadpis: Hory v hlavní roli.
   odstavce:
-    - Web začíná landing stránkou, ne mapou. Hned na ní je claim, který je pro Jardu skoro posláním.
+    - "Web začíná landing stránkou, ne mapou. Hned na ní je claim, který je pro Jardu skoro posláním:"
     - "> „Neřeknu ti kam máš jít, ale ukážu ti co jde zažít.“"
     - Jarda na rozdíl od většiny influencerů neříká, kam máte jet. Chce předat myšlenku a inspiraci, jak si hory užít po svém. Na mapě najdete jeho poznatky, zážitky a doporučení a naplánujete si výlet tak, abyste byli spokojení hlavně vy.
   obrazky:
     - src: /img/projekty/jardova-mapa/reseni-1.webp
       popisek: Hlavní obrazovka s mapou
+      vyrez: 163.49 100 -34.04 0
     - src: /img/projekty/jardova-mapa/reseni-2.webp
       popisek: Detail trasy
+      vyrez: 132.3 129.05 -16.15 -14.53
 ---

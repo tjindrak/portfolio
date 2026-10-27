@@ -20,9 +20,11 @@ meta:
 web:
   url: https://pullupstar.com
   popisek: pullupstar.com
+  tlacitko: Prohlédnout aplikaci
 hero:
   rozlozeni: plny
   popisek: Web Pull Up Star
+  vyrez: 104.38 136.03 0 -19.26
 
 vyzva:
   nadpis: Shyby jako soutěž, ne povinnost.
@@ -31,6 +33,7 @@ vyzva:
   obrazek:
     src: /img/projekty/pull-up-star/vyzva.webp
     popisek: Aplikace Pull Up Star
+    vyrez: 193.5 100 -52.63 0
   obrazekPozice: vedle
 
 proces:
@@ -53,7 +56,15 @@ reseni:
     - "Celý brand stojí na jednoduché výzvě, která zní z webu i z aplikace:"
     - "> „Kolik shybů zvládneš?“"
     - Výrazná červenooranžová, hvězda a soutěžní tón drží pohromadě aplikaci, web i tiskoviny. Hrazda počítá, aplikace ukazuje výsledky a děti mají důvod zkusit ještě jeden shyb.
-  siroky:
-    src: /img/projekty/pull-up-star/reseni-appstore.webp
-    popisek: Náhledy aplikace do App Store
+  obrazovky:
+    - src: /img/projekty/pull-up-star/appstore-1.webp
+      popisek: Stoupej ke hvězdám
+    - src: /img/projekty/pull-up-star/appstore-2.webp
+      popisek: Spáruj hrazdu a začni cvičit
+    - src: /img/projekty/pull-up-star/appstore-3.webp
+      popisek: Buduj komunitu
+    - src: /img/projekty/pull-up-star/appstore-4.webp
+      popisek: Soutěž o titul Pull Up Star
+    - src: /img/projekty/pull-up-star/appstore-5.webp
+      popisek: Trénuj, soutěž, sdílej, inspiruj, vyhrávej
 ---

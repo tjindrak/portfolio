@@ -13,10 +13,17 @@ interface Props {
   position?: string;
   eager?: boolean;
   showCaption?: boolean;
+  // Výřez z Figmy: "šířka výška vlevo nahoře" v % rámečku, např. "163.49 100 -34.04 0".
+  // Rodič musí mít position: relative a overflow: hidden.
+  vyrez?: string;
 }
 
-const { src, alt, class: className, fit = 'cover', position = 'center', eager = false, showCaption = true } = Astro.props;
+const { src, alt, class: className, fit = 'cover', position = 'center', eager = false, showCaption = true, vyrez } = Astro.props;
 const exists = !!src && existsSync(join(process.cwd(), 'public', src));
+const [w, h, l, t] = vyrez ? vyrez.split(/\s+/).map(Number) : [];
+const styl = vyrez
+  ? `position:absolute;width:${w}%;height:${h}%;left:${l}%;top:${t}%;max-width:none;object-fit:fill`
+  : `object-fit:${fit};object-position:${position}`;
 ---
 {exists ? (
   <img
@@ -25,7 +32,7 @@ const exists = !!src && existsSync(join(process.cwd(), 'public', src));
     alt={alt}
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
-    style={`object-fit:${fit};object-position:${position}`}
+    style={styl}
   />
 ) : (
   <div class:list={['obrazek obrazek--placeholder', className]} role="img" aria-label={alt}>

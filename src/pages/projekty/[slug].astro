@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Obrazek from '../../components/Obrazek.astro';
 import ProjektDlazdice from '../../components/ProjektDlazdice.astro';
 import Icon from '../../components/Icon.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { vsechnyProjekty, obrazekProjektu, prvniExistujici, type Projekt } from '../../lib/projekty';
 
 export const getStaticPaths = (async () => {
@@ -38,10 +40,14 @@ const metaPolozky = [
 
 const jeCitat = (t: string) => t.startsWith('> ');
 const bezCitace = (t: string) => t.replace(/^>\s*/, '');
+// Vrstevnice v pozadí stránky (Jardova mapa), když projekt má vrstevnice.svg
+const vrstevnice = `/img/projekty/${id}/vrstevnice.svg`;
+const maVrstevnice = existsSync(join(process.cwd(), 'public', vrstevnice));
 const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obrazekProjektu(id, 'hero.webp');
 ---
 <Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`}>
   <article class="detail">
+    {maVrstevnice && <img class="vrstevnice" src={vrstevnice} alt="" aria-hidden="true" />}
     <!-- Hero -->
     <header class="container hero">
       <a href="/projekty" class="btn btn--text hero__zpet"><Icon name="arrow-left" />Všechny projekty</a>
@@ -60,7 +66,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
               {d.shrnuti && <p class="lead gradient-text gradient-text--soft hero__shrnuti">{d.shrnuti}</p>}
               {d.web?.url && (
                 <a href={d.web.url} class="btn btn--accent hero__web" target="_blank" rel="noopener">
-                  Navštívit web <Icon name="arrow-up-right" />
+                  {d.web.tlacitko} <Icon name="arrow-up-right" />
                 </a>
               )}
             </div>
@@ -83,16 +89,18 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     {d.hero?.rozlozeni === 'kolaz' ? (
       <div class="container kolaz" data-reveal>
         <div class="kolaz__velky">
-          <Obrazek src={heroSrc} alt={d.hero.popisek} eager />
+          <Obrazek src={heroSrc} alt={d.hero.popisek} vyrez={d.hero.vyrez} eager />
           <Obrazek src={obrazekProjektu(id, 'hero-logo.svg')} alt="" class="kolaz__logo" fit="contain" showCaption={false} />
         </div>
         <div class="kolaz__maly">
-          <Obrazek src={obrazekProjektu(id, 'hero-mobil.webp')} alt={d.hero.popisekMobil ?? d.hero.popisek} />
+          <Obrazek src={obrazekProjektu(id, 'hero-mobil.webp')} alt={d.hero.popisekMobil ?? d.hero.popisek} vyrez={d.hero.vyrezMobil} />
         </div>
       </div>
     ) : (
       <div class:list={['container hero-obrazek', { 'hero-obrazek--brzy': brzy }]} data-reveal>
-        <Obrazek src={heroSrc} alt={d.hero?.popisek ?? d.nazev} eager />
+        <div class="hero-obrazek__ram">
+          <Obrazek src={heroSrc} alt={d.hero?.popisek ?? d.nazev} vyrez={brzy ? undefined : d.hero?.vyrez} eager />
+        </div>
       </div>
     )}
 
@@ -105,12 +113,12 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
       <>
         <!-- Výzva -->
         {d.vyzva && (
-          <section class="container sekce">
+          <section class:list={['container sekce sekce--vyzva', { 'sekce--s-obrazkem': d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek }]}>
             <p class="bg-word" aria-hidden="true">Výzva</p>
             <div class:list={['sekce__obsah', { 'sekce__obsah--s-obrazkem': d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek }]}>
               {d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek && (
                 <div class="obrazek-vedle" data-reveal>
-                  <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} />
+                  <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} vyrez={d.vyzva.obrazek.vyrez} />
                 </div>
               )}
               <div class="sloupec sloupec--vpravo" data-reveal>
@@ -122,7 +130,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
             </div>
             {d.vyzva.obrazekPozice === 'pod' && d.vyzva.obrazek && (
               <div class="obrazek-pod" data-reveal>
-                <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} />
+                <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} vyrez={d.vyzva.obrazek.vyrez} />
               </div>
             )}
           </section>
@@ -130,7 +138,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 
         <!-- Proces -->
         {d.proces && (
-          <section class="container sekce">
+          <section class="container sekce sekce--proces">
             <p class="bg-word bg-word--vpravo" aria-hidden="true">Proces</p>
             <div class="sloupec" data-reveal>
               <h2 class="subhead gradient-text">{d.proces.nadpis}</h2>
@@ -154,7 +162,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 
         <!-- Řešení -->
         {d.reseni && (
-          <section class="container sekce">
+          <section class:list={['container sekce sekce--reseni', { 'sekce--dlouhe-slovo': !!d.reseni.slovo }]}>
             <p class="bg-word bg-word--zalom" aria-hidden="true">{d.reseni.slovo ?? 'Řešení'}</p>
             <div class="sloupec sloupec--vpravo" data-reveal>
               <h2 class="subhead gradient-text">{d.reseni.nadpis}</h2>
@@ -166,10 +174,19 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
               <div class:list={['galerie', `galerie--${Math.min(d.reseni.obrazky.length, 2)}`, `galerie--${id}`]}>
                 {d.reseni.obrazky.map((o, i) => (
                   <div class="galerie__item" data-reveal style={`--reveal-delay:${i * 0.1}s`}>
-                    <Obrazek src={o.src} alt={o.popisek} />
+                    <Obrazek src={o.src} alt={o.popisek} vyrez={o.vyrez} />
                   </div>
                 ))}
               </div>
+            )}
+            {d.reseni.obrazovky.length > 0 && (
+              <ul class="obrazovky">
+                {d.reseni.obrazovky.map((o, i) => (
+                  <li class="obrazovky__item" data-reveal style={`--reveal-delay:${i * 0.06}s`}>
+                    <Obrazek src={o.src} alt={o.popisek} />
+                  </li>
+                ))}
+              </ul>
             )}
             {d.reseni.siroky && (
               <div class="siroky" data-reveal>
@@ -193,7 +210,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     <!-- Další projekt -->
     {dalsi && (
       <section class="container dalsi" aria-label="Další projekt">
-        <p class="bg-word bg-word--stred" aria-hidden="true">Další projekt</p>
+        <p class="bg-word bg-word--vpravo" aria-hidden="true">Další projekt</p>
         <div data-reveal>
           <ProjektDlazdice projekt={dalsi} siroka class="dalsi__dlazdice" />
         </div>
@@ -203,6 +220,22 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 </Base>
 
 <style>
+  /* Rozměry podle Figmy (rámec 1440 px, obsah 1312 px) */
+
+  .detail {
+    position: relative;
+  }
+  .vrstevnice {
+    position: absolute;
+    top: -101px;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+  }
+
   /* Hero */
   .hero {
     position: relative;
@@ -212,11 +245,11 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     margin-left: -5px;
   }
   .hero__slovo {
-    margin-top: 18px;
+    margin-top: 28px;
   }
   .hero__nazev {
     position: relative;
-    margin-top: clamp(-76px, -5.3vw, -36px);
+    margin-top: clamp(-76px, -5.28vw, -36px);
   }
   .hero__stitky {
     display: flex;
@@ -226,14 +259,16 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     padding: 0;
     list-style: none;
   }
+  .hero__stitky .chip {
+    font-weight: 500;
+  }
   .hero__radek {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 800px) minmax(0, 360px);
     justify-content: space-between;
     gap: 48px;
-    margin-top: 47px;
-  }
-  .hero__levy {
-    max-width: 800px;
+    min-height: 362px;
+    margin-top: 48px;
   }
   .hero__web {
     margin-top: 40px;
@@ -243,43 +278,49 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     flex-direction: column;
     gap: 22px;
     margin: 8px 0 0;
-    min-width: 260px;
-    max-width: 360px;
   }
   .meta dt {
     font-size: 13px;
     font-weight: 500;
+    line-height: 1.23;
     color: var(--fg-60);
   }
   .meta dd {
     margin: 4px 0 0;
     font-size: 17px;
     font-weight: 500;
+    line-height: 1.23;
     color: var(--fg);
   }
 
   /* Hlavní obrázek */
-  .hero-obrazek {
-    margin-top: 80px;
+  .hero-obrazek__ram,
+  .kolaz__velky,
+  .kolaz__maly,
+  .obrazek-vedle,
+  .obrazek-pod,
+  .galerie__item {
+    position: relative;
+    overflow: hidden;
   }
-  .hero-obrazek :global(.obrazek) {
+  .hero-obrazek__ram {
     aspect-ratio: 1312 / 720;
-    height: auto;
+  }
+  .hero-obrazek__ram :global(.obrazek) {
+    position: absolute;
+    inset: 0;
   }
   .hero-obrazek--brzy {
     margin-top: 80px;
   }
   .kolaz {
     position: relative;
-    margin-top: 80px;
     padding-bottom: 228px;
   }
   .kolaz__velky {
-    position: relative;
-    margin-left: 14.9%;
-    margin-right: -0.4%;
+    margin-left: 14.86%;
+    width: 84.76%;
     aspect-ratio: 1112 / 640;
-    overflow: hidden;
     border-radius: var(--radius-media);
   }
   .kolaz__velky :global(.obrazek) {
@@ -294,25 +335,36 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   }
   .kolaz__maly {
     position: absolute;
-    left: calc(var(--gutter) + 2.3%);
+    left: calc(var(--gutter) + (100% - 2 * var(--gutter)) * 0.0229);
     top: 228px;
-    width: 33.6%;
+    width: calc((100% - 2 * var(--gutter)) * 0.3361);
     aspect-ratio: 441 / 640;
-    overflow: hidden;
     border-radius: var(--radius-media);
-    box-shadow: 0 40px 80px rgb(0 0 0 / 0.35);
   }
 
   /* Sekce s velkým slovem v pozadí */
   .sekce {
     position: relative;
+    margin-top: 140px;
+  }
+  .sekce--vyzva {
+    margin-top: 180px;
+  }
+  .kolaz + .sekce--vyzva {
     margin-top: 200px;
+  }
+  .sekce--s-obrazkem + .sekce {
+    margin-top: 60px;
+  }
+  .sekce--reseni {
+    margin-top: 180px;
+  }
+  .sekce .bg-word,
+  .dalsi .bg-word {
+    font-size: clamp(88px, 15.28vw, 220px);
   }
   .bg-word--vpravo {
     text-align: right;
-  }
-  .bg-word--stred {
-    text-align: center;
   }
   .bg-word--zalom {
     white-space: normal;
@@ -329,33 +381,43 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     width: 441px;
     max-width: calc(100% - 48px);
     aspect-ratio: 441 / 640;
-    margin-top: 120px;
-    overflow: hidden;
+    margin-top: 169px;
   }
   .sloupec {
     position: relative;
     max-width: 820px;
-    margin-top: -40px;
+    margin-top: -24px;
+  }
+  .sekce--vyzva .sloupec {
+    margin-top: 29px;
+  }
+  .sekce--reseni .sloupec {
+    margin-top: -48px;
+  }
+  .sekce--dlouhe-slovo .sloupec {
+    margin-top: 35px;
   }
   .sloupec--vpravo {
     margin-left: var(--col-offset);
   }
   .sloupec .prose {
-    margin-top: 40px;
+    margin-top: 42px;
+  }
+  .sekce--vyzva .sloupec .prose {
+    margin-top: 72px;
   }
   .obrazek-pod {
     width: 67.7%;
     aspect-ratio: 888 / 780;
-    margin: 70px 0 0 6%;
-    overflow: hidden;
+    margin: 120px 0 0 6%;
     border-radius: var(--radius-media);
   }
 
   .kroky {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 272px));
     gap: 64px;
-    margin: 120px 0 0;
+    margin: 140px 0 0;
     padding: 0;
     list-style: none;
   }
@@ -384,12 +446,15 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 72px;
-    margin-top: 120px;
+    margin-top: 112px;
   }
   .galerie__item {
-    overflow: hidden;
     border-radius: var(--radius-media);
     aspect-ratio: 620 / 440;
+  }
+  .galerie__item :global(.obrazek) {
+    position: absolute;
+    inset: 0;
   }
   .galerie__item:nth-child(2) {
     margin-top: 80px;
@@ -401,7 +466,8 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   .galerie--jardova-mapa {
     grid-template-columns: 566fr 662fr;
     gap: 17px;
-    padding-left: 5%;
+    margin-top: 99px;
+    padding-left: 5.1%;
   }
   .galerie--jardova-mapa .galerie__item:nth-child(1) {
     aspect-ratio: 566 / 694;
@@ -415,9 +481,28 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     aspect-ratio: 1312 / 546;
     overflow: hidden;
   }
+  .obrazovky {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 267px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .obrazovky__item {
+    flex: 0 1 252px;
+    aspect-ratio: 252 / 546;
+  }
   .web-odkaz {
-    margin-top: 160px;
+    max-width: 820px;
+    margin: 120px auto 0;
     text-align: center;
+  }
+  .galerie + .web-odkaz {
+    margin-top: 268px;
+  }
+  .obrazovky + .web-odkaz {
+    margin-top: 78px;
   }
   .web-odkaz a {
     transition: opacity 0.2s ease;
@@ -433,25 +518,38 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 
   .dalsi {
     position: relative;
-    margin-top: 220px;
+    margin-top: 200px;
+    margin-bottom: 180px;
   }
   .dalsi :global(.dalsi__dlazdice) {
-    margin-top: -40px;
+    margin-top: 40px;
     height: 460px;
   }
 
   @media (max-width: 1100px) {
     .hero__radek {
-      flex-direction: column;
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .hero-obrazek,
+    .kolaz {
+      margin-top: 80px;
     }
     .meta {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      max-width: none;
     }
     .kroky {
       grid-template-columns: repeat(2, 1fr);
       gap: 48px;
+    }
+    .obrazovky {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+    .obrazovky__item {
+      flex: 0 0 220px;
+      scroll-snap-align: start;
     }
   }
   @media (max-width: 720px) {
@@ -461,7 +559,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     .hero__radek {
       margin-top: 32px;
     }
-    .hero-obrazek :global(.obrazek) {
+    .hero-obrazek__ram {
       aspect-ratio: 4 / 3;
     }
     .kolaz {
@@ -472,6 +570,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     }
     .kolaz__velky {
       margin: 0;
+      width: 100%;
     }
     .kolaz__maly {
       position: relative;
@@ -479,11 +578,22 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
       top: auto;
       width: 60%;
     }
-    .sekce {
+    .sekce,
+    .sekce--vyzva,
+    .sekce--reseni,
+    .kolaz + .sekce--vyzva,
+    .sekce--s-obrazkem + .sekce {
       margin-top: 120px;
     }
-    .sloupec {
+    .sloupec,
+    .sekce--vyzva .sloupec,
+    .sekce--reseni .sloupec,
+    .sekce--dlouhe-slovo .sloupec {
       margin-top: -16px;
+    }
+    .sloupec .prose,
+    .sekce--vyzva .sloupec .prose {
+      margin-top: 32px;
     }
     .sekce__obsah--s-obrazkem {
       display: flex;
@@ -516,20 +626,26 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     .galerie--jardova-mapa .galerie__item:nth-child(2) {
       margin-top: 0;
     }
+    .obrazovky {
+      margin-top: 64px;
+    }
     .siroky {
       aspect-ratio: 4 / 3;
       margin-top: 64px;
     }
     .web-odkaz,
+    .galerie + .web-odkaz,
+    .obrazovky + .web-odkaz,
     .brzy {
       margin-top: 96px;
     }
     .dalsi {
       margin-top: 120px;
+      margin-bottom: 40px;
     }
     .dalsi :global(.dalsi__dlazdice) {
       height: 320px;
-      margin-top: -16px;
+      margin-top: 16px;
     }
   }
 </style>

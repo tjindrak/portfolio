@@ -200,7 +200,7 @@ h4 {
 }
 
 .title-xl {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(44px, 5vw, 72px);
   line-height: 1.05;
@@ -219,8 +219,8 @@ h4 {
 
 /* Podnadpisy sekcí: přechod Accent/5 -> bílá */
 .subhead {
-  font-family: var(--font-heading);
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: clamp(30px, 3.1vw, 44px);
   line-height: 1.18;
   letter-spacing: -0.02em;
@@ -247,8 +247,7 @@ h4 {
   margin-top: 20px;
 }
 .prose .quote {
-  font-family: var(--font-heading);
-  font-weight: 400;
+  font-weight: 500;
   font-size: clamp(24px, 2.2vw, 32px);
   line-height: 1.3;
 }

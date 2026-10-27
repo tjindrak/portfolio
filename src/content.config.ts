@@ -4,6 +4,8 @@ import { glob } from 'astro/loaders';
 const obrazek = z.object({
   src: z.string().optional(),
   popisek: z.string(),
+  // Výřez z Figmy (viz Obrazek.astro): "šířka výška vlevo nahoře" v %
+  vyrez: z.string().optional(),
 });
 
 const sekce = z.object({
@@ -45,12 +47,14 @@ const projekty = defineCollection({
       })
       .optional(),
     // Bez url se tlačítko "Navštívit web" skryje a popisek zůstane jako text.
-    web: z.object({ url: z.string().url().optional(), popisek: z.string() }).optional(),
+    web: z.object({ url: z.string().url().optional(), popisek: z.string(), tlacitko: z.string().default('Navštívit web') }).optional(),
     hero: z
       .object({
         rozlozeni: z.enum(['plny', 'kolaz']).default('plny'),
         popisek: z.string(),
         popisekMobil: z.string().optional(),
+        vyrez: z.string().optional(),
+        vyrezMobil: z.string().optional(),
       })
       .optional(),
     vyzva: sekce
@@ -70,6 +74,8 @@ const projekty = defineCollection({
         slovo: z.string().optional(),
         obrazky: z.array(obrazek).default([]),
         siroky: obrazek.optional(),
+        // Řada úzkých náhledů přes celou šířku (např. obrazovky z App Store)
+        obrazovky: z.array(obrazek).default([]),
       })
       .optional(),
   }),
