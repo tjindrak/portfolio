@@ -20,6 +20,8 @@ const projekty = defineCollection({
     nazev: z.string(),
     // Velké slovo v pozadí hero (když se liší od názvu)
     slovo: z.string().optional(),
+    // Velikost slova v pozadí hero v px (Figma), když se dlouhé slovo nevejde do 224 px
+    velikostSlova: z.number().optional(),
     // Název na dlaždici v gridu Projekty (když se liší od názvu)
     dlazdice: z.string().optional(),
     // Barva pod obrázkem na dlaždici (pro obrázky s průhledným pozadím)

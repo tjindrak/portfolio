@@ -1,5 +1,6 @@
 ---
 nazev: Jardova mapa
+velikostSlova: 198
 stav: hotovo
 barva: "#E3B341"
 typ: Webová aplikace
@@ -19,7 +20,7 @@ meta:
   vystup: Redesign webové aplikace
   spoluprace: Martin Nešněra – vývoj
 web:
-  url: https://jardovamapa.cz
+  url: https://www.jardovamapa.cz/
   popisek: jardovamapa.cz
 hero:
   rozlozeni: kolaz
