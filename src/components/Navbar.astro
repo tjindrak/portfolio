@@ -108,27 +108,11 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     color: var(--fg-70);
     transition: color 0.2s ease;
   }
-  .navbar__link::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 27px;
-    width: 16px;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.25s ease;
-  }
   .navbar__link:hover {
     color: var(--fg);
   }
   .navbar__link.is-active {
-    color: var(--fg);
-  }
-  .navbar__link.is-active::after,
-  .navbar__link:hover::after {
-    transform: scaleX(1);
+    color: var(--accent);
   }
   .navbar__divider {
     width: 1px;
@@ -228,7 +212,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     color: var(--fg-70);
   }
   .mobile-menu a.is-active {
-    color: var(--fg);
+    color: var(--accent);
   }
   .mobile-menu__theme {
     margin-top: 32px;

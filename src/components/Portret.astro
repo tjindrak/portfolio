@@ -33,16 +33,16 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
     const float sirka = 108.0;
     void main() {
       vec2 px = uv * size;
-      float u = dot(px, dir) + t * 14.0;
+      float u = dot(px, dir) + t * 6.0;
       float s = fract(u / sirka);
       // lom: uvnitř pruhu se obraz posune podle polohy v pruhu, síla pomalu kolísá
-      float sila = 12.0 + 5.0 * sin(t * 0.45);
+      float sila = 7.0 + 2.5 * sin(t * 0.25);
       float posun = (s - 0.5) * sila;
       vec2 q = (px + dir * posun) / size;
       vec4 c = texture2D(tex, clamp(q, 0.0, 1.0));
       // jemné prosvětlení hrany pruhu
       float hrana = smoothstep(0.03, 0.0, s) + smoothstep(0.97, 1.0, s);
-      c.rgb += hrana * 0.05 * c.a;
+      c.rgb += hrana * 0.03 * c.a;
       gl_FragColor = c;
     }`;
 
