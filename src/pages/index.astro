@@ -44,7 +44,7 @@ const sluzby = [
 
   <!-- Vybrané projekty -->
   <section class="vybrane container" aria-labelledby="vybrane-nadpis">
-    <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-reveal>Vybrané projekty</h2>
+    <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-pismena>Vybrané projekty</h2>
     <ul class="karty" data-reveal>
       {karty.map(({ p, src, pomer }, i) => (
         <li class:list={['karta', { 'is-open': i === 0 }]} style={`--pomer: ${pomer.toFixed(4)}`}>
@@ -71,9 +71,9 @@ const sluzby = [
   <section class="omne container" aria-labelledby="omne-nadpis">
     <p class="bg-word omne__slovo" aria-hidden="true">O mně</p>
     <div class="omne__obsah">
-      <div class="omne__intro" data-reveal>
-        <h2 id="omne-nadpis" class="omne__claim">Jsem designer, který se nejdřív ptá a&nbsp;teprve potom tvoří.</h2>
-        <p class="omne__popis">
+      <div class="omne__intro">
+        <h2 id="omne-nadpis" class="omne__claim" data-pismena>Jsem designer, který se nejdřív ptá a&nbsp;teprve potom tvoří.</h2>
+        <p class="omne__popis" data-pismena>
           Navrhuju digitální produkty od prvního rozhovoru s uživateli až po finální pixel. Pomáhám týmům a značkám zjistit, co lidé
           opravdu potřebují, a proměnit to v rozhraní, která se dobře používají a hezky vypadají.
         </p>
@@ -95,7 +95,7 @@ const sluzby = [
   <section class="napis container" aria-labelledby="napis-nadpis">
     <p class="bg-word napis__slovo" aria-hidden="true">Napiš mi</p>
     <div class="napis__obsah">
-      <h2 id="napis-nadpis" class="napis__intro" data-reveal>Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.</h2>
+      <h2 id="napis-nadpis" class="napis__intro" data-pismena>Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.</h2>
       <KontaktFormular class="napis__formular" kompaktni />
     </div>
   </section>
@@ -113,9 +113,60 @@ const sluzby = [
       karty.forEach((k) => k.classList.toggle('is-open', k === karta));
     });
   });
+
+  // Texty najíždějí písmeno po písmenu zleva doprava, když se dostanou do okna.
+  // Slova zůstávají celá (kvůli zalamování), čtečky dostanou celý text přes aria-label.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const pozorovatel = new IntersectionObserver(
+      (zaznamy) =>
+        zaznamy.forEach((z) => {
+          if (!z.isIntersecting) return;
+          z.target.classList.add('is-in');
+          pozorovatel.unobserve(z.target);
+        }),
+      { rootMargin: '0px 0px -12% 0px' }
+    );
+    document.querySelectorAll<HTMLElement>('[data-pismena]').forEach((el) => {
+      const text = (el.textContent ?? '').replace(/[ \t\n\r]+/g, ' ').trim();
+      el.setAttribute('aria-label', text);
+      el.textContent = '';
+      let i = 0;
+      text.split(' ').forEach((slovo, n) => {
+        if (n) el.append(' ');
+        const s = document.createElement('span');
+        s.className = 'slovo';
+        s.setAttribute('aria-hidden', 'true');
+        for (const znak of slovo) {
+          const z = document.createElement('span');
+          z.className = 'pismeno';
+          z.textContent = znak;
+          z.style.setProperty('--i', String(i++));
+          s.append(z);
+        }
+        el.append(s);
+      });
+      el.style.setProperty('--n', String(i));
+      el.classList.add('pismena');
+      pozorovatel.observe(el);
+    });
+  }
 </script>
 
 <style>
+  /* Najetí textu písmeno po písmenu (skript výše); celé trvá zhruba stejně dlouho u krátkých i dlouhých textů */
+  :global(.pismena .slovo) {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  :global(.pismena .pismeno) {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    transition-delay: calc(var(--i) * min(28ms, 1100ms / var(--n)));
+  }
+  :global(.pismena.is-in .pismeno) {
+    opacity: 1;
+  }
+
   /* Hero je kompozice 1440 × 900 z Figmy, která se škáluje podle okna:
      --u je velikost jednoho pixelu návrhu. Řídí ji výška okna, aby fotka vždy
      zmizela na spodní hraně, a šířka, aby se fotka vešla vedle textu. */
@@ -232,10 +283,15 @@ const sluzby = [
     max-width: none;
     height: 100%;
     transform: translateX(-50%);
-    transition: width 1.3s cubic-bezier(0.45, 0, 0.2, 1);
+    /* Neaktivní karta má jako ve Figmě sníženou saturaci a je o něco tmavší */
+    filter: saturate(0.5) brightness(0.85);
+    transition:
+      width 1.3s cubic-bezier(0.45, 0, 0.2, 1),
+      filter 0.9s ease;
   }
   .karta.is-open :global(.karta__img) {
     width: max(var(--otevrena), calc(450px * var(--pomer, 1.3333)));
+    filter: none;
   }
   .karta__scrim {
     position: absolute;
