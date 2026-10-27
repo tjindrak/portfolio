@@ -110,9 +110,15 @@ const fotky = [
     top: 169px;
     width: 532px;
   }
-  /* O mně zatím drží černobílý portrét, dokud se stránka nepřevede podle nové Figmy */
-  .hero :global(.hero__portret img) {
-    filter: grayscale(1);
+  /* Slova v pozadí jsou Nohemi SemiBold, texty Delight Regular (Figma O mně 316:447) */
+  .bg-word {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+  .hero__nazev,
+  .hero__shrnuti,
+  .subhead {
+    font-weight: 400;
   }
   .hero__slovo,
   .hero__nazev,
@@ -124,6 +130,7 @@ const fotky = [
   }
   .hero__shrnuti {
     max-width: 800px;
+    font-size: clamp(22px, 2.23vw, 32px);
     margin-top: 50px;
   }
   .sekce {
@@ -132,6 +139,9 @@ const fotky = [
   }
   .sekce--studium {
     margin-top: 621px;
+  }
+  .sekce--kam {
+    margin-top: 364px;
   }
   .sekce .bg-word {
     font-size: clamp(88px, 15.28vw, 220px);
@@ -146,7 +156,7 @@ const fotky = [
     }
   }
   .bg-word--odsazene {
-    padding-left: 21%;
+    padding-left: 18.37%;
   }
   .sloupec {
     position: relative;
@@ -183,7 +193,7 @@ const fotky = [
     margin-top: 123px;
   }
   .sekce--prace .osa-wrap {
-    margin-top: 140px;
+    margin-top: 138px;
   }
   .smery {
     display: grid;
@@ -195,12 +205,12 @@ const fotky = [
   }
   .smery__nazev {
     font-family: var(--font-body);
-    font-weight: 500;
+    font-weight: 400;
     font-size: clamp(26px, 2.5vw, 36px);
-    line-height: 1.2;
+    line-height: normal;
   }
   .smery__popis {
-    margin-top: 13px;
+    margin-top: 10px;
     font-size: clamp(18px, 1.55vw, 22px);
     line-height: 1.5;
     color: var(--fg-80);

@@ -1,6 +1,6 @@
 ---
 // Svislá časová osa (Figma: Osa · Studium / Práce). Poslední bod svítí,
-// milníky se objevují postupně při scrollu.
+// linka se kreslí se scrollem a milníky se rozsvěcují, když k nim dojede.
 interface Polozka {
   roky?: string;
   nazev: string;
@@ -11,9 +11,10 @@ interface Props {
 }
 const { polozky } = Astro.props;
 ---
-<ol class="osa">
+<ol class="osa" data-osa>
+  <span class="osa__linka" aria-hidden="true"></span>
   {polozky.map((p, i) => (
-    <li class:list={['osa__polozka', { 'osa__polozka--aktualni': i === polozky.length - 1 }]} data-reveal>
+    <li class:list={['osa__polozka', { 'osa__polozka--aktualni': i === polozky.length - 1 }]}>
       {p.roky && <span class="osa__roky">{p.roky}</span>}
       <span class="osa__bod" aria-hidden="true"></span>
       <h3 class="osa__nazev">{p.nazev}</h3>
@@ -32,15 +33,17 @@ const { polozky } = Astro.props;
     padding: 0;
     list-style: none;
   }
-  /* Čára vede od středu bodu ke středu dalšího bodu (ve Figmě končí u posledního) */
-  .osa__polozka:not(:last-child)::after {
-    content: '';
+  /* Jedna linka od středu prvního bodu ke středu posledního (Figma: Osa · …).
+     Délku a začátek dopočítá skript, --p (0–1) říká, kam už dojela. */
+  .osa__linka {
     position: absolute;
     left: var(--osa-x);
-    top: var(--osa-stred);
-    height: calc(100% + var(--osa-mezera));
+    top: var(--osa-zacatek, var(--osa-stred));
+    height: var(--osa-delka, 0px);
     width: 1px;
     background: var(--fg-24);
+    transform-origin: top;
+    transform: scaleY(var(--p, 1));
   }
   .osa__polozka {
     position: relative;
@@ -57,7 +60,7 @@ const { polozky } = Astro.props;
     width: 480px;
     text-align: right;
     font-size: 22px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.1;
     color: var(--fg-40);
     white-space: nowrap;
@@ -80,12 +83,32 @@ const { polozky } = Astro.props;
   }
   .osa__nazev {
     font-family: var(--font-body);
-    font-weight: 500;
+    font-weight: 400;
     font-size: clamp(26px, 2.5vw, 36px);
-    line-height: 1.2;
+    line-height: normal;
+  }
+  /* Milník se objeví, až k němu linka dojede */
+  :global(.js) .osa[data-pripraveno] .osa__polozka > :not(.osa__bod) {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  :global(.js) .osa[data-pripraveno] .osa__bod {
+    transform: scale(0.4);
+    opacity: 0;
+    transition:
+      opacity 0.4s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.8s ease;
+  }
+  :global(.js) .osa[data-pripraveno] .osa__polozka.is-on > * {
+    opacity: 1;
+    transform: none;
   }
   .osa__popis {
-    margin-top: 12px;
+    margin-top: 10px;
     white-space: pre-line;
     font-size: clamp(18px, 1.55vw, 22px);
     line-height: 1.5;
@@ -128,3 +151,61 @@ const { polozky } = Astro.props;
     }
   }
 </style>
+
+<script>
+  // Linka časové osy se kreslí podle scrollu: konec linky drží zhruba ve 2/3 výšky okna.
+  const osy = [...document.querySelectorAll<HTMLElement>('[data-osa]')];
+  const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const zmerit = () =>
+    osy.forEach((osa) => {
+      const body = [...osa.querySelectorAll<HTMLElement>('.osa__bod')];
+      const o = osa.getBoundingClientRect().top;
+      const stredy = body.map((b) => {
+        const r = b.getBoundingClientRect();
+        return r.top + r.height / 2 - o;
+      });
+      osa.style.setProperty('--osa-zacatek', `${stredy[0]}px`);
+      osa.style.setProperty('--osa-delka', `${stredy[stredy.length - 1] - stredy[0]}px`);
+      (osa as any)._stredy = stredy;
+    });
+  const posun = () =>
+    osy.forEach((osa) => {
+      const stredy: number[] = (osa as any)._stredy;
+      const delka = stredy[stredy.length - 1] - stredy[0];
+      const hrot = innerHeight * 0.66 - (osa.getBoundingClientRect().top + stredy[0]);
+      const p = Math.min(1, Math.max(0, hrot / (delka || 1)));
+      osa.style.setProperty('--p', String(p));
+      osa.querySelectorAll('.osa__polozka').forEach((li, i) => {
+        // první milník se ukáže, jakmile se k němu doscrolluje, další až je linka u nich
+        if (hrot >= stredy[i] - stredy[0] - 1) li.classList.add('is-on');
+      });
+    });
+  if (osy.length && !klid) {
+    zmerit();
+    osy.forEach((o) => o.setAttribute('data-pripraveno', ''));
+    posun();
+    let ceka = false;
+    addEventListener(
+      'scroll',
+      () => {
+        if (ceka) return;
+        ceka = true;
+        requestAnimationFrame(() => {
+          posun();
+          ceka = false;
+        });
+      },
+      { passive: true },
+    );
+    addEventListener('resize', () => {
+      zmerit();
+      posun();
+    });
+    document.fonts?.ready.then(() => {
+      zmerit();
+      posun();
+    });
+  } else {
+    zmerit();
+  }
+</script>
