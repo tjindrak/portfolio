@@ -6,7 +6,7 @@ pozadi: "#dcdcd5"
 stav: brzy
 typ: Packaging – Soutěž
 rok: "2023"
-kategorie: [Grafika, Ilustrace]
+kategorie: [Grafika]
 poradi: 9
 vyska: 360
 dalsi: jardova-mapa

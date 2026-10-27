@@ -8,7 +8,9 @@ const projekty = await vsechnyProjekty();
 // Filtry se počítají z kategorií v Markdown souborech projektů.
 const pocty = new Map<string, number>();
 for (const p of projekty) for (const k of p.data.kategorie) pocty.set(k, (pocty.get(k) ?? 0) + 1);
-const filtry = [...pocty.entries()].sort((a, b) => b[1] - a[1]);
+// Pořadí chipů podle Figmy (Projekty 241:331)
+const poradi = ['UI/UX design', 'Web', 'Grafika', 'Branding'];
+const filtry = [...pocty.entries()].sort((a, b) => (poradi.indexOf(a[0]) + 1 || 99) - (poradi.indexOf(b[0]) + 1 || 99) || b[1] - a[1]);
 
 // Kolik dlaždic ukázat hned, zbytek odkryje tlačítko "Zobrazit další projekty".
 const LIMIT = 12;

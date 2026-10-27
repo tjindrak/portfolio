@@ -5,7 +5,7 @@ stav: hotovo
 barva: "#6AA6D8"
 typ: Desková hra
 rok: "2023"
-kategorie: [Grafika, Ilustrace]
+kategorie: [Grafika]
 poradi: 3
 vyska: 600
 vybrany: 3

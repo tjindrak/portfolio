@@ -262,7 +262,7 @@ h4 {
 }
 .prose .quote {
   font-weight: 500;
-  font-size: clamp(24px, 2.2vw, 32px);
+  font-size: clamp(24px, 2.23vw, 32px);
   line-height: 1.3;
 }
 

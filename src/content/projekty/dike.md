@@ -6,7 +6,7 @@ stav: hotovo
 barva: "#7DB08A"
 typ: Web & Branding
 rok: "2025"
-kategorie: [UI/UX design, Web, UX výzkum]
+kategorie: [UI/UX design, Web]
 poradi: 2
 vyska: 480
 vybrany: 4
