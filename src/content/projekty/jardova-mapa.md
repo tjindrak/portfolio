@@ -1,6 +1,7 @@
 ---
 nazev: Jardova mapa
 stav: hotovo
+barva: "#E3B341"
 typ: Webová aplikace
 rok: "2026"
 kategorie: [UI/UX design, Web]

@@ -1,6 +1,7 @@
 ---
 nazev: Pull Up Star
 stav: hotovo
+barva: "#EC3E1B"
 typ: Aplikace & Web
 rok: "2025"
 kategorie: [UI/UX design, Branding, Web]

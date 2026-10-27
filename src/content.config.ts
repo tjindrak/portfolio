@@ -25,6 +25,8 @@ const projekty = defineCollection({
     // Barva pod obrázkem na dlaždici (pro obrázky s průhledným pozadím)
     pozadi: z.string().optional(),
     stav: z.enum(['hotovo', 'brzy']).default('hotovo'),
+    // Počáteční barva gradientu nadpisů na detailu (podle vizuálu projektu)
+    barva: z.string().optional(),
     typ: z.string(),
     rok: z.string(),
     kategorie: z.array(z.string()).default([]),

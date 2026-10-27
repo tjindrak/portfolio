@@ -3,6 +3,7 @@ nazev: Zahradní centrum DIKÉ
 slovo: DIKÉ
 dlazdice: Diké
 stav: hotovo
+barva: "#7DB08A"
 typ: Web & Branding
 rok: "2025"
 kategorie: [UI/UX design, Web, UX výzkum]

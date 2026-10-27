@@ -46,7 +46,10 @@ const maVrstevnice = existsSync(join(process.cwd(), 'public', vrstevnice));
 const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obrazekProjektu(id, 'hero.webp');
 ---
 <Base title={d.nazev} description={d.shrnuti ?? `${d.nazev} · ${d.typ}`} glow={brzy ? 'brzy' : 'default'}>
-  <article class="detail">
+  <article
+    class:list={['detail', { 'detail--barva': !brzy && d.barva, 'detail--brzy': brzy }]}
+    style={!brzy && d.barva ? `--projekt: ${d.barva}` : undefined}
+  >
     {maVrstevnice && <img class="vrstevnice" src={vrstevnice} alt="" aria-hidden="true" />}
     <!-- Hero -->
     <header class="container hero">
@@ -220,6 +223,18 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 </Base>
 
 <style>
+  /* Gradient nadpisů podle barvy vizuálu projektu; hotový projekt bez barvy si nechá akcent */
+  .detail--barva :global(.gradient-text) {
+    background-image: linear-gradient(90deg, var(--projekt) 0%, var(--fg) 100%);
+  }
+  .detail--barva :global(.gradient-text--soft),
+  .detail--barva :global(.quote.gradient-text) {
+    background-image: linear-gradient(90deg, color-mix(in srgb, var(--projekt), var(--fg) 45%) 0%, var(--fg) 100%);
+  }
+  .detail--brzy :global(.gradient-text) {
+    background-image: linear-gradient(90deg, var(--fg) 0%, rgb(var(--fg-rgb) / 0.55) 100%);
+  }
+
   /* Rozměry podle Figmy (rámec 1440 px, obsah 1312 px) */
 
   .detail {

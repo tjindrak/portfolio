@@ -8,6 +8,7 @@
 nazev: Název projektu
 # slovo: Kratší slovo do pozadí hero (když je název dlouhý)
 stav: hotovo            # hotovo | brzy (brzy = stránka "Detaily už brzy")
+barva: "#E3B341"         # počáteční barva gradientu nadpisů (podle vizuálu)
 typ: Web & Branding     # podtitulek na dlaždici
 rok: "2026"
 kategorie: [UI/UX design, Web]   # podle nich se počítají filtry na /projekty
