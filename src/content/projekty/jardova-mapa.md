@@ -1,6 +1,6 @@
 ---
 nazev: Jardova mapa
-velikostSlova: 190
+velikostSlova: 193
 stav: hotovo
 barva: "#E3B341"
 typ: Webová aplikace
