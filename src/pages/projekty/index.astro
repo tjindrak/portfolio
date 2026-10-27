@@ -16,8 +16,8 @@ const LIMIT = 12;
 <Base title="Projekty" description="Výběr projektů Tomáše Jindráka: weby, aplikace, branding a grafika.">
   <section class="container projekty">
     <div class="uvod">
-      <h1 class="uvod__nadpis">Projekty</h1>
-      <p class="uvod__popis">Výběr prací, které nejlépe ukazují jak nad projekty přemýšlím a co vše během nich dělám.</p>
+      <h1 class="uvod__nadpis"><span class="maska"><span>Projekty</span></span></h1>
+      <p class="uvod__popis"><span class="maska"><span>Výběr prací, které nejlépe ukazují jak nad projekty přemýšlím a co vše během nich dělám.</span></span></p>
 
       <div class="filtr" role="group" aria-labelledby="filtr-label">
         <p id="filtr-label" class="filtr__label">Typ projektu</p>
@@ -78,10 +78,12 @@ const LIMIT = 12;
         return col;
       });
       viditelne.forEach((t, i) => sloupce[i % n].appendChild(t));
+      sloupce.forEach((col, i) => col.style.setProperty('--i', String(i)));
       tiles.filter((t) => t.hidden).forEach((t) => sloupce[0].appendChild(t));
       grid!.replaceChildren(...sloupce);
       grid!.classList.add('is-masonry');
       if (prazdno) prazdno.hidden = viditelne.length > 0;
+      nastavPosun();
     }
 
     function aplikovat() {
@@ -107,14 +109,84 @@ const LIMIT = 12;
       aplikovat();
     });
 
+    // Parallax: každý sloupec jede při scrollu jinou rychlostí (jen víc sloupců a bez omezeného pohybu)
+    const RYCHLOSTI = [0.02, 0.09, 0.05, 0.12];
+    const klid = matchMedia('(prefers-reduced-motion: reduce)');
+    let cil = 0;
+    let ted = 0;
+    let bezi = false;
+    function nastavPosun() {
+      const sloupce = grid!.querySelectorAll<HTMLElement>('.grid__col');
+      const zapnuto = sloupce.length > 1 && !klid.matches;
+      sloupce.forEach((s, i) => (s.style.translate = zapnuto ? `0 ${(-ted * RYCHLOSTI[i % 4]).toFixed(1)}px` : ''));
+    }
+    const krok = () => {
+      ted += (cil - ted) * 0.1;
+      if (Math.abs(cil - ted) < 0.1) ted = cil;
+      nastavPosun();
+      bezi = ted !== cil;
+      if (bezi) requestAnimationFrame(krok);
+    };
+    const posun = () => {
+      cil = Math.max(0, scrollY);
+      if (!bezi) {
+        bezi = true;
+        requestAnimationFrame(krok);
+      }
+    };
+
     aplikovat();
-    addEventListener('resize', () => rozlozit());
+    posun();
+    addEventListener('scroll', posun, { passive: true });
+    addEventListener('resize', () => {
+      rozlozit();
+      posun();
+    });
   }
 </script>
 
 <style>
   .projekty {
     padding-top: 99px;
+  }
+  /* Najetí úvodu jako na hlavní stránce: text vyjede zespodu z masky, pak filtr a sloupce gridu */
+  .maska {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .maska > span {
+    display: block;
+    animation: vyjet 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .uvod__popis .maska > span {
+    animation-delay: 0.12s;
+  }
+  .filtr {
+    animation: najet 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+  .grid :global(.grid__col) {
+    animation: najet 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.4s + var(--i, 0) * 60ms);
+  }
+  @keyframes vyjet {
+    from {
+      transform: translateY(110%);
+    }
+  }
+  @keyframes najet {
+    from {
+      opacity: 0;
+      transform: translateY(80px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .maska > span,
+    .filtr,
+    .grid :global(.grid__col) {
+      animation: none;
+    }
   }
   .uvod__nadpis {
     font-weight: 400;

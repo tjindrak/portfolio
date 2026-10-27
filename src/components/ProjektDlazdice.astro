@@ -46,7 +46,7 @@ const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : 
     transition: transform 0.8s cubic-bezier(0.42, 0, 0.58, 1);
   }
   .dlazdice:hover :global(.dlazdice__img) {
-    transform: scale(1.04);
+    transform: scale(1.03);
   }
   /* Ztmavení přes celou dlaždici, bez hrany uprostřed (Figma: 0 % až do 45 %, dole 80 %) */
   .dlazdice__scrim {
@@ -90,14 +90,13 @@ const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : 
     border-radius: 50%;
     background: var(--accent-5);
     color: var(--grayscale-10);
-    transition: transform var(--hover), background-color var(--hover);
+    transition: background-color var(--hover);
   }
   .dlazdice__sipka :global(svg) {
     width: 20px;
     height: 20px;
   }
   .dlazdice:hover .dlazdice__sipka {
-    transform: rotate(45deg);
     background: var(--accent-3);
   }
 </style>
