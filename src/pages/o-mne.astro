@@ -31,43 +31,43 @@ const fotky = [
 ---
 <Base title="O mně" description="Tomáš Jindrák: designér na pomezí UX, UI a grafiky. Studium, praxe a co mě baví mimo práci.">
   <header class="container hero">
-    <Portret class="hero__portret" />
-    <p class="bg-word hero__slovo" aria-hidden="true">O mně</p>
-    <h1 class="title-xl hero__nazev">Tomáš Jindrák</h1>
-    <p class="lead gradient-text gradient-text--soft hero__shrnuti">
+    <Portret class="hero__portret nacti" />
+    <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">O mně</p>
+    <h1 class="title-xl hero__nazev"><span class="maska"><span style="--d:0.15s">Tomáš Jindrák</span></span></h1>
+    <p class="lead gradient-text gradient-text--soft hero__shrnuti nacti" style="--d:0.35s">
       Designér na pomezí UX, UI a grafiky. Začínal jsem u webu, odbočil k fyzice a nakonec se naplno vrátil k tomu, co mě baví nejvíc.
     </p>
   </header>
 
   <section class="container sekce sekce--studium">
-    <p class="bg-word" aria-hidden="true">Studium</p>
-    <div class="sloupec sloupec--vpravo" data-reveal>
-      <h2 class="subhead gradient-text">K designu se zastávkou u fyziky</h2>
+    <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Studium</p>
+    <div class="sloupec sloupec--vpravo">
+      <h2 class="subhead gradient-text" data-pismena>K designu se zastávkou u fyziky</h2>
       <div class="prose">
-        <p>Moje cesta k designu nebyla úplně přímá. Začínal jsem u fotky a videí, přešel k webu, pak jsem zkusil fyziku a nakonec jsem pochopil, že mě to nejvíce táhne k tomu, dělat věci hezké a funkční a pro lidi.</p>
-        <p>Každá zastávka mi ale něco dala.</p>
+        <p data-pismena>Moje cesta k designu nebyla úplně přímá. Začínal jsem u fotky a videí, přešel k webu, pak jsem zkusil fyziku a nakonec jsem pochopil, že mě to nejvíce táhne k tomu, dělat věci hezké a funkční a pro lidi.</p>
+        <p data-pismena>Každá zastávka mi ale něco dala.</p>
       </div>
     </div>
     <div class="osa-wrap"><Osa polozky={studium} /></div>
   </section>
 
   <section class="container sekce sekce--prace">
-    <p class="bg-word bg-word--vpravo" aria-hidden="true">Práce</p>
-    <div class="sloupec" data-reveal>
-      <h2 class="subhead gradient-text">Praxe, která mě posunula.</h2>
+    <p class="bg-word bg-word--vpravo" aria-hidden="true" data-pismena="zespodu">Práce</p>
+    <div class="sloupec">
+      <h2 class="subhead gradient-text" data-pismena>Praxe, která mě posunula.</h2>
       <div class="prose">
-        <p>Vedle školy jsem prošel několik skvělých týmů, od kreativní agentury až po vývoj chytré hrazdy. Dnes pracuju hlavně na volné noze a beru projekty, které mají smysl a které mě baví.</p>
+        <p data-pismena>Vedle školy jsem prošel několik skvělých týmů, od kreativní agentury až po vývoj chytré hrazdy. Dnes pracuju hlavně na volné noze a beru projekty, které mají smysl a které mě baví.</p>
       </div>
     </div>
     <div class="osa-wrap"><Osa polozky={prace} /></div>
   </section>
 
   <section class="container sekce sekce--kam">
-    <p class="bg-word bg-word--odsazene" aria-hidden="true">Kam dál</p>
-    <div class="sloupec sloupec--vpravo" data-reveal>
-      <h2 class="subhead gradient-text">Kam chci svou práci posouvat.</h2>
+    <p class="bg-word bg-word--odsazene" aria-hidden="true" data-pismena="zespodu">Kam dál</p>
+    <div class="sloupec sloupec--vpravo">
+      <h2 class="subhead gradient-text" data-pismena>Kam chci svou práci posouvat.</h2>
       <div class="prose">
-        <p>Design mě čím dál víc baví i jako něco, co se dá sdílet a vést. Do budoucna se chci naplno věnovat dvěma směrům.</p>
+        <p data-pismena>Design mě čím dál víc baví i jako něco, co se dá sdílet a vést. Do budoucna se chci naplno věnovat dvěma směrům.</p>
       </div>
       <ul class="smery">
         {smery.map((s, i) => (
@@ -81,11 +81,11 @@ const fotky = [
   </section>
 
   <section class="container sekce sekce--mimo">
-    <p class="bg-word" aria-hidden="true">Mimo práci</p>
-    <div class="sloupec sloupec--mimo" data-reveal>
-      <h2 class="subhead gradient-text">Nejlíp je mi venku</h2>
+    <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Mimo práci</p>
+    <div class="sloupec sloupec--mimo">
+      <h2 class="subhead gradient-text" data-pismena>Nejlíp je mi venku</h2>
       <div class="prose">
-        <p>Když zrovna nedesignuju, jsem nejradši v přírodě. Miluju hory a sport, takže mě najdeš na kole, na běžkách nebo na discgolfovém hřišti. A když venku zrovna nejsem, sahám po kytaře nebo sedám ke klavíru.</p>
+        <p data-pismena>Když zrovna nedesignuju, jsem nejradši v přírodě. Miluju hory a sport, takže mě najdeš na kole, na běžkách nebo na discgolfovém hřišti. A když venku zrovna nejsem, sahám po kytaře nebo sedám ke klavíru.</p>
       </div>
     </div>
     <div class="kolaz">

@@ -88,6 +88,7 @@ const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · 
             }),
           { rootMargin: '0px 0px -12% 0px' }
         );
+        const prechody: HTMLElement[] = [];
         document.querySelectorAll<HTMLElement>('[data-pismena]').forEach((el) => {
           const text = (el.textContent ?? '').replace(/[ \t\n\r]+/g, ' ').trim();
           el.setAttribute('aria-label', text);
@@ -110,7 +111,30 @@ const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · 
           el.style.setProperty('--n', String(i));
           el.classList.add('pismena');
           if (el.dataset.pismena === 'zespodu') el.classList.add('pismena--zespodu');
+          // Přechodová barva (background-clip: text) se kreslí na rodiči, takže by
+          // písmena nemizela. Každé písmeno proto dostane svůj výřez z přechodu.
+          if (getComputedStyle(el).backgroundClip === 'text') {
+            el.classList.add('pismena--prechod');
+            prechody.push(el);
+          }
           pozorovatel.observe(el);
+        });
+        const umistit = () =>
+          prechody.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            el.style.setProperty('--pw', `${r.width}px`);
+            el.style.setProperty('--ph', `${r.height}px`);
+            el.querySelectorAll<HTMLElement>('.pismeno').forEach((z) => {
+              const p = z.getBoundingClientRect();
+              z.style.backgroundPosition = `${r.left - p.left}px ${r.top - p.top}px`;
+            });
+          });
+        umistit();
+        document.fonts?.ready.then(umistit);
+        let cekani = 0;
+        addEventListener('resize', () => {
+          clearTimeout(cekani);
+          cekani = window.setTimeout(umistit, 150);
         });
       }
     </script>

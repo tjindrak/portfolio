@@ -11,21 +11,21 @@ const udaje = [
 ---
 <Base title="Kontakt" description="Máš nápad nebo projekt? Napiš Tomášovi Jindrákovi.">
   <header class="container hero">
-    <p class="bg-word hero__slovo" aria-hidden="true">Kontakt</p>
-    <h1 class="title-xl hero__nazev">Tomáš Jindrák</h1>
-    <p class="lead gradient-text gradient-text--soft hero__shrnuti">Máš nápad nebo projekt? Napiš mi.</p>
+    <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">Kontakt</p>
+    <h1 class="title-xl hero__nazev"><span class="maska"><span style="--d:0.15s">Tomáš Jindrák</span></span></h1>
+    <p class="lead gradient-text gradient-text--soft hero__shrnuti nacti" style="--d:0.3s">Máš nápad nebo projekt? Napiš mi.</p>
   </header>
 
   <section class="container obsah">
     <dl class="udaje">
       {udaje.map((u, i) => (
-        <div class="udaj" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+        <div class="udaj nacti" style={`--d:${0.4 + i * 0.08}s`}>
           <dt class="label">{u.label}</dt>
           <dd>{u.href ? <a href={u.href}>{u.hodnota}</a> : u.hodnota}</dd>
         </div>
       ))}
     </dl>
-    <KontaktFormular class="obsah__formular" />
+    <KontaktFormular class="obsah__formular nacti" />
   </section>
 </Base>
 

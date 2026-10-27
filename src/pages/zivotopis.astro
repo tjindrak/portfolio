@@ -34,20 +34,20 @@ const jazyky = [
 <Base title="Životopis" description="Životopis Tomáše Jindráka: vzdělání, klienti, dovednosti a jazyky.">
   <!-- Rozměry podle Figmy (Životopis, rámec 1440 px) -->
   <header class="container hero">
-    <p class="bg-word hero__slovo" aria-hidden="true">Životopis</p>
+    <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">Životopis</p>
     <div class="hero__radek">
-      <div class="hero__foto"><Obrazek src="/img/zivotopis/portret.webp" alt="Tomáš Jindrák" showCaption={false} eager /></div>
+      <div class="hero__foto nacti" style="--d:0.2s"><Obrazek src="/img/zivotopis/portret.webp" alt="Tomáš Jindrák" showCaption={false} eager /></div>
       <div class="hero__text">
-        <h1 class="title-xl">Tomáš Jindrák</h1>
-        <p class="lead gradient-text gradient-text--soft hero__role">UX/UI designer</p>
-        <p class="hero__misto">Praha / Liberec&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
+        <h1 class="title-xl"><span class="maska"><span style="--d:0.15s">Tomáš Jindrák</span></span></h1>
+        <p class="lead gradient-text gradient-text--soft hero__role nacti" style="--d:0.3s">UX/UI designer</p>
+        <p class="hero__misto nacti" style="--d:0.4s">Praha / Liberec&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
       </div>
-      <a class="btn btn--accent hero__cv" href={CV} download>Stáhnout CV<Icon name="download" /></a>
+      <a class="btn btn--accent hero__cv nacti" style="--d:0.5s" href={CV} download>Stáhnout CV<Icon name="download" /></a>
     </div>
   </header>
 
   <section class="container blok blok--vzdelani">
-    <h2 class="blok__nadpis">Vzdělání</h2>
+    <h2 class="blok__nadpis" data-pismena>Vzdělání</h2>
     <ul class="blok__obsah vzdelani">
       {vzdelani.map((v, i) => (
         <li class="skola" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
@@ -63,7 +63,7 @@ const jazyky = [
   </section>
 
   <section class="container blok">
-    <h2 class="blok__nadpis">Klienti</h2>
+    <h2 class="blok__nadpis" data-pismena>Klienti</h2>
     <ul class="blok__obsah mrizka klienti">
       {klienti.map((k, i) => (
         <li class="klient" data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
@@ -86,7 +86,7 @@ const jazyky = [
   </section>
 
   <section class="container blok blok--dovednosti">
-    <h2 class="blok__nadpis">Dovednosti</h2>
+    <h2 class="blok__nadpis" data-pismena>Dovednosti</h2>
     <ul class="blok__obsah dovednosti">
       {dovednosti.map((d, i) => (
         <li data-reveal style={`--reveal-delay:${i * 0.08}s`}>
@@ -98,7 +98,7 @@ const jazyky = [
   </section>
 
   <section class="container blok">
-    <h2 class="blok__nadpis">Jazyky</h2>
+    <h2 class="blok__nadpis" data-pismena>Jazyky</h2>
     <ul class="blok__obsah mrizka">
       {jazyky.map((j) => (
         <li data-reveal>
@@ -109,7 +109,7 @@ const jazyky = [
     </ul>
   </section>
 
-  <div class="container zaver">
+  <div class="container zaver" data-reveal>
     <a class="btn btn--accent" href={CV} download>Stáhnout CV<Icon name="download" /></a>
   </div>
 </Base>

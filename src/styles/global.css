@@ -384,6 +384,23 @@ button.chip:hover {
 .pismena.is-in .pismeno {
   opacity: 1;
 }
+/* Přechodové texty: rodič přechod nekreslí, každé písmeno má svůj výřez */
+.pismena--prechod {
+  background-size: 0 0;
+  background-repeat: no-repeat;
+}
+.pismena--prechod .slovo {
+  background-image: inherit;
+  background-size: 0 0;
+}
+.pismena--prechod .pismeno {
+  background-image: inherit;
+  background-size: var(--pw) var(--ph);
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 /* Slova v pozadí: písmena vyjíždějí zespodu s plynulým zpožděním */
 .pismena--zespodu .pismeno {
   display: inline-block;
