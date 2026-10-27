@@ -16,6 +16,72 @@ const dalsi = barva ? [4200, 5700, 7200, 8700, 10200, 11700] : [];
   {dalsi.map((top, i) => <span class:list={['glow glow--dalsi', i % 2 ? 'glow--vpravo' : 'glow--vlevo']} style={`top: ${top}px`}></span>)}
 </div>
 
+{variant === 'home' && (
+  <script>
+    // Body z Figmy (Mainpage): x, y v px při šířce 1440, velikost, barva a krytí.
+    // Postup scrollu 0–1 se mapuje na tyto body a hodnoty se mezi nimi plynule prolínají.
+    const body = [
+      { p: 0, x: 700, y: -250, w: 1100, h: 900, rgb: [179, 174, 142], a: 0.16 },
+      { p: 0.42, x: -450, y: 0, w: 1100, h: 900, rgb: [99, 112, 116], a: 0.24 },
+      { p: 0.8, x: 800, y: 50, w: 900, h: 800, rgb: [179, 174, 142], a: 0.12 },
+      { p: 1, x: 800, y: 50, w: 900, h: 800, rgb: [179, 174, 142], a: 0.12 },
+    ];
+    const el = document.querySelector<HTMLElement>('.glows--home .glow--a');
+    if (el) {
+      const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const ease = (t: number) => t * t * (3 - 2 * t);
+      const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+      const cil = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const p = max > 0 ? Math.min(Math.max(scrollY / max, 0), 1) : 0;
+        let i = 0;
+        while (i < body.length - 2 && p > body[i + 1].p) i++;
+        const A = body[i];
+        const B = body[i + 1];
+        const t = ease(Math.min(Math.max((p - A.p) / (B.p - A.p), 0), 1));
+        return {
+          x: mix(A.x, B.x, t),
+          y: mix(A.y, B.y, t),
+          w: mix(A.w, B.w, t),
+          h: mix(A.h, B.h, t),
+          rgb: A.rgb.map((c, k) => mix(c, B.rgb[k], t)),
+          a: mix(A.a, B.a, t),
+        };
+      };
+      let ted = cil();
+      let bezi = false;
+      const kresli = () => {
+        const c = cil();
+        const k = klid ? 1 : 0.08;
+        ted = {
+          x: mix(ted.x, c.x, k),
+          y: mix(ted.y, c.y, k),
+          w: mix(ted.w, c.w, k),
+          h: mix(ted.h, c.h, k),
+          rgb: ted.rgb.map((v, n) => mix(v, c.rgb[n], k)),
+          a: mix(ted.a, c.a, k),
+        };
+        const sx = innerWidth / 1440;
+        el.style.width = `${ted.w}px`;
+        el.style.height = `${ted.h}px`;
+        el.style.transform = `translate(${ted.x * sx}px, ${ted.y}px)`;
+        el.style.setProperty('--glow-barva-home', `rgb(${ted.rgb.map(Math.round).join(' ')} / ${ted.a.toFixed(3)})`);
+        // Smyčka běží, jen dokud světlo nedojede k cíli
+        bezi = Math.abs(ted.x - c.x) + Math.abs(ted.y - c.y) + Math.abs(ted.w - c.w) > 0.5;
+        if (bezi) requestAnimationFrame(kresli);
+      };
+      const spust = () => {
+        if (bezi) return;
+        bezi = true;
+        requestAnimationFrame(kresli);
+      };
+      spust();
+      addEventListener('scroll', spust, { passive: true });
+      addEventListener('resize', spust);
+    }
+  </script>
+)}
+
 <style>
   .glows {
     position: absolute;
@@ -52,8 +118,18 @@ const dalsi = barva ? [4200, 5700, 7200, 8700, 10200, 11700] : [];
   }
 
   /* Hlavní stránka: horní světlo zůstává při scrollu na místě a sekce přes něj přijíždějí */
+  /* Hlavní stránka: jedno světlo zůstává při scrollu v okně a putuje podle Figmy
+     (vpravo béžové → vlevo modrošedé → vpravo béžové), řídí ho skript níže. */
   .glows--home .glow--a {
     position: fixed;
+    left: 0;
+    top: 0;
+    will-change: transform;
+    background: radial-gradient(closest-side, var(--glow-barva-home, var(--glow)), transparent);
+  }
+  .glows--home .glow--b,
+  .glows--home .glow--c {
+    display: none;
   }
 
   .glows--barva .glow--b,
