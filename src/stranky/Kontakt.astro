@@ -7,6 +7,7 @@ import { jazykZUrl, t } from '../i18n';
 const lang = jazykZUrl(Astro.url);
 const udaje = [
   { label: t(lang, 'E-mail', 'Email'), hodnota: site.email, href: `mailto:${site.email}` },
+  { label: 'Instagram', hodnota: '@tjindrak_design', href: site.instagram, externi: true },
   { label: t(lang, 'Telefon', 'Phone'), hodnota: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
   { label: t(lang, 'IČO', 'Company ID (IČO)'), hodnota: site.ico },
 ];
@@ -23,7 +24,7 @@ const udaje = [
       {udaje.map((u, i) => (
         <div class="udaj nacti" style={`--d:${0.4 + i * 0.08}s`}>
           <dt class="label">{u.label}</dt>
-          <dd>{u.href ? <a href={u.href}>{u.hodnota}</a> : u.hodnota}</dd>
+          <dd>{u.href ? <a href={u.href} target={u.externi ? '_blank' : undefined} rel={u.externi ? 'noopener' : undefined}>{u.hodnota}</a> : u.hodnota}</dd>
         </div>
       ))}
     </dl>

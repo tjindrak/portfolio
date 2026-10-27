@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Portret from '../components/Portret.astro';
 import Osa from '../components/Osa.astro';
 import Obrazek from '../components/Obrazek.astro';
-import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
 import { jazykZUrl, t } from '../i18n';
 
@@ -117,9 +116,7 @@ const fotky = [
         <p data-pismena>{t(lang, 'Když zrovna nedesignuju, jsem nejradši v přírodě. Miluju hory a sport, takže mě najdeš na kole, na běžkách nebo na discgolfovém hřišti. A když venku zrovna nejsem, sahám po kytaře nebo sedám ke klavíru.', 'When I’m not designing, I’d rather be out in nature. I love the mountains and sport, so you’ll find me on a bike, on cross-country skis or on a disc golf course. And when I’m not outside, I reach for the guitar or sit down at the piano.')}</p>
       </div>
       <a class="ig" href={site.instagramOsobni} target="_blank" rel="noopener" data-reveal>
-        <Icon name="instagram" />
-        <span>@tjindrak</span>
-        <Icon name="arrow-up-right" class="ig__sipka" />
+        @tjindrak
       </a>
     </div>
     <div class="kolaz">
@@ -260,31 +257,14 @@ const fotky = [
   }
   /* Soukromý Instagram pod textem Mimo práci */
   .ig {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+    display: inline-block;
     margin-top: 40px;
     font-size: clamp(20px, 1.7vw, 24px);
     color: var(--fg);
     transition: color var(--hover);
   }
-  .ig :global(svg) {
-    width: 28px;
-    height: 28px;
-    stroke-width: 1.5;
-  }
-  .ig :global(.ig__sipka) {
-    width: 20px;
-    height: 20px;
-    color: var(--fg-50);
-    transition: transform var(--hover), color var(--hover);
-  }
-  .ig:hover,
-  .ig:hover :global(.ig__sipka) {
+  .ig:hover {
     color: var(--accent);
-  }
-  .ig:hover :global(.ig__sipka) {
-    transform: translate(2px, -2px);
   }
   .kolaz {
     position: relative;
