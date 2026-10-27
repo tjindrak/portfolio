@@ -45,7 +45,8 @@ proces:
 
 reseni:
   nadpis: Z klauzury až za vydavateli.
-  slovo: Řešení a dopad
+  # pevná mezera: „a“ nezůstane na konci řádku (Figma: Řešení / a dopad)
+  slovo: "Řešení a dopad"
   odstavce:
     - "Původně to měla být „jen“ školní práce, jenže projekt nakonec přerostl do něčeho většího. V ateliéru na VŠKK sklidil velmi vysoké hodnocení za originalitu i komplexnost. Během dalších 14 dní jsme překreslili grafiku, nechali vyrobit profesionální prototyp a dostali jedinečnou šanci:"
     - "> „Celý koncept jsme představili vydavatelům Albi a Dino.“"
@@ -56,4 +57,6 @@ reseni:
       popisek: Karty a měna
     - src: /img/projekty/ein-berliner/reseni-2.webp
       popisek: Fyzický prototyp
+      # Figma: logo vložené jako Fit (620 × 91 uprostřed rámečku 620 × 440)
+      vyrez: "100 20.68 0 39.66"
 ---
