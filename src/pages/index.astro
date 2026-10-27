@@ -69,7 +69,7 @@ const sluzby = [
 
   <!-- O mně -->
   <section class="omne container" aria-labelledby="omne-nadpis">
-    <p class="bg-word omne__slovo" aria-hidden="true" data-reveal>O mně</p>
+    <p class="bg-word omne__slovo" aria-hidden="true" data-pismena="zespodu">O mně</p>
     <div class="omne__obsah">
       <div class="omne__intro">
         <h2 id="omne-nadpis" class="omne__claim" data-pismena>Jsem designer, který se nejdřív ptá a&nbsp;teprve potom tvoří.</h2>
@@ -93,7 +93,7 @@ const sluzby = [
 
   <!-- Napiš mi -->
   <section class="napis container" aria-labelledby="napis-nadpis">
-    <p class="bg-word napis__slovo" aria-hidden="true" data-reveal>Napiš mi</p>
+    <p class="bg-word napis__slovo" aria-hidden="true" data-pismena="zespodu">Napiš mi</p>
     <div class="napis__obsah">
       <h2 id="napis-nadpis" class="napis__intro" data-pismena>Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.</h2>
       <div data-reveal><KontaktFormular class="napis__formular" kompaktni /></div>
@@ -147,6 +147,7 @@ const sluzby = [
       });
       el.style.setProperty('--n', String(i));
       el.classList.add('pismena');
+      if (el.dataset.pismena === 'zespodu') el.classList.add('pismena--zespodu');
       pozorovatel.observe(el);
     });
   }
@@ -165,6 +166,18 @@ const sluzby = [
   }
   :global(.pismena.is-in .pismeno) {
     opacity: 1;
+  }
+  /* Slova v pozadí: písmena vyjíždějí zespodu s plynulým zpožděním */
+  :global(.pismena--zespodu .pismeno) {
+    display: inline-block;
+    transform: translateY(0.35em);
+    transition:
+      opacity 0.9s ease,
+      transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  :global(.pismena--zespodu.is-in .pismeno) {
+    transform: none;
   }
 
   /* Hero je kompozice 1440 × 900 z Figmy, která se škáluje podle okna:
