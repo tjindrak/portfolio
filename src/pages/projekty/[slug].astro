@@ -582,6 +582,49 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     margin-top: 38px;
     height: 460px;
   }
+  /* DIKÉ, Pull Up Star a Ein Berliner: údaje začínají na x 1016 (Figma Meta) */
+  @media (min-width: 1101px) {
+    .detail--dike .hero__radek,
+    .detail--pull-up-star .hero__radek,
+    .detail--ein-berliner .hero__radek {
+      grid-template-columns: minmax(0, 800px) minmax(0, 360px);
+    }
+  }
+  /* Ein Berliner podle Figmy 438:1003: texty se střídají vlevo / vpravo,
+     Řešení má širší sloupec a bílou citaci. Mezery mezi sekcemi zůstávají větší. */
+  @media (min-width: 1101px) {
+    .detail--ein-berliner .sekce--vyzva .sloupec,
+    .detail--ein-berliner .sekce--reseni .sloupec {
+      margin-left: 0;
+    }
+    .detail--ein-berliner .sekce--proces .sloupec {
+      margin-left: var(--col-offset);
+      margin-top: 54px;
+    }
+    .detail--ein-berliner .kroky {
+      margin-top: 196px;
+    }
+    .detail--ein-berliner .sekce--reseni .sloupec {
+      max-width: 1091px;
+      margin-top: 47px;
+    }
+    .detail--ein-berliner .sekce--reseni .sloupec .prose {
+      margin-top: 35px;
+    }
+    .detail--ein-berliner .galerie {
+      margin-top: 317px;
+    }
+    .detail--ein-berliner .dalsi :global(.dalsi__dlazdice) {
+      margin-top: 54px;
+    }
+  }
+  .detail--ein-berliner :global(.prose .quote.gradient-text) {
+    background-image: linear-gradient(90deg, #fff 0%, #fff 100%);
+    font-weight: 400;
+  }
+  :root[data-theme='light'] .detail--ein-berliner :global(.prose .quote.gradient-text) {
+    background-image: linear-gradient(90deg, var(--fg) 0%, var(--fg) 100%);
+  }
 
   @media (max-width: 1100px) {
     .hero__radek {
