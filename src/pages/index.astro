@@ -162,6 +162,10 @@ const sluzby = [
     line-height: 1.1;
   }
   .karty {
+    /* Otevřená karta = celá šířka minus tři zavřené karty a tři mezery */
+    --zavrena: 160px;
+    --otevrena: calc(100cqw - 3 * var(--zavrena) - 3 * 8px);
+    container-type: inline-size;
     display: flex;
     gap: 8px;
     height: 450px;
@@ -171,25 +175,33 @@ const sluzby = [
   }
   .karta {
     position: relative;
-    flex: 0 0 160px;
+    flex: none;
+    width: var(--zavrena);
     min-width: 0;
     overflow: hidden;
     border-radius: 10px;
     background: var(--tile-bg);
-    transition: flex 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: width 1.8s cubic-bezier(0.45, 0, 0.2, 1);
   }
   /* Otevřená karta se rozbalí po kliknutí (skript dole), druhé kliknutí vede na detail */
   .karta.is-open {
-    flex: 1 1 auto;
+    width: var(--otevrena);
   }
   .karta__odkaz {
     position: absolute;
     inset: 0;
     display: block;
   }
+  /* Fotka má pořád šířku otevřené karty a karta ji jen odkrývá,
+     takže se při animaci nepřepočítává ořez (to dělalo cuknutí). */
   .karta :global(.karta__img) {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    width: var(--otevrena);
+    max-width: none;
+    height: 100%;
+    transform: translateX(-50%);
   }
   .karta__scrim {
     position: absolute;
@@ -367,8 +379,13 @@ const sluzby = [
     }
     .karta,
     .karta.is-open {
-      flex: 0 0 auto;
+      width: auto;
       height: 280px;
+    }
+    .karta :global(.karta__img) {
+      left: 0;
+      width: 100%;
+      transform: none;
     }
     .karta__popisek {
       opacity: 1;
