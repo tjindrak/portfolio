@@ -132,7 +132,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
               </div>
             </div>
             {d.vyzva.obrazekPozice === 'pod' && d.vyzva.obrazek && (
-              <div class="obrazek-pod" data-reveal>
+              <div class="obrazek-pod" data-reveal="pozde">
                 <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} vyrez={d.vyzva.obrazek.vyrez} />
               </div>
             )}
