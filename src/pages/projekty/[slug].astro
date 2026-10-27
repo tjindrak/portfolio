@@ -53,7 +53,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     {maVrstevnice && <img class="vrstevnice" src={vrstevnice} alt="" aria-hidden="true" />}
     <!-- Hero -->
     <header class="container hero">
-      <a href="/projekty" class="btn btn--text hero__zpet nacti"><Icon name="arrow-left" />Všechny projekty</a>
+      <a href="/projekty" class="btn btn--text hero__zpet nacti" aria-label="Všechny projekty" title="Všechny projekty"><Icon name="arrow-left" /></a>
       <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">{slovo}</p>
       <h1 class="title-xl hero__nazev"><span class="maska"><span style="--d:0.15s">{d.nazev}</span></span></h1>
 
@@ -263,6 +263,15 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   .detail :global(.bg-word) {
     font-family: var(--font-heading);
     font-weight: 600;
+  }
+  /* Zpět jen jako tenká šipka (výška zůstává 32 px) */
+  .hero__zpet {
+    padding: 4px 0;
+  }
+  .hero__zpet :global(svg) {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.25;
   }
   .hero__slovo {
     margin-top: 31px;
