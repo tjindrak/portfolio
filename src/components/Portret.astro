@@ -7,14 +7,112 @@ import { join } from 'node:path';
 
 interface Props {
   class?: string;
+  // Pohyblivé skleněné pruhy přes fotku (lom světla jako žebrované sklo)
+  sklo?: boolean;
 }
-const { class: className } = Astro.props;
+const { class: className, sklo = false } = Astro.props;
 const foto = '/img/portret.webp';
 const ready = existsSync(join(process.cwd(), 'public', foto));
 ---
 <div class:list={['portret', { 'portret--placeholder': !ready }, className]}>
   {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Portrét Tomáše Jindráka (doplní se)"></span>}
+  {ready && sklo && <canvas class="portret__sklo" aria-hidden="true"></canvas>}
 </div>
+
+<script>
+  // Žebrované sklo: fotka se kreslí ve WebGL a každý šikmý pruh (108 px, 21,55° jako pruhy v hero)
+  // ji posune o kousek do strany. Pruhy se pomalu posouvají a lom jemně dýchá.
+  // Bez WebGL nebo při omezeném pohybu zůstane obyčejná fotka.
+  const VS = `attribute vec2 p; varying vec2 uv; void main(){ uv = p * 0.5 + 0.5; uv.y = 1.0 - uv.y; gl_Position = vec4(p, 0.0, 1.0); }`;
+  const FS = `precision mediump float;
+    varying vec2 uv;
+    uniform sampler2D tex;
+    uniform vec2 size;
+    uniform float t;
+    const vec2 dir = vec2(0.9301, 0.3673);
+    const float sirka = 108.0;
+    void main() {
+      vec2 px = uv * size;
+      float u = dot(px, dir) + t * 14.0;
+      float s = fract(u / sirka);
+      // lom: uvnitř pruhu se obraz posune podle polohy v pruhu, síla pomalu kolísá
+      float sila = 12.0 + 5.0 * sin(t * 0.45);
+      float posun = (s - 0.5) * sila;
+      vec2 q = (px + dir * posun) / size;
+      vec4 c = texture2D(tex, clamp(q, 0.0, 1.0));
+      // jemné prosvětlení hrany pruhu
+      float hrana = smoothstep(0.03, 0.0, s) + smoothstep(0.97, 1.0, s);
+      c.rgb += hrana * 0.05 * c.a;
+      gl_FragColor = c;
+    }`;
+
+  document.querySelectorAll<HTMLCanvasElement>('.portret__sklo').forEach((canvas) => {
+    const img = canvas.parentElement?.querySelector<HTMLImageElement>('.portret__foto');
+    const gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true });
+    if (!img || !gl) return;
+    const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const shader = (typ: number, src: string) => {
+      const sh = gl.createShader(typ)!;
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      return sh;
+    };
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, VS));
+    gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uSize = gl.getUniformLocation(prog, 'size');
+    const uT = gl.getUniformLocation(prog, 't');
+
+    const start = () => {
+      gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+
+      let w = 0;
+      let h = 0;
+      const velikost = () => {
+        const r = canvas.getBoundingClientRect();
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        w = r.width;
+        h = r.height;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+      velikost();
+      new ResizeObserver(velikost).observe(canvas);
+
+      let viditelne = true;
+      new IntersectionObserver(([e]) => (viditelne = e.isIntersecting)).observe(canvas);
+      const t0 = performance.now();
+      const kresli = (cas: number) => {
+        if (viditelne) {
+          gl.uniform2f(uSize, w, h);
+          gl.uniform1f(uT, klid ? 0 : (cas - t0) / 1000);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          canvas.classList.add('is-ready');
+        }
+        if (!klid) requestAnimationFrame(kresli);
+      };
+      requestAnimationFrame(kresli);
+    };
+    if (img.complete && img.naturalWidth) start();
+    else img.addEventListener('load', start, { once: true });
+  });
+</script>
 
 <style>
   .portret {
@@ -30,6 +128,20 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  .portret__sklo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+  .portret__sklo.is-ready {
+    opacity: 1;
+  }
+  .portret__sklo.is-ready ~ .portret__foto,
+  .portret:has(.portret__sklo.is-ready) .portret__foto {
+    visibility: hidden;
   }
   .portret--placeholder {
     -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 85%);
