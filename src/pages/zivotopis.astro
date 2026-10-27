@@ -13,7 +13,7 @@ const vzdelani = [
 ];
 const klienti = [
   { logo: '/img/zivotopis/logo-jardova-mapa.webp', nazev: 'Jarda Havelka', rok: '2026', popis: 'Redesign webové aplikace s mapou a plánovačem výletů do hor' },
-  { logo: '/img/zivotopis/logo-czechitacademy.webp', nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: 'Brand, aplikace, web a tisk pro chytrou hrazdu Pull Up Star' },
+  { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: 'Brand, aplikace, web a tisk pro chytrou hrazdu Pull Up Star' },
   { logo: '/img/zivotopis/logo-laba.webp', nazev: 'Laba', rok: '2024', popis: 'Social media specialist, content creator' },
   { logo: '/img/zivotopis/logo-dike.svg', nazev: 'DIKÉ', rok: '2025', popis: 'Řízení projektu rebrandingu a redesignu webových stránek' },
   { logo: '/img/zivotopis/logo-kreativni-kancl.webp', nazev: 'Kreativní kancl', rok: '2024', popis: 'Tvorba obsahu pro sociální sítě' },
@@ -32,32 +32,31 @@ const jazyky = [
 ];
 ---
 <Base title="Životopis" description="Životopis Tomáše Jindráka: vzdělání, klienti, dovednosti a jazyky.">
+  <!-- Rozměry podle Figmy (Životopis, rámec 1440 px) -->
   <header class="container hero">
     <p class="bg-word hero__slovo" aria-hidden="true">Životopis</p>
     <div class="hero__radek">
-      <div class="hero__osoba">
-        <div class="hero__foto"><Obrazek src="/img/zivotopis/portret.webp" alt="Tomáš Jindrák" showCaption={false} eager /></div>
-        <div>
-          <h1 class="title-xl">Tomáš Jindrák</h1>
-          <p class="lead gradient-text gradient-text--soft hero__role">UX/UI designer</p>
-          <p class="hero__misto">Praha / Liberec&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
-        </div>
+      <div class="hero__foto"><Obrazek src="/img/zivotopis/portret.webp" alt="Tomáš Jindrák" showCaption={false} eager /></div>
+      <div class="hero__text">
+        <h1 class="title-xl">Tomáš Jindrák</h1>
+        <p class="lead gradient-text gradient-text--soft hero__role">UX/UI designer</p>
+        <p class="hero__misto">Praha / Liberec&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
       </div>
-      <a class="btn btn--accent" href={CV} download><Icon name="download" />Stáhnout CV</a>
+      <a class="btn btn--accent hero__cv" href={CV} download>Stáhnout CV<Icon name="download" /></a>
     </div>
   </header>
 
-  <section class="container blok">
+  <section class="container blok blok--vzdelani">
     <h2 class="blok__nadpis">Vzdělání</h2>
-    <ul class="blok__obsah seznam">
+    <ul class="blok__obsah vzdelani">
       {vzdelani.map((v, i) => (
-        <li class="polozka" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+        <li class="skola" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
           <div class="logo logo--64"><Obrazek src={v.logo} alt={v.skola} showCaption={false} fit="contain" /></div>
-          <div class="polozka__text">
-            <h3 class="polozka__nazev">{v.skola}</h3>
-            <p class="polozka__popis">{v.obor} · {v.titul}</p>
+          <div>
+            <h3 class="skola__nazev">{v.skola}</h3>
+            <p class="skola__popis">{v.obor} · {v.titul}</p>
           </div>
-          <p class="polozka__rok">{v.roky}</p>
+          <p class="rok skola__rok">{v.roky}</p>
         </li>
       ))}
     </ul>
@@ -65,37 +64,34 @@ const jazyky = [
 
   <section class="container blok">
     <h2 class="blok__nadpis">Klienti</h2>
-    <ul class="blok__obsah klienti">
+    <ul class="blok__obsah mrizka klienti">
       {klienti.map((k, i) => (
         <li class="klient" data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
-          <div class="logo logo--56"><Obrazek src={k.logo} alt={k.nazev} showCaption={false} fit="contain" /></div>
-          <div>
-            <h3 class="polozka__nazev">{k.nazev} <span class="polozka__rok polozka__rok--inline">{k.rok}</span></h3>
-            <p class="polozka__popis">{k.popis}</p>
-          </div>
+          <div class:list={['logo logo--56', { 'logo--siroke': k.siroke }]}><Obrazek src={k.logo} alt={k.nazev} showCaption={false} fit={k.siroke ? 'cover' : 'contain'} /></div>
+          <h3 class="klient__nazev">{k.nazev}</h3>
+          <p class="rok klient__rok">{k.rok}</p>
+          <p class="klient__popis">{k.popis}</p>
         </li>
       ))}
       <li class="klient" data-reveal style="--reveal-delay:0.08s">
         <div class="loga-dalsi">
           {dalsiKlienti.map((n, i) => (
-            <div class="logo logo--40"><Obrazek src={`/img/zivotopis/${dalsiLoga[i]}`} alt={n} showCaption={false} fit="contain" /></div>
+            <div class="logo logo--56"><Obrazek src={`/img/zivotopis/${dalsiLoga[i]}`} alt={n} showCaption={false} fit="contain" /></div>
           ))}
         </div>
-        <div>
-          <h3 class="polozka__nazev">Další klienti</h3>
-          <p class="polozka__popis">{dalsiKlienti.join(', ')}</p>
-        </div>
+        <h3 class="klient__nazev">Další klienti</h3>
+        <p class="klient__popis klient__popis--bez-roku">{dalsiKlienti.join(', ')}</p>
       </li>
     </ul>
   </section>
 
-  <section class="container blok">
+  <section class="container blok blok--dovednosti">
     <h2 class="blok__nadpis">Dovednosti</h2>
-    <ul class="blok__obsah seznam">
+    <ul class="blok__obsah dovednosti">
       {dovednosti.map((d, i) => (
-        <li class="dovednost" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
-          <h3 class="polozka__nazev">{d.nazev}</h3>
-          <p class="polozka__popis">{d.popis}</p>
+        <li data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <h3 class="dovednost__nazev">{d.nazev}</h3>
+          <p class="dovednost__popis">{d.popis}</p>
         </li>
       ))}
     </ul>
@@ -103,43 +99,37 @@ const jazyky = [
 
   <section class="container blok">
     <h2 class="blok__nadpis">Jazyky</h2>
-    <ul class="blok__obsah klienti">
+    <ul class="blok__obsah mrizka">
       {jazyky.map((j) => (
-        <li class="dovednost" data-reveal>
-          <h3 class="polozka__nazev">{j.nazev}</h3>
-          <p class="polozka__popis">{j.popis}</p>
+        <li data-reveal>
+          <h3 class="dovednost__nazev">{j.nazev}</h3>
+          <p class="dovednost__popis">{j.popis}</p>
         </li>
       ))}
     </ul>
   </section>
 
   <div class="container zaver">
-    <a class="btn btn--accent" href={CV} download><Icon name="download" />Stáhnout CV</a>
+    <a class="btn btn--accent" href={CV} download>Stáhnout CV<Icon name="download" /></a>
   </div>
 </Base>
 
 <style>
   .hero {
     position: relative;
-    padding-top: 120px;
+    padding-top: 209px;
   }
   .hero__slovo {
     position: absolute;
-    top: 40px;
+    top: 209px;
     left: var(--gutter);
   }
   .hero__radek {
     position: relative;
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 32px;
-    padding-top: 100px;
-  }
-  .hero__osoba {
-    display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 40px;
+    padding-top: 150px;
   }
   .hero__foto {
     flex: none;
@@ -154,54 +144,86 @@ const jazyky = [
     height: 100%;
     filter: grayscale(1);
   }
+  .hero__text {
+    flex: 1;
+  }
   .hero__role {
-    margin-top: 6px;
+    margin-top: 8px;
   }
   .hero__misto {
-    margin-top: 12px;
+    margin-top: 26px;
     font-size: 17px;
+    font-weight: 500;
     color: var(--fg-40);
+  }
+  .hero__cv {
+    margin-top: 20px;
   }
   .blok {
     display: grid;
     grid-template-columns: var(--col-offset) 1fr;
-    margin-top: 160px;
+    margin-top: 200px;
   }
-  .blok + .blok {
-    margin-top: 120px;
+  .blok--vzdelani {
+    margin-top: 197px;
+  }
+  .blok--dovednosti {
+    margin-top: 167px;
   }
   .blok__nadpis {
-    font-family: var(--font-heading);
-    font-weight: 400;
+    font-family: var(--font-body);
+    font-weight: 500;
     font-size: clamp(40px, 5vw, 72px);
     line-height: 1;
     letter-spacing: -0.02em;
     color: var(--fg-30);
   }
   .blok__obsah {
-    margin: 0;
+    margin: 6px 0 0;
     padding: 0;
     list-style: none;
   }
-  .seznam {
+  .vzdelani {
     display: grid;
-    gap: 40px;
+    gap: 56px;
   }
-  .klienti {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px 40px;
-  }
-  .polozka {
+  .skola {
     display: grid;
     grid-template-columns: 64px 1fr auto;
-    align-items: center;
+    align-items: start;
     gap: 24px;
   }
-  .klient {
+  .skola__nazev {
+    margin-top: 2px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(22px, 1.8vw, 26px);
+    line-height: 1.2;
+  }
+  .skola__popis {
+    margin-top: 7px;
+    font-size: clamp(18px, 1.4vw, 20px);
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  .rok {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fg-40);
+    white-space: nowrap;
+  }
+  .skola__rok {
+    margin-top: 8px;
+    font-size: 17px;
+    text-align: right;
+  }
+  .mrizka {
     display: grid;
-    gap: 16px;
-    align-content: start;
+    grid-template-columns: minmax(0, 380px) minmax(0, 380px);
+    column-gap: 60px;
+  }
+  .klienti {
+    row-gap: 63px;
   }
   .logo {
     overflow: hidden;
@@ -225,51 +247,61 @@ const jazyky = [
     height: 56px;
     border-radius: 16px;
   }
-  .logo--40 {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+  .logo--siroke {
+    width: 122px;
   }
   .loga-dalsi {
     display: flex;
-    gap: 8px;
-    min-height: 56px;
-    align-items: center;
+    gap: 16px;
   }
-  .polozka__nazev {
+  .klient__nazev {
+    margin-top: 20px;
     font-family: var(--font-body);
     font-weight: 500;
-    font-size: clamp(20px, 1.7vw, 24px);
-    line-height: 1.3;
+    font-size: 24px;
+    line-height: 1.2;
   }
-  .polozka__popis {
+  .klient__rok {
+    margin-top: 4px;
+  }
+  .klient__popis {
     margin-top: 6px;
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.5;
-    color: var(--fg-60);
+    color: var(--fg-80);
   }
-  .polozka__rok {
-    font-size: 17px;
-    color: var(--fg-40);
-    white-space: nowrap;
+  .klient__popis--bez-roku {
+    margin-top: 32px;
   }
-  .polozka__rok--inline {
-    margin-left: 8px;
-    font-weight: 400;
+  .dovednosti {
+    display: grid;
+    gap: 57px;
   }
-  .dovednost .polozka__popis {
-    max-width: 640px;
+  .dovednost__nazev {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.2;
+  }
+  .dovednost__popis {
+    margin-top: 10px;
+    font-size: clamp(18px, 1.55vw, 22px);
+    line-height: 1.5;
+    color: var(--fg-80);
   }
   .zaver {
     display: flex;
     justify-content: center;
     margin-top: 160px;
+    margin-bottom: 200px;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     .hero__radek {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .hero__cv {
+      margin-top: 0;
     }
     .blok {
       grid-template-columns: 1fr;
@@ -277,46 +309,45 @@ const jazyky = [
     }
   }
   @media (max-width: 720px) {
-    .hero {
-      padding-top: 40px;
-    }
+    .hero,
     .hero__slovo {
+      padding-top: 40px;
       top: 0;
     }
     .hero__radek {
-      padding-top: 64px;
-    }
-    .hero__osoba {
       flex-direction: column;
-      align-items: flex-start;
       gap: 24px;
+      padding-top: 64px;
     }
     .hero__foto {
       width: 120px;
       height: 120px;
     }
     .blok,
-    .blok + .blok {
+    .blok--vzdelani,
+    .blok--dovednosti {
       margin-top: 96px;
     }
-    .klienti {
+    .mrizka {
       grid-template-columns: 1fr;
-      gap: 36px;
+      row-gap: 36px;
     }
-    .polozka {
+    .skola {
       grid-template-columns: 56px 1fr;
       gap: 16px;
     }
-    .polozka .logo--64 {
+    .skola .logo--64 {
       width: 56px;
       height: 56px;
     }
-    .polozka__rok {
+    .skola__rok {
       grid-column: 2;
-      margin-top: -12px;
+      margin-top: -8px;
+      text-align: left;
     }
     .zaver {
       margin-top: 96px;
+      margin-bottom: 40px;
     }
   }
 </style>

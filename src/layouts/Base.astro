@@ -8,7 +8,7 @@ import { site } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
-  glow?: 'default' | 'home';
+  glow?: 'default' | 'home' | 'brzy';
 }
 
 const { title, description = site.description, glow = 'default' } = Astro.props;

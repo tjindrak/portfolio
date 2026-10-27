@@ -1,14 +1,15 @@
 ---
 // Měkké světelné skvrny v pozadí (Figma: Glow).
 interface Props {
-  variant?: 'default' | 'home';
+  // home = všechny tři, brzy = bez spodní (jako ve Figmě)
+  variant?: 'default' | 'home' | 'brzy';
 }
 const { variant = 'default' } = Astro.props;
 ---
 <div class="glows" aria-hidden="true">
   <span class="glow glow--a"></span>
-  {variant === 'home' && <span class="glow glow--b"></span>}
-  <span class="glow glow--c"></span>
+  {variant !== 'default' && <span class="glow glow--b"></span>}
+  {variant !== 'brzy' && <span class="glow glow--c"></span>}
 </div>
 
 <style>

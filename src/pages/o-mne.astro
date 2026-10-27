@@ -7,7 +7,7 @@ import Obrazek from '../components/Obrazek.astro';
 // Roky jsou zatím zástupné (20XX), doplň je.
 const studium = [
   { roky: '20XX – 20XX', nazev: 'SPŠSE a VOŠ Liberec', popis: 'Technické lyceum se zaměřením na multimédia a web design. Tady to všechno začalo.' },
-  { roky: '20XX – 20XX', nazev: 'FJFI ČVUT', popis: 'Fakulta jaderná a fyzikálně inženýrská. Zajímavá zkušenost, jenže to nebyl můj šálek espressa.' },
+  { roky: '20XX – 20XX', nazev: 'FJFI ČVUT', popis: 'Fakulta jaderná a fyzikálně inženýrská.\nZajímavá zkušenost, jenže to nebyl můj šálek espressa' },
   { roky: '20XX – 20XX', nazev: 'VŠKK', popis: 'Grafický a mediální design. Souběžný začátek s FJFI, ale nakonec jsem pochopil, že tohle je cesta, která mě baví.' },
   { roky: '20XX – dnes', nazev: 'VŠE FIS', popis: 'UX výzkum a design. Učím se navrhovat podle toho, co lidé opravdu potřebují.' },
 ];
@@ -39,7 +39,7 @@ const fotky = [
     </p>
   </header>
 
-  <section class="container sekce">
+  <section class="container sekce sekce--studium">
     <p class="bg-word" aria-hidden="true">Studium</p>
     <div class="sloupec sloupec--vpravo" data-reveal>
       <h2 class="subhead gradient-text">K designu se zastávkou u fyziky</h2>
@@ -51,7 +51,7 @@ const fotky = [
     <div class="osa-wrap"><Osa polozky={studium} /></div>
   </section>
 
-  <section class="container sekce">
+  <section class="container sekce sekce--prace">
     <p class="bg-word bg-word--vpravo" aria-hidden="true">Práce</p>
     <div class="sloupec" data-reveal>
       <h2 class="subhead gradient-text">Praxe, která mě posunula.</h2>
@@ -62,7 +62,7 @@ const fotky = [
     <div class="osa-wrap"><Osa polozky={prace} /></div>
   </section>
 
-  <section class="container sekce">
+  <section class="container sekce sekce--kam">
     <p class="bg-word bg-word--odsazene" aria-hidden="true">Kam dál</p>
     <div class="sloupec sloupec--vpravo" data-reveal>
       <h2 class="subhead gradient-text">Kam chci svou práci posouvat.</h2>
@@ -80,7 +80,7 @@ const fotky = [
     </div>
   </section>
 
-  <section class="container sekce">
+  <section class="container sekce sekce--mimo">
     <p class="bg-word" aria-hidden="true">Mimo práci</p>
     <div class="sloupec sloupec--mimo" data-reveal>
       <h2 class="subhead gradient-text">Nejlíp je mi venku</h2>
@@ -99,6 +99,7 @@ const fotky = [
 </Base>
 
 <style>
+  /* Rozměry podle Figmy (O mně, rámec 1440 px) */
   .hero {
     position: relative;
     padding-top: 269px;
@@ -106,7 +107,7 @@ const fotky = [
   .hero :global(.hero__portret) {
     position: absolute;
     left: calc(var(--gutter) + 756px);
-    top: 145px;
+    top: 169px;
     width: 532px;
   }
   .hero__slovo,
@@ -115,18 +116,21 @@ const fotky = [
     position: relative;
   }
   .hero__nazev {
-    margin-top: clamp(-76px, -5.3vw, -36px);
+    margin-top: clamp(-76px, -5.28vw, -36px);
   }
   .hero__shrnuti {
     max-width: 800px;
-    margin-top: 54px;
+    margin-top: 50px;
   }
   .sekce {
     position: relative;
-    margin-top: 250px;
+    margin-top: 200px;
   }
-  .sekce:first-of-type {
-    margin-top: 420px;
+  .sekce--studium {
+    margin-top: 461px;
+  }
+  .sekce .bg-word {
+    font-size: clamp(88px, 15.28vw, 220px);
   }
   .bg-word--vpravo {
     text-align: right;
@@ -137,7 +141,6 @@ const fotky = [
   .sloupec {
     position: relative;
     max-width: 820px;
-    margin-top: -40px;
   }
   .sloupec--vpravo {
     margin-left: var(--col-offset);
@@ -146,16 +149,37 @@ const fotky = [
     margin-left: 32%;
   }
   .sloupec .prose {
-    margin-top: 40px;
+    margin-top: 42px;
+  }
+  .sekce--studium .sloupec {
+    margin-top: 29px;
+  }
+  .sekce--studium .sloupec .prose {
+    margin-top: 29px;
+  }
+  .sekce--prace .sloupec {
+    margin-top: -24px;
+  }
+  .sekce--kam .sloupec {
+    margin-top: 59px;
+  }
+  .sekce--kam .sloupec .prose {
+    margin-top: 72px;
+  }
+  .sekce--mimo .sloupec {
+    margin-top: 34px;
   }
   .osa-wrap {
-    margin-top: 120px;
+    margin-top: 123px;
+  }
+  .sekce--prace .osa-wrap {
+    margin-top: 177px;
   }
   .smery {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 380px 380px;
     gap: 60px;
-    margin: 72px 0 0;
+    margin: 99px 0 0;
     padding: 0;
     list-style: none;
   }
@@ -166,7 +190,7 @@ const fotky = [
     line-height: 1.2;
   }
   .smery__popis {
-    margin-top: 12px;
+    margin-top: 13px;
     font-size: clamp(18px, 1.55vw, 22px);
     line-height: 1.5;
     color: var(--fg-80);
@@ -174,24 +198,28 @@ const fotky = [
   .kolaz {
     position: relative;
     aspect-ratio: 1312 / 1280;
-    margin-top: 110px;
+    margin-top: 119px;
+    margin-bottom: 180px;
   }
   .foto {
     position: absolute;
     overflow: hidden;
     border-radius: var(--radius-media);
   }
-  .f1 { left: 0; top: 0; width: 39.6%; height: 51.6%; }
-  .f2 { left: 43.3%; top: 9.4%; width: 27.4%; height: 35.9%; }
-  .f3 { left: 74.4%; top: 3.1%; width: 25.6%; height: 39.1%; }
-  .f4 { left: 11.9%; top: 56.3%; width: 32%; height: 42.2%; }
-  .f5 { left: 48.2%; top: 50%; width: 42.7%; height: 50%; }
+  .f1 { left: 0; top: 0; width: 39.63%; height: 51.56%; }
+  .f2 { left: 43.29%; top: 9.38%; width: 27.44%; height: 35.94%; }
+  .f3 { left: 74.39%; top: 3.13%; width: 25.61%; height: 39.06%; }
+  .f4 { left: 11.89%; top: 56.25%; width: 32.01%; height: 42.19%; }
+  .f5 { left: 48.17%; top: 50%; width: 42.68%; height: 50%; }
 
   @media (max-width: 1200px) {
     .hero :global(.hero__portret) {
       left: auto;
       right: 0;
       width: 38%;
+    }
+    .smery {
+      grid-template-columns: 1fr 1fr;
     }
   }
   @media (max-width: 720px) {
@@ -208,11 +236,26 @@ const fotky = [
       margin: 0 auto -40%;
     }
     .sekce,
-    .sekce:first-of-type {
+    .sekce--studium {
       margin-top: 120px;
     }
-    .sloupec {
+    .sloupec,
+    .sekce--studium .sloupec,
+    .sekce--prace .sloupec,
+    .sekce--kam .sloupec,
+    .sekce--mimo .sloupec {
       margin-top: -16px;
+    }
+    .sloupec .prose,
+    .sekce--studium .sloupec .prose,
+    .sekce--kam .sloupec .prose {
+      margin-top: 32px;
+    }
+    .sekce--prace .osa-wrap {
+      margin-top: 56px;
+    }
+    .kolaz {
+      margin-bottom: 40px;
     }
     .sloupec--mimo {
       margin-left: 0;

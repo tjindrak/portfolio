@@ -34,6 +34,10 @@ import { site } from '../data/site';
     display: grid;
     place-items: center;
     background: var(--bg);
+    /* stopa načítací linky */
+    background-image: linear-gradient(var(--fg-8), var(--fg-8));
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
     animation: intro-out 0.7s ease 1.9s forwards;
   }
   :global(.intro-skip) .intro {
@@ -53,7 +57,7 @@ import { site } from '../data/site';
   .intro__logo {
     font-family: var(--font-heading);
     font-weight: 500;
-    font-size: clamp(40px, 6vw, 64px);
+    font-size: clamp(40px, 5vw, 72px);
     line-height: 1;
     color: var(--fg);
     opacity: 0;
