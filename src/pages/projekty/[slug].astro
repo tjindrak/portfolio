@@ -53,28 +53,28 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     {maVrstevnice && <img class="vrstevnice" src={vrstevnice} alt="" aria-hidden="true" />}
     <!-- Hero -->
     <header class="container hero">
-      <a href="/projekty" class="btn btn--text hero__zpet"><Icon name="arrow-left" />Všechny projekty</a>
-      <p class="bg-word hero__slovo" aria-hidden="true">{slovo}</p>
-      <h1 class="title-xl hero__nazev">{d.nazev}</h1>
+      <a href="/projekty" class="btn btn--text hero__zpet nacti"><Icon name="arrow-left" />Všechny projekty</a>
+      <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">{slovo}</p>
+      <h1 class="title-xl hero__nazev"><span class="maska"><span style="--d:0.15s">{d.nazev}</span></span></h1>
 
       {!brzy && (
         <>
           {d.stitky.length > 0 && (
-            <ul class="hero__stitky">
+            <ul class="hero__stitky nacti" style="--d:0.3s">
               {d.stitky.map((s) => <li>{s}</li>)}
             </ul>
           )}
           <div class="hero__radek">
             <div class="hero__levy">
-              {d.shrnuti && <p class="lead gradient-text gradient-text--soft hero__shrnuti">{d.shrnuti}</p>}
+              {d.shrnuti && <p class="lead gradient-text gradient-text--soft hero__shrnuti nacti" style="--d:0.4s">{d.shrnuti}</p>}
               {d.web?.url && (
-                <a href={d.web.url} class="btn btn--accent hero__web" target="_blank" rel="noopener">
+                <a href={d.web.url} class="btn btn--accent hero__web nacti" style="--d:0.55s" target="_blank" rel="noopener">
                   {d.web.tlacitko} <Icon name="arrow-up-right" />
                 </a>
               )}
             </div>
             {metaPolozky.length > 0 && (
-              <dl class="meta">
+              <dl class="meta nacti" style="--d:0.45s">
                 {metaPolozky.map(([k, v]) => (
                   <div class="meta__polozka">
                     <dt>{k}</dt>
@@ -117,17 +117,17 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
         <!-- Výzva -->
         {d.vyzva && (
           <section class:list={['container sekce sekce--vyzva', { 'sekce--s-obrazkem': d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek }]}>
-            <p class="bg-word" aria-hidden="true">Výzva</p>
+            <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Výzva</p>
             <div class:list={['sekce__obsah', { 'sekce__obsah--s-obrazkem': d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek }]}>
               {d.vyzva.obrazekPozice === 'vedle' && d.vyzva.obrazek && (
                 <div class="obrazek-vedle" data-reveal>
                   <Obrazek src={d.vyzva.obrazek.src} alt={d.vyzva.obrazek.popisek} vyrez={d.vyzva.obrazek.vyrez} />
                 </div>
               )}
-              <div class="sloupec sloupec--vpravo" data-reveal>
-                <h2 class="subhead gradient-text">{d.vyzva.nadpis}</h2>
+              <div class="sloupec sloupec--vpravo">
+                <h2 class="subhead gradient-text" data-pismena>{d.vyzva.nadpis}</h2>
                 <div class="prose">
-                  {d.vyzva.odstavce.map((o) => <p>{o}</p>)}
+                  {d.vyzva.odstavce.map((o) => <p data-pismena>{o}</p>)}
                 </div>
               </div>
             </div>
@@ -142,11 +142,11 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
         <!-- Proces -->
         {d.proces && (
           <section class="container sekce sekce--proces">
-            <p class="bg-word bg-word--vpravo" aria-hidden="true">Proces</p>
-            <div class="sloupec" data-reveal>
-              <h2 class="subhead gradient-text">{d.proces.nadpis}</h2>
+            <p class="bg-word bg-word--vpravo" aria-hidden="true" data-pismena="zespodu">Proces</p>
+            <div class="sloupec">
+              <h2 class="subhead gradient-text" data-pismena>{d.proces.nadpis}</h2>
               <div class="prose">
-                {d.proces.odstavce.map((o) => <p>{o}</p>)}
+                {d.proces.odstavce.map((o) => <p data-pismena>{o}</p>)}
               </div>
             </div>
             {d.proces.kroky.length > 0 && (
@@ -166,11 +166,11 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
         <!-- Řešení -->
         {d.reseni && (
           <section class:list={['container sekce sekce--reseni', { 'sekce--dlouhe-slovo': !!d.reseni.slovo }]}>
-            <p class="bg-word bg-word--zalom" aria-hidden="true">{d.reseni.slovo ?? 'Řešení'}</p>
-            <div class="sloupec sloupec--vpravo" data-reveal>
-              <h2 class="subhead gradient-text">{d.reseni.nadpis}</h2>
+            <p class="bg-word bg-word--zalom" aria-hidden="true" data-pismena="zespodu">{d.reseni.slovo ?? 'Řešení'}</p>
+            <div class="sloupec sloupec--vpravo">
+              <h2 class="subhead gradient-text" data-pismena>{d.reseni.nadpis}</h2>
               <div class="prose">
-                {d.reseni.odstavce.map((o) => (jeCitat(o) ? <p class="quote gradient-text">{bezCitace(o)}</p> : <p>{o}</p>))}
+                {d.reseni.odstavce.map((o) => (jeCitat(o) ? <p class="quote gradient-text" data-pismena>{bezCitace(o)}</p> : <p data-pismena>{o}</p>))}
               </div>
             </div>
             {d.reseni.obrazky.length > 0 && (
@@ -211,7 +211,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     <!-- Další projekt -->
     {dalsi && (
       <section class="container dalsi" aria-label="Další projekt">
-        <p class="bg-word bg-word--vpravo" aria-hidden="true">Další projekt</p>
+        <p class="bg-word bg-word--vpravo" aria-hidden="true" data-pismena="zespodu">Další projekt</p>
         <div data-reveal>
           <ProjektDlazdice projekt={dalsi} siroka class="dalsi__dlazdice" />
         </div>
@@ -554,6 +554,10 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   @media (min-width: 1101px) {
     .detail--jardova-mapa .sekce--proces {
       margin-top: 178px;
+    }
+    /* Slovo Proces přesahuje ve Figmě pravý okraj obsahu (začíná na x 712,5) */
+    .detail--jardova-mapa .sekce--proces .bg-word {
+      margin-right: -31.5px;
     }
     .detail--jardova-mapa .kroky {
       margin-top: 134px;

@@ -61,6 +61,44 @@ const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · 
         { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
       );
       document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Texty najíždějí písmeno po písmenu zleva doprava, když se dostanou do okna.
+      // Slova zůstávají celá (kvůli zalamování), čtečky dostanou celý text přes aria-label.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const pozorovatel = new IntersectionObserver(
+          (zaznamy) =>
+            zaznamy.forEach((z) => {
+              if (!z.isIntersecting) return;
+              z.target.classList.add('is-in');
+              pozorovatel.unobserve(z.target);
+            }),
+          { rootMargin: '0px 0px -12% 0px' }
+        );
+        document.querySelectorAll<HTMLElement>('[data-pismena]').forEach((el) => {
+          const text = (el.textContent ?? '').replace(/[ \t\n\r]+/g, ' ').trim();
+          el.setAttribute('aria-label', text);
+          el.textContent = '';
+          let i = 0;
+          text.split(' ').forEach((slovo, n) => {
+            if (n) el.append(' ');
+            const s = document.createElement('span');
+            s.className = 'slovo';
+            s.setAttribute('aria-hidden', 'true');
+            for (const znak of slovo) {
+              const z = document.createElement('span');
+              z.className = 'pismeno';
+              z.textContent = znak;
+              z.style.setProperty('--i', String(i++));
+              s.append(z);
+            }
+            el.append(s);
+          });
+          el.style.setProperty('--n', String(i));
+          el.classList.add('pismena');
+          if (el.dataset.pismena === 'zespodu') el.classList.add('pismena--zespodu');
+          pozorovatel.observe(el);
+        });
+      }
     </script>
     <style>
       .page {
