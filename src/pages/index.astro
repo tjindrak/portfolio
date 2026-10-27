@@ -34,7 +34,7 @@ const sluzby = [
     <div class="hero__pruhy" aria-hidden="true"></div>
     <Portret class="hero__portret" />
     <div class="hero__text">
-      <h1 class="hero__nadpis">Grafický a UI/UX designer.</h1>
+      <h1 class="hero__nadpis"><span class="hero__radek"><span>Grafický a UI/UX</span></span> <span class="hero__radek"><span>designer.</span></span></h1>
       <div class="hero__akce">
         <a href="/projekty" class="btn btn--accent">Moje práce</a>
         <a href="/kontakt" class="btn btn--dark">Kontakt</a>
@@ -153,6 +153,16 @@ const sluzby = [
   }
   :global(:root[data-theme='light']) .hero__nadpis {
     color: var(--fg);
+  }
+  /* Řádky nadpisu: při úvodní animaci vyjíždějí zespodu z masky */
+  .hero__radek {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .hero__radek > span {
+    display: block;
   }
   .hero__akce {
     display: flex;
