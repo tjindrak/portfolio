@@ -40,7 +40,7 @@ const fotky = [
 
   <section class="container sekce sekce--studium">
     <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Studium</p>
-    <div class="sloupec sloupec--vpravo">
+    <div class="sloupec">
       <h2 class="subhead gradient-text" data-pismena>K designu se zastávkou u fyziky</h2>
       <div class="prose">
         <p data-pismena>Moje cesta k designu nebyla úplně přímá. Začínal jsem u fotky a videí, přešel k webu, pak jsem zkusil fyziku a nakonec jsem pochopil, že mě to nejvíce táhne k tomu, dělat věci hezké a funkční a pro lidi.</p>
@@ -62,7 +62,7 @@ const fotky = [
   </section>
 
   <section class="container sekce sekce--kam">
-    <p class="bg-word bg-word--odsazene" aria-hidden="true" data-pismena="zespodu">Kam dál</p>
+    <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Kam dál</p>
     <div class="sloupec sloupec--vpravo">
       <h2 class="subhead gradient-text" data-pismena>Kam chci svou práci posouvat.</h2>
       <div class="prose">
@@ -81,7 +81,7 @@ const fotky = [
 
   <section class="container sekce sekce--mimo">
     <p class="bg-word" aria-hidden="true" data-pismena="zespodu">Mimo práci</p>
-    <div class="sloupec sloupec--mimo">
+    <div class="sloupec">
       <h2 class="subhead gradient-text" data-pismena>Nejlíp je mi venku</h2>
       <div class="prose">
         <p data-pismena>Když zrovna nedesignuju, jsem nejradši v přírodě. Miluju hory a sport, takže mě najdeš na kole, na běžkách nebo na discgolfovém hřišti. A když venku zrovna nejsem, sahám po kytaře nebo sedám ke klavíru.</p>
@@ -147,6 +147,10 @@ const fotky = [
   .sekce--studium {
     margin-top: 721px;
   }
+  /* Práce sedí ve Figmě o 4 px výš, podnadpis zůstává na místě */
+  .sekce--prace {
+    margin-top: 356px;
+  }
   .sekce--kam {
     margin-top: 364px;
   }
@@ -155,12 +159,6 @@ const fotky = [
   }
   .bg-word--vpravo {
     text-align: right;
-  }
-  /* Práce přesahuje ve Figmě pravý okraj obsahu až na x 1404 */
-  @media (min-width: 1101px) {
-    .bg-word--vpravo {
-      margin-right: -28px;
-    }
   }
   .bg-word--odsazene {
     padding-left: 18.37%;
@@ -185,7 +183,7 @@ const fotky = [
     margin-top: 29px;
   }
   .sekce--prace .sloupec {
-    margin-top: 24px;
+    margin-top: 28px;
   }
   .sekce--kam .sloupec {
     margin-top: 59px;
