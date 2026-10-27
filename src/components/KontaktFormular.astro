@@ -2,8 +2,16 @@
 // Typografický formulář (Figma: Formulář, Kontakt – v2). Bez backendu:
 // odeslání otevře e-mail s předvyplněnou zprávou.
 import { site } from '../data/site';
+import { jazykZUrl, t } from '../i18n';
 
-const temata = ['Web', 'Aplikace', 'Identita', 'UX výzkum', 'Něco jiného'];
+const lang = jazykZUrl(Astro.url);
+const temata = t(lang, ['Web', 'Aplikace', 'Identita', 'UX výzkum', 'Něco jiného'], ['Website', 'App', 'Identity', 'UX research', 'Something else']);
+// Hlášky pro skript (podle jazyka stránky)
+const hlasky = t(
+  lang,
+  { chyba: 'Vyplň prosím jméno, e-mail a zprávu.', predmet: 'Poptávka z webu', hotovo: 'Otevírám e-mail s připravenou zprávou.' },
+  { chyba: 'Please fill in your name, email and message.', predmet: 'Enquiry from the website', hotovo: 'Opening your email with the message ready.' },
+);
 interface Props {
   class?: string;
   // Hustší varianta na hlavní stránce (Figma: Mainpage, Frame 33)
@@ -11,9 +19,9 @@ interface Props {
 }
 const { class: className, kompaktni = false } = Astro.props;
 ---
-<form class:list={['formular', { 'formular--kompaktni': kompaktni }, className]} data-formular data-email={site.email} novalidate>
+<form class:list={['formular', { 'formular--kompaktni': kompaktni }, className]} data-formular data-email={site.email} data-hlasky={JSON.stringify(hlasky)} novalidate>
   <fieldset class="formular__temata">
-    <legend class="label">S čím ti můžu pomoct?</legend>
+    <legend class="label">{t(lang, 'S čím ti můžu pomoct?', 'What can I help you with?')}</legend>
     <div class="formular__chips">
       {temata.map((t, i) => (
         <label class="tema">
@@ -26,23 +34,23 @@ const { class: className, kompaktni = false } = Astro.props;
 
   <div class="formular__radek">
     <label class="pole">
-      <span class="label">Jméno</span>
-      <input type="text" name="jmeno" placeholder={kompaktni ? 'Jméno Příjmení' : 'Jak ti mám říkat?'} autocomplete="name" required />
+      <span class="label">{t(lang, 'Jméno', 'Name')}</span>
+      <input type="text" name="jmeno" placeholder={kompaktni ? t(lang, 'Jméno Příjmení', 'First and last name') : t(lang, 'Jak ti mám říkat?', 'What should I call you?')} autocomplete="name" required />
     </label>
     <label class="pole">
-      <span class="label">E-mail</span>
-      <input type="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required />
+      <span class="label">{t(lang, 'E-mail', 'Email')}</span>
+      <input type="email" name="email" placeholder={t(lang, 'tvuj@email.cz', 'you@email.com')} autocomplete="email" required />
     </label>
   </div>
 
   <label class="pole pole--zprava">
-    <span class="label">Zpráva</span>
-    <textarea name="zprava" rows="5" placeholder="Napiš mi pár vět o projektu…" required></textarea>
+    <span class="label">{t(lang, 'Zpráva', 'Message')}</span>
+    <textarea name="zprava" rows="5" placeholder={t(lang, 'Napiš mi pár vět o projektu…', 'Tell me a few words about your project…')} required></textarea>
   </label>
 
   <div class="formular__pata">
-    <p class="label" data-formular-stav aria-live="polite">Údaje použiju jen k odpovědi.</p>
-    <button type="submit" class="btn btn--accent">Odeslat zprávu</button>
+    <p class="label" data-formular-stav aria-live="polite">{t(lang, 'Údaje použiju jen k odpovědi.', 'I’ll only use your details to reply.')}</p>
+    <button type="submit" class="btn btn--accent">{t(lang, 'Odeslat zprávu', 'Send message')}</button>
   </div>
 </form>
 
@@ -51,16 +59,17 @@ const { class: className, kompaktni = false } = Astro.props;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const stav = form.querySelector('[data-formular-stav]');
+      const hlasky = JSON.parse(form.dataset.hlasky ?? '{}');
       if (!form.checkValidity()) {
-        if (stav) stav.textContent = 'Vyplň prosím jméno, e-mail a zprávu.';
+        if (stav) stav.textContent = hlasky.chyba;
         form.reportValidity();
         return;
       }
       const d = new FormData(form);
-      const subject = `Poptávka z webu: ${d.get('tema')}`;
+      const subject = `${hlasky.predmet}: ${d.get('tema')}`;
       const body = `${d.get('zprava')}\n\n${d.get('jmeno')}\n${d.get('email')}`;
       window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      if (stav) stav.textContent = 'Otevírám e-mail s připravenou zprávou.';
+      if (stav) stav.textContent = hlasky.hotovo;
     });
   });
 </script>

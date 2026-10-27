@@ -1,0 +1,453 @@
+---
+import Base from '../layouts/Base.astro';
+import Obrazek from '../components/Obrazek.astro';
+import Icon from '../components/Icon.astro';
+import { jazykZUrl, t } from '../i18n';
+
+const lang = jazykZUrl(Astro.url);
+
+// CV ke stažení: nahraj PDF do public/cv.pdf.
+const CV = '/cv.pdf';
+
+const vzdelani = t(
+  lang,
+  [
+    { logo: '/img/zivotopis/logo-vse.webp', skola: 'VŠE, Fakulta informatiky a statistiky', obor: 'UX výzkum a design', titul: 'Ing.', roky: '2025 – dnes' },
+    { logo: '/img/zivotopis/logo-vskk.webp', skola: 'Vysoká škola kreativní komunikace', obor: 'Grafický a mediální design', titul: 'BcA.', roky: '2022 – 2025' },
+    { logo: '/img/zivotopis/logo-spsse.webp', skola: 'SPŠSE a VOŠ Liberec', obor: 'Technické lyceum, multimédia a web design', titul: 'Maturita', roky: '2018 – 2022' },
+  ],
+  [
+    { logo: '/img/zivotopis/logo-vse.webp', skola: 'Prague University of Economics and Business (VŠE)', obor: 'UX research and design', titul: 'Master’s degree', roky: '2025 – present' },
+    { logo: '/img/zivotopis/logo-vskk.webp', skola: 'College of Creative Communication (VŠKK)', obor: 'Graphic and media design', titul: 'Bachelor’s degree', roky: '2022 – 2025' },
+    { logo: '/img/zivotopis/logo-spsse.webp', skola: 'SPŠSE a VOŠ Liberec', obor: 'Technical lyceum, multimedia and web design', titul: 'High school diploma', roky: '2018 – 2022' },
+  ],
+);
+const klienti = [
+  { logo: '/img/zivotopis/logo-jardova-mapa.webp', nazev: 'Jarda Havelka', rok: '2026', popis: t(lang, 'Redesign webové aplikace s mapou a plánovačem výletů do hor', 'Redesign of a web app with a map and a mountain trip planner') },
+  { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: t(lang, 'Externí UX/UI designer a grafik, tvorba aplikací a webů', 'Freelance UX/UI and graphic designer for apps and websites') },
+  { logo: '/img/zivotopis/logo-laba.webp', nazev: 'Laba', rok: '2024', popis: t(lang, 'Social media specialist, content creator', 'Social media specialist, content creator') },
+  { logo: '/img/zivotopis/logo-dike.svg', nazev: 'DIKÉ', rok: '2025', popis: t(lang, 'Řízení projektu rebrandingu a redesignu webových stránek', 'Project management of the rebrand and website redesign') },
+  { logo: '/img/zivotopis/logo-kreativni-kancl.webp', nazev: 'Kreativní kancl', rok: '2024', popis: t(lang, 'Tvorba obsahu pro sociální sítě', 'Social media content creation') },
+];
+const dalsiKlienti = ['Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
+// Loga dalších klientů ve stejném pořadí jako ve Figmě
+const dalsiLoga = ['logo-dalsi-1.webp', 'logo-dalsi-2.webp', 'logo-dalsi-3.webp', 'logo-dalsi-4.svg', 'logo-dalsi-5.webp'];
+const dovednosti = t(
+  lang,
+  [
+    { nazev: 'UX výzkum a design', popis: 'Zjišťuju, co lidé opravdu potřebují. Rozhovory, testování a z nich jasná struktura produktu.' },
+    { nazev: 'UI design', popis: 'Navrhuju rozhraní pro web, mobil i aplikace. Čistá, přehledná a připravená rovnou do vývoje.' },
+    { nazev: 'Vizuální identita a grafika', popis: 'Od loga přes barvy a písmo až po tisk. Brand, který drží pohromadě na webu i v ruce.' },
+    { nazev: 'Motion, foto a video', popis: 'Lehce animuju, fotím a stříhám video. Krátké motion prvky, produktové fotky a střih obsahu pro sociální sítě.' },
+    { nazev: 'Prezentace', popis: 'Umím projekt srozumitelně odprezentovat klientovi i týmu a vysvětlit, proč je řešení právě takové.' },
+  ],
+  [
+    { nazev: 'UX research and design', popis: 'I find out what people really need. Interviews, testing and, out of them, a clear product structure.' },
+    { nazev: 'UI design', popis: 'I design interfaces for web, mobile and apps. Clean, clear and ready to go straight into development.' },
+    { nazev: 'Visual identity and graphic design', popis: 'From the logo to colours, type and print. A brand that holds together on screen and in your hands.' },
+    { nazev: 'Motion, photo and video', popis: 'I do light animation, photography and video editing. Short motion pieces, product photos and edits for social media.' },
+    { nazev: 'Presenting', popis: 'I can present a project clearly to clients and teams and explain why the solution is the way it is.' },
+  ],
+);
+// Software ve stejném pořadí jako ve Figmě (Software · ikony)
+const software = [
+  { soubor: 'figma', nazev: 'Figma' },
+  { soubor: 'indesign', nazev: 'Adobe InDesign' },
+  { soubor: 'illustrator', nazev: 'Adobe Illustrator' },
+  { soubor: 'lightroom', nazev: 'Adobe Lightroom' },
+  { soubor: 'photoshop', nazev: 'Adobe Photoshop' },
+  { soubor: 'after-effects', nazev: 'Adobe After Effects' },
+  { soubor: 'premiere', nazev: 'Adobe Premiere Pro' },
+  { soubor: 'slack', nazev: 'Slack' },
+];
+const jazyky = t(
+  lang,
+  [
+    { nazev: 'Čeština', popis: 'Rodilý mluvčí.' },
+    { nazev: 'Angličtina', popis: 'Vysoká komunikační úroveň' },
+  ],
+  [
+    { nazev: 'Czech', popis: 'Native speaker' },
+    { nazev: 'English', popis: 'Fluent, high level of communication' },
+  ],
+);
+---
+<Base title={t(lang, 'Životopis', 'Resume')} description={t(lang, 'Životopis Tomáše Jindráka: vzdělání, klienti, dovednosti a jazyky.', 'Resume of Tomáš Jindrák: education, clients, skills and languages.')}>
+  <!-- Rozměry podle Figmy (Životopis, rámec 1440 px) -->
+  <header class="container hero">
+    <p class="bg-word hero__slovo" aria-hidden="true" data-pismena="zespodu">{t(lang, 'Životopis', 'Resume')}</p>
+    <div class="hero__radek">
+      <div class="hero__foto nacti" style="--d:0.2s"><Obrazek src="/img/zivotopis/portret.webp" alt="Tomáš Jindrák" showCaption={false} eager /></div>
+      <div class="hero__text">
+        <h1 class="title-xl"><span class="maska"><span style="--d:0.15s">Tomáš Jindrák</span></span></h1>
+        <p class="lead gradient-text gradient-text--soft hero__role nacti" style="--d:0.3s">UX/UI designer</p>
+        <p class="hero__misto nacti" style="--d:0.4s">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
+      </div>
+      <a class="btn btn--accent hero__cv nacti" style="--d:0.5s" href={CV} download>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
+    </div>
+  </header>
+
+  <section class="container blok blok--vzdelani">
+    <h2 class="blok__nadpis" data-pismena>{t(lang, 'Vzdělání', 'Education')}</h2>
+    <ul class="blok__obsah vzdelani">
+      {vzdelani.map((v, i) => (
+        <li class="skola" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <div class="logo logo--64"><Obrazek src={v.logo} alt={v.skola} showCaption={false} fit="contain" /></div>
+          <div>
+            <h3 class="skola__nazev">{v.skola}</h3>
+            <p class="skola__popis">{v.obor} · {v.titul}</p>
+          </div>
+          <p class="rok skola__rok">{v.roky}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok blok--klienti">
+    <h2 class="blok__nadpis" data-pismena>{t(lang, 'Klienti', 'Clients')}</h2>
+    <ul class="blok__obsah mrizka klienti">
+      {klienti.map((k, i) => (
+        <li class="klient" data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
+          <div class:list={['logo logo--56', { 'logo--siroke': k.siroke }]}><Obrazek src={k.logo} alt={k.nazev} showCaption={false} fit={k.siroke ? 'cover' : 'contain'} /></div>
+          <h3 class="klient__nazev">{k.nazev}</h3>
+          <p class="rok klient__rok">{k.rok}</p>
+          <p class="klient__popis">{k.popis}</p>
+        </li>
+      ))}
+      <li class="klient" data-reveal style="--reveal-delay:0.08s">
+        <div class="loga-dalsi">
+          {dalsiKlienti.map((n, i) => (
+            <div class="logo logo--56"><Obrazek src={`/img/zivotopis/${dalsiLoga[i]}`} alt={n} showCaption={false} fit="contain" /></div>
+          ))}
+        </div>
+        <h3 class="klient__nazev">{t(lang, 'Další klienti', 'Other clients')}</h3>
+        <p class="klient__popis klient__popis--bez-roku">{dalsiKlienti.join(', ')}</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="container blok blok--dovednosti">
+    <h2 class="blok__nadpis" data-pismena>{t(lang, 'Dovednosti', 'Skills')}</h2>
+    <ul class="blok__obsah dovednosti">
+      {dovednosti.map((d, i) => (
+        <li data-reveal style={`--reveal-delay:${i * 0.08}s`}>
+          <h3 class="dovednost__nazev">{d.nazev}</h3>
+          <p class="dovednost__popis">{d.popis}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok blok--software">
+    <h2 class="blok__nadpis" data-pismena>Software</h2>
+    <ul class="blok__obsah software">
+      {software.map((sw, i) => (
+        <li class="software__ikona" data-reveal style={`--reveal-delay:${i * 0.05}s`}>
+          <img src={`/img/zivotopis/software/${sw.soubor}.svg`} alt={sw.nazev} title={sw.nazev} width="64" height="64" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok blok--jazyky">
+    <h2 class="blok__nadpis" data-pismena>{t(lang, 'Jazyky', 'Languages')}</h2>
+    <ul class="blok__obsah mrizka">
+      {jazyky.map((j) => (
+        <li data-reveal>
+          <h3 class="dovednost__nazev">{j.nazev}</h3>
+          <p class="dovednost__popis">{j.popis}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <div class="container zaver" data-reveal>
+    <a class="btn btn--accent" href={CV} download>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: 209px;
+  }
+  /* Slovo v pozadí Nohemi SemiBold, texty Delight Regular (Figma Životopis 323:482) */
+  .hero__slovo {
+    position: absolute;
+    top: 169px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    left: var(--gutter);
+  }
+  .hero__radek {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    padding-top: 150px;
+  }
+  .hero__foto {
+    flex: none;
+    /* portrét lícuje se jménem (Figma y 536) */
+    margin-top: 76px;
+    border: 1px solid var(--fg-16);
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--fg-8);
+  }
+  .hero__foto :global(.obrazek) {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(1);
+  }
+  .hero__text {
+    flex: 1;
+    /* text začíná 24 px pod slovem Životopis */
+    margin-top: 76px;
+  }
+  .hero__text :global(h1),
+  .hero__role,
+  .hero__cv,
+  .zaver .btn {
+    font-weight: 400;
+  }
+  .hero__role {
+    margin-top: 8px;
+    font-size: clamp(22px, 2.23vw, 32px);
+  }
+  .hero__misto {
+    margin-top: 19px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: normal;
+    color: var(--fg-40);
+  }
+  .hero__cv {
+    margin-top: 96px;
+    /* Figma: tlačítko končí na x 1371 */
+    margin-right: 5px;
+  }
+  .blok {
+    display: grid;
+    grid-template-columns: var(--col-offset) 1fr;
+    margin-top: 360px;
+  }
+  .blok--vzdelani {
+    margin-top: 367px;
+  }
+  .blok--klienti {
+    margin-top: 354px;
+  }
+  .blok--dovednosti {
+    margin-top: 327px;
+  }
+  .blok--software {
+    margin-top: 298px;
+  }
+  .blok--jazyky {
+    margin-top: 320px;
+  }
+  .blok__nadpis {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg-30);
+  }
+  .blok__obsah {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .vzdelani {
+    display: grid;
+    gap: 56px;
+  }
+  .skola {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: start;
+    gap: 24px;
+  }
+  .skola__nazev {
+    margin-top: 2px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(22px, 1.81vw, 26px);
+    line-height: normal;
+  }
+  .skola__popis {
+    margin-top: 5px;
+    font-size: clamp(18px, 1.4vw, 20px);
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  .rok {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: normal;
+    color: var(--fg-40);
+    white-space: nowrap;
+  }
+  .skola__rok {
+    margin-top: 8px;
+    font-size: 17px;
+    text-align: right;
+  }
+  .mrizka {
+    display: grid;
+    grid-template-columns: minmax(0, 380px) minmax(0, 380px);
+    column-gap: 60px;
+  }
+  .klienti {
+    row-gap: 64px;
+  }
+  .logo {
+    overflow: hidden;
+    background: var(--fg-8);
+  }
+  .logo :global(.obrazek) {
+    width: 100%;
+    height: 100%;
+  }
+  .logo :global(.obrazek__icon) {
+    width: 40%;
+    height: 40%;
+  }
+  .logo--64 {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+  .logo--56 {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+  }
+  .logo--siroke {
+    width: 122px;
+  }
+  .loga-dalsi {
+    display: flex;
+    gap: 16px;
+  }
+  .klient__nazev {
+    margin-top: 20px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .klient__rok {
+    margin-top: 3px;
+  }
+  .klient__popis {
+    margin-top: 9px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  .klient__popis--bez-roku {
+    margin-top: 31px;
+  }
+  /* Figma Frame 168: auto layout, mezera 64 px mezi dovednostmi */
+  .dovednosti {
+    display: grid;
+    gap: 64px;
+  }
+  .dovednost__nazev {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 35px;
+  }
+  .dovednost__popis {
+    margin-top: 9px;
+    font-size: clamp(18px, 1.55vw, 22px);
+    line-height: 1.5;
+    color: var(--fg-80);
+  }
+  /* Software: dlaždice 64 × 64 s mezerou 24 (Figma Software · ikony) */
+  .software {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .software__ikona {
+    height: 64px;
+    line-height: 0;
+  }
+  .software__ikona img {
+    display: block;
+    width: 64px;
+    height: 64px;
+  }
+  .zaver {
+    display: flex;
+    justify-content: center;
+    margin-top: 160px;
+  }
+
+  @media (max-width: 1100px) {
+    .hero__radek {
+      flex-wrap: wrap;
+    }
+    .hero__foto,
+    .hero__text,
+    .hero__cv {
+      margin-top: 0;
+    }
+    .blok {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero,
+    .hero__slovo {
+      padding-top: 40px;
+      top: 0;
+    }
+    .hero__radek {
+      flex-direction: column;
+      gap: 24px;
+      padding-top: 64px;
+    }
+    .hero__foto {
+      width: 120px;
+      height: 120px;
+    }
+    .blok,
+    .blok--vzdelani,
+    .blok--klienti,
+    .blok--dovednosti,
+    .blok--software,
+    .blok--jazyky {
+      margin-top: 96px;
+    }
+    .mrizka {
+      grid-template-columns: 1fr;
+      row-gap: 36px;
+    }
+    .skola {
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+    }
+    .skola .logo--64 {
+      width: 56px;
+      height: 56px;
+    }
+    .skola__rok {
+      grid-column: 2;
+      margin-top: -8px;
+      text-align: left;
+    }
+    .zaver {
+      margin-top: 96px;
+      margin-bottom: 40px;
+    }
+  }
+</style>

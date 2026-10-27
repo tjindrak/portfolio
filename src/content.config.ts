@@ -14,9 +14,7 @@ const sekce = z.object({
   odstavce: z.array(z.string()).default([]),
 });
 
-const projekty = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projekty' }),
-  schema: z.object({
+const schema = z.object({
     nazev: z.string(),
     // Velké slovo v pozadí hero (když se liší od názvu)
     slovo: z.string().optional(),
@@ -51,7 +49,7 @@ const projekty = defineCollection({
       })
       .optional(),
     // Bez url se tlačítko "Navštívit web" skryje a popisek zůstane jako text.
-    web: z.object({ url: z.string().url().optional(), popisek: z.string(), tlacitko: z.string().default('Navštívit web') }).optional(),
+    web: z.object({ url: z.string().url().optional(), popisek: z.string(), tlacitko: z.string().optional() }).optional(),
     hero: z
       .object({
         rozlozeni: z.enum(['plny', 'kolaz']).default('plny'),
@@ -82,7 +80,17 @@ const projekty = defineCollection({
         obrazovky: z.array(obrazek).default([]),
       })
       .optional(),
-  }),
 });
 
-export const collections = { projekty };
+const projekty = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projekty' }),
+  schema,
+});
+
+// Anglická verze projektů: stejné soubory (stejný slug), přeložené texty
+const projektyEn = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projekty-en' }),
+  schema,
+});
+
+export const collections = { projekty, projektyEn };

@@ -15,7 +15,7 @@ const foto = '/img/portret.webp';
 const ready = existsSync(join(process.cwd(), 'public', foto));
 ---
 <div class:list={['portret', { 'portret--placeholder': !ready }, className]}>
-  {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Portrét Tomáše Jindráka (doplní se)"></span>}
+  {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Tomáš Jindrák"></span>}
   {ready && sklo && <canvas class="portret__sklo" aria-hidden="true"></canvas>}
 </div>
 

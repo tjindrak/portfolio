@@ -1,0 +1,8 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Detail from '../../../stranky/Detail.astro';
+import { cestyDetailu } from '../../../lib/projekty';
+
+export const getStaticPaths = (() => cestyDetailu('en')) satisfies GetStaticPaths;
+---
+<Detail {...Astro.props} />

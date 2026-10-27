@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Glow from '../components/Glow.astro';
 import { site } from '../data/site';
+import { jazykZUrl, prelozitCestu, t } from '../i18n';
 
 interface Props {
   title?: string;
@@ -13,11 +14,14 @@ interface Props {
   glowBarva?: string;
 }
 
-const { title, description = site.description, glow = 'default', glowBarva } = Astro.props;
-const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · Grafický a UI/UX designer`;
+const lang = jazykZUrl(Astro.url);
+const { title, description = site.description[lang], glow = 'default', glowBarva } = Astro.props;
+const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · ${t(lang, 'Grafický a UI/UX designer', 'Graphic and UI/UX designer')}`;
+const cesta = Astro.url.pathname.replace(/\/$/, '') || '/';
+const adresa = (c: string) => new URL(c, Astro.site).href;
 ---
 <!doctype html>
-<html lang="cs">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,7 +29,11 @@ const fullTitle = title ? `${title} · ${site.fullName}` : `${site.fullName} · 
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content={t(lang, 'cs_CZ', 'en_US')} />
     <meta name="theme-color" content="#141414" />
+    <link rel="alternate" hreflang="cs" href={adresa(prelozitCestu(cesta, 'cs'))} />
+    <link rel="alternate" hreflang="en" href={adresa(prelozitCestu(cesta, 'en'))} />
+    <link rel="alternate" hreflang="x-default" href={adresa(prelozitCestu(cesta, 'cs'))} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/Delight-VF.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="preload" href="/fonts/Nohemi-Medium.otf" as="font" type="font/otf" crossorigin />

@@ -1,0 +1,248 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjektDlazdice from '../components/ProjektDlazdice.astro';
+import { vsechnyProjekty } from '../lib/projekty';
+import { jazykZUrl, t } from '../i18n';
+
+const lang = jazykZUrl(Astro.url);
+const projekty = await vsechnyProjekty(lang);
+
+// Filtry se počítají z kategorií v Markdown souborech projektů.
+const pocty = new Map<string, number>();
+for (const p of projekty) for (const k of p.data.kategorie) pocty.set(k, (pocty.get(k) ?? 0) + 1);
+// Pořadí chipů podle Figmy (Projekty 241:331)
+const poradi = t(lang, ['UI/UX design', 'Web', 'Grafika', 'Branding'], ['UI/UX design', 'Web', 'Graphic design', 'Branding']);
+const filtry = [...pocty.entries()].sort((a, b) => (poradi.indexOf(a[0]) + 1 || 99) - (poradi.indexOf(b[0]) + 1 || 99) || b[1] - a[1]);
+
+// Kolik dlaždic ukázat hned, zbytek odkryje tlačítko "Zobrazit další projekty".
+const LIMIT = 12;
+---
+<Base title={t(lang, 'Projekty', 'Projects')} description={t(lang, 'Výběr projektů Tomáše Jindráka: weby, aplikace, branding a grafika.', 'Selected work by Tomáš Jindrák: websites, apps, branding and graphic design.')}>
+  <section class="container projekty">
+    <div class="uvod">
+      <h1 class="uvod__nadpis"><span class="maska"><span>{t(lang, 'Projekty', 'Projects')}</span></span></h1>
+      <p class="uvod__popis"><span class="maska"><span>{t(lang, 'Výběr prací, které nejlépe ukazují jak nad projekty přemýšlím a co vše během nich dělám.', 'A selection of work that best shows how I think about projects and everything I do along the way.')}</span></span></p>
+
+      <div class="filtr" role="group" aria-labelledby="filtr-label">
+        <p id="filtr-label" class="filtr__label">{t(lang, 'Typ projektu', 'Project type')}</p>
+        <div class="filtr__chipy">
+          <button type="button" class="chip" aria-pressed="true" data-filtr="*">
+            {t(lang, 'Vše', 'All')} <span class="chip__count">{projekty.length}</span>
+          </button>
+          {filtry.map(([nazev, pocet]) => (
+            <button type="button" class="chip" aria-pressed="false" data-filtr={nazev}>
+              {nazev} <span class="chip__count">{pocet}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" data-grid>
+      {projekty.map((p, i) => (
+        <ProjektDlazdice
+          projekt={p}
+          class:list={['grid__item', { 'is-hidden-limit': i >= LIMIT }]}
+          style={`--h:${p.data.vyska}`}
+          data-kategorie={p.data.kategorie.join('|')}
+        />
+      ))}
+    </div>
+
+    {projekty.length > LIMIT && (
+      <div class="dalsi">
+        <button type="button" class="btn btn--accent" data-dalsi>{t(lang, 'Zobrazit další projekty', 'Show more projects')}</button>
+      </div>
+    )}
+    <p class="prazdno" data-prazdno hidden>{t(lang, 'V téhle kategorii zatím nic nemám.', 'Nothing in this category yet.')}</p>
+  </section>
+</Base>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  if (grid) {
+    const tiles = [...grid.querySelectorAll<HTMLElement>('.grid__item')];
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filtr]')];
+    const prazdno = document.querySelector<HTMLElement>('[data-prazdno]');
+    let filtr = '*';
+    let columnsCount = 0;
+
+    const pocetSloupcu = () => (innerWidth > 1100 ? 4 : innerWidth > 640 ? 2 : 1);
+
+    // Masonry: dlaždice se rozdělí do sloupců po řádcích (1, 2, 3, 4, 1, 2…),
+    // takže hotové projekty zůstanou nahoře jako ve Figmě.
+    function rozlozit(force = false) {
+      const n = pocetSloupcu();
+      if (!force && n === columnsCount) return;
+      columnsCount = n;
+      const viditelne = tiles.filter((t) => !t.hidden);
+      const sloupce = Array.from({ length: n }, () => {
+        const col = document.createElement('div');
+        col.className = 'grid__col';
+        return col;
+      });
+      viditelne.forEach((t, i) => sloupce[i % n].appendChild(t));
+      sloupce.forEach((col, i) => col.style.setProperty('--i', String(i)));
+      tiles.filter((t) => t.hidden).forEach((t) => sloupce[0].appendChild(t));
+      grid!.replaceChildren(...sloupce);
+      grid!.classList.add('is-masonry');
+      if (prazdno) prazdno.hidden = viditelne.length > 0;
+    }
+
+    function aplikovat() {
+      for (const t of tiles) {
+        const kat = (t.dataset.kategorie ?? '').split('|');
+        const limit = t.classList.contains('is-hidden-limit');
+        t.hidden = (filtr !== '*' && !kat.includes(filtr)) || (filtr === '*' && limit);
+      }
+      rozlozit(true);
+    }
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        filtr = chip.dataset.filtr ?? '*';
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        aplikovat();
+      }),
+    );
+
+    document.querySelector('[data-dalsi]')?.addEventListener('click', (e) => {
+      tiles.forEach((t) => t.classList.remove('is-hidden-limit'));
+      (e.currentTarget as HTMLElement).parentElement?.remove();
+      aplikovat();
+    });
+
+    aplikovat();
+    addEventListener('resize', () => rozlozit());
+  }
+</script>
+
+<style>
+  .projekty {
+    padding-top: 99px;
+  }
+  /* Najetí úvodu jako na hlavní stránce: text vyjede zespodu z masky, pak filtr a sloupce gridu */
+  .maska {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .maska > span {
+    display: block;
+    animation: vyjet 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .uvod__popis .maska > span {
+    animation-delay: 0.12s;
+  }
+  .filtr {
+    animation: najet 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+  .grid :global(.grid__col) {
+    animation: najet 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.4s + var(--i, 0) * 60ms);
+  }
+  @keyframes vyjet {
+    from {
+      transform: translateY(110%);
+    }
+  }
+  @keyframes najet {
+    from {
+      opacity: 0;
+      transform: translateY(80px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .maska > span,
+    .filtr,
+    .grid :global(.grid__col) {
+      animation: none;
+    }
+  }
+  .uvod__nadpis {
+    font-weight: 400;
+    font-size: clamp(56px, 6.7vw, 96px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .uvod__popis {
+    max-width: 620px;
+    margin-top: 20px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--fg-60);
+  }
+  .filtr {
+    margin-top: 48px;
+  }
+  .filtr__label {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: normal;
+    color: var(--fg-60);
+  }
+  .filtr__chipy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .grid.is-masonry {
+    display: flex;
+    align-items: flex-start;
+  }
+  .grid :global(.grid__col) {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .grid :global(.grid__item) {
+    aspect-ratio: 310 / var(--h);
+  }
+  .grid :global(.grid__item[hidden]) {
+    display: none;
+  }
+  .grid:not(.is-masonry) :global(.is-hidden-limit) {
+    display: none;
+  }
+  .dalsi {
+    display: flex;
+    justify-content: center;
+    margin-top: 56px;
+  }
+  .prazdno {
+    margin-top: 40px;
+    color: var(--fg-60);
+  }
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .projekty {
+      padding-top: 48px;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .grid :global(.grid__col) {
+      gap: 16px;
+    }
+    .grid :global(.grid__item) {
+      aspect-ratio: auto;
+      height: min(calc(var(--h) * 1px), 440px);
+    }
+  }
+</style>

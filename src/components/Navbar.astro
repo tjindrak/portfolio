@@ -1,16 +1,21 @@
 ---
 import { nav, site } from '../data/site';
 import Icon from './Icon.astro';
+import { jazykZUrl, odkaz, prelozitCestu, t } from '../i18n';
 
+const lang = jazykZUrl(Astro.url);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(href + '/');
+const polozky = nav.map((n) => ({ href: odkaz(lang, n.stranka), label: n.label[lang] }));
+const cz = prelozitCestu(path, 'cs');
+const en = prelozitCestu(path, 'en');
 ---
 <header class="navbar container">
-  <a href="/" class="navbar__logo" aria-label={`${site.name}, úvodní stránka`}>{site.name}</a>
+  <a href={odkaz(lang, 'domu')} class="navbar__logo" aria-label={`${site.name}, ${t(lang, 'úvodní stránka', 'home page')}`}>{site.name}</a>
 
-  <nav class="navbar__nav" aria-label="Hlavní navigace">
+  <nav class="navbar__nav" aria-label={t(lang, 'Hlavní navigace', 'Main navigation')}>
     <ul class="navbar__links">
-      {nav.map((item) => (
+      {polozky.map((item) => (
         <li>
           <a href={item.href} class:list={['navbar__link', { 'is-active': isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
             {item.label}
@@ -21,11 +26,11 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     <span class="navbar__divider" aria-hidden="true"></span>
     <div class="navbar__tools">
       <span class="navbar__lang">
-        <span class="navbar__lang-active" aria-current="true">CZ</span>
+        <a href={cz} hreflang="cs" lang="cs" class:list={{ 'navbar__lang-active': lang === 'cs' }} aria-current={lang === 'cs' ? 'true' : undefined} aria-label="Česky">CZ</a>
         <span aria-hidden="true">/</span>
-        <span title="Anglická verze se připravuje">EN</span>
+        <a href={en} hreflang="en" lang="en" class:list={{ 'navbar__lang-active': lang === 'en' }} aria-current={lang === 'en' ? 'true' : undefined} aria-label="English">EN</a>
       </span>
-      <button type="button" class="navbar__theme" data-theme-toggle aria-label="Přepnout světlý a tmavý motiv">
+      <button type="button" class="navbar__theme" data-theme-toggle aria-label={t(lang, 'Přepnout světlý a tmavý motiv', 'Switch light and dark theme')}>
         <Icon name="moon" class="icon-moon" />
         <Icon name="sun" class="icon-sun" />
       </button>
@@ -41,13 +46,18 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
 
 <div class="mobile-menu" id="mobile-menu" hidden>
   <ul>
-    {nav.map((item) => (
+    {polozky.map((item) => (
       <li>
         <a href={item.href} class:list={{ 'is-active': isActive(item.href) }}>{item.label}</a>
       </li>
     ))}
   </ul>
-  <button type="button" class="mobile-menu__theme" data-theme-toggle>Přepnout motiv</button>
+  <p class="mobile-menu__lang">
+    <a href={cz} hreflang="cs" lang="cs" class:list={{ 'is-active': lang === 'cs' }}>CZ</a>
+    <span aria-hidden="true">/</span>
+    <a href={en} hreflang="en" lang="en" class:list={{ 'is-active': lang === 'en' }}>EN</a>
+  </p>
+  <button type="button" class="mobile-menu__theme" data-theme-toggle>{t(lang, 'Přepnout motiv', 'Switch theme')}</button>
 </div>
 
 <script>
@@ -147,7 +157,14 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     font-size: 14px;
     color: var(--fg-60);
   }
-  .navbar__lang-active {
+  .navbar__lang a {
+    transition: color var(--hover);
+  }
+  .navbar__lang a:hover {
+    color: var(--fg);
+  }
+  .navbar__lang .navbar__lang-active,
+  .navbar__lang .navbar__lang-active:hover {
     font-weight: 500;
     color: var(--accent);
   }
@@ -231,8 +248,25 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
   .mobile-menu a.is-active {
     color: var(--accent);
   }
-  .mobile-menu__theme {
+  .mobile-menu__lang {
+    display: flex;
+    gap: 8px;
     margin-top: 32px;
+    font-size: 16px;
+    color: var(--fg-60);
+  }
+  .mobile-menu .mobile-menu__lang a {
+    display: inline;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--fg-60);
+  }
+  .mobile-menu .mobile-menu__lang a.is-active {
+    color: var(--accent);
+  }
+  .mobile-menu__theme {
+    margin-top: 24px;
     padding: 0;
     border: 0;
     background: none;

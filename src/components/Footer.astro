@@ -1,5 +1,7 @@
 ---
 import { site, version, commit } from '../data/site';
+import { jazykZUrl, t } from '../i18n';
+const lang = jazykZUrl(Astro.url);
 const year = new Date().getFullYear();
 ---
 <footer class="footer container">
@@ -13,7 +15,7 @@ const year = new Date().getFullYear();
       <li><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <a href="#top" class="footer__top">↑ Nahoru</a>
+    <a href="#top" class="footer__top">↑ {t(lang, 'Nahoru', 'Back to top')}</a>
   </div>
 </footer>
 

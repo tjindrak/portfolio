@@ -1,0 +1,524 @@
+---
+import Base from '../layouts/Base.astro';
+import Intro from '../components/Intro.astro';
+import Portret from '../components/Portret.astro';
+import Obrazek from '../components/Obrazek.astro';
+import Icon from '../components/Icon.astro';
+import KontaktFormular from '../components/KontaktFormular.astro';
+import sharp from 'sharp';
+import { join } from 'node:path';
+import { vybraneProjekty, prvniExistujici } from '../lib/projekty';
+import { jazykZUrl, odkaz, odkazProjektu, t } from '../i18n';
+
+const lang = jazykZUrl(Astro.url);
+const vybrane = await vybraneProjekty(lang);
+
+// Poměr stran fotky karty: zavřená karta ukazuje fotku na plnou výšku jako ve Figmě
+const karty = await Promise.all(
+  vybrane.map(async (p) => {
+    const src = prvniExistujici(p.id, ['karta.webp', 'cover.webp']);
+    const { width = 4, height = 3 } = await sharp(join(process.cwd(), 'public', src)).metadata().catch(() => ({}));
+    return { p, src, pomer: width / height };
+  })
+);
+
+const sluzby = t(
+  lang,
+  [
+    { nazev: 'UI a produktový design', stitky: ['Weby', 'Aplikace', 'Design systémy'] },
+    { nazev: 'UX výzkum', stitky: ['Rozhovory', 'Testování', 'Analýza'] },
+    { nazev: 'Grafika a identita', stitky: ['Logo', 'Vizuální styl', 'Tiskoviny'] },
+  ],
+  [
+    { nazev: 'UI and product design', stitky: ['Websites', 'Apps', 'Design systems'] },
+    { nazev: 'UX research', stitky: ['Interviews', 'Testing', 'Analysis'] },
+    { nazev: 'Graphic design and identity', stitky: ['Logo', 'Visual style', 'Print'] },
+  ],
+);
+---
+<Base glow="home">
+  <Intro slot="before" />
+
+  <!-- Hero -->
+  <section class="hero container">
+    <div class="hero__pruhy" aria-hidden="true"></div>
+    <Portret class="hero__portret" sklo />
+    <div class="hero__text">
+      <h1 class="hero__nadpis"><span class="hero__radek"><span>{t(lang, 'Grafický a UI/UX', 'Graphic and UI/UX')}</span></span> <span class="hero__radek"><span>designer.</span></span></h1>
+      <div class="hero__akce">
+        <a href={odkaz(lang, 'projekty')} class="btn btn--accent">{t(lang, 'Moje práce', 'My work')}</a>
+        <a href={odkaz(lang, 'kontakt')} class="btn btn--dark">{t(lang, 'Kontakt', 'Contact')}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vybrané projekty -->
+  <section class="vybrane container" aria-labelledby="vybrane-nadpis">
+    <p class="bg-word vybrane__slovo" aria-hidden="true" data-pismena="zespodu">{t(lang, 'Projekty', 'Projects')}</p>
+    <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-pismena>{t(lang, 'Vybrané ukázky', 'Selected work')}</h2>
+    <ul class="karty" data-reveal>
+      {karty.map(({ p, src, pomer }, i) => (
+        <li class:list={['karta', { 'is-open': i === 0 }]} style={`--pomer: ${pomer.toFixed(4)}`}>
+          <a href={odkazProjektu(lang, p.id)} class="karta__odkaz">
+            <Obrazek src={src} alt={p.data.nazev} class="karta__img" showCaption={false} />
+            <span class="karta__scrim" aria-hidden="true"></span>
+            <span class="karta__popisek">
+              <span class="karta__text">
+                <span class="karta__nazev">{p.data.nazev === 'Zahradní centrum DIKÉ' ? 'DIKÉ' : p.data.nazev}</span>
+                <span class="karta__meta">{p.data.rok} · {p.data.typ}</span>
+              </span>
+              <span class="karta__sipka" aria-hidden="true"><Icon name="arrow-up-right" /></span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="vybrane__pata" data-reveal>
+      <a href={odkaz(lang, 'projekty')} class="btn btn--accent">{t(lang, 'Všechny projekty', 'All projects')}</a>
+    </div>
+  </section>
+
+  <!-- O mně -->
+  <section class="omne container" aria-labelledby="omne-nadpis">
+    <p class="bg-word omne__slovo" aria-hidden="true" data-pismena="zespodu">{t(lang, 'O mně', 'About')}</p>
+    <div class="omne__obsah">
+      <div class="omne__intro">
+        {lang === 'en' ? (
+          <h2 id="omne-nadpis" class="omne__claim" data-pismena>I’m a designer who asks questions first and designs second.</h2>
+          <p class="omne__popis" data-pismena>
+            I design digital products from the first user interview to the final pixel. I help teams and brands find out what people
+            really need and turn it into interfaces that are easy to use and look good.
+          </p>
+        ) : (
+          <h2 id="omne-nadpis" class="omne__claim" data-pismena>Jsem designer, který se nejdřív ptá a&nbsp;teprve potom tvoří.</h2>
+          <p class="omne__popis" data-pismena>
+            Navrhuju digitální produkty od prvního rozhovoru s uživateli až po finální pixel. Pomáhám týmům a značkám zjistit, co lidé
+            opravdu potřebují, a proměnit to v rozhraní, která se dobře používají a hezky vypadají.
+          </p>
+        )}
+      </div>
+      <ul class="sluzby">
+        {sluzby.map((s, i) => (
+          <li class="sluzba" data-reveal style={`--reveal-delay:${i * 0.1}s`}>
+            <h3 class="sluzba__nazev">{s.nazev}</h3>
+            <p class="sluzba__stitky">{s.stitky.join('  ·  ')}</p>
+          </li>
+        ))}
+      </ul>
+      <a href={odkaz(lang, 'omne')} class="btn btn--accent omne__btn" data-reveal>{t(lang, 'Celý příběh o mně', 'My full story')}</a>
+    </div>
+  </section>
+
+  <!-- Napiš mi -->
+  <section class="napis container" aria-labelledby="napis-nadpis">
+    <p class="bg-word napis__slovo" aria-hidden="true" data-pismena="zespodu">{t(lang, 'Napiš mi', 'Say hello')}</p>
+    <div class="napis__obsah">
+      <h2 id="napis-nadpis" class="napis__intro" data-pismena>{t(lang, 'Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.', 'Got an idea that deserves good design? Let’s see it through together.')}</h2>
+      <div data-reveal><KontaktFormular class="napis__formular" kompaktni /></div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Vybrané projekty: první kliknutí kartu rozbalí, další kliknutí na rozbalenou otevře detail.
+  // Na mobilu (karty pod sebou) vede kliknutí rovnou na detail.
+  const karty = document.querySelectorAll<HTMLElement>('.karta');
+  const pod = matchMedia('(max-width: 900px)');
+  karty.forEach((karta) => {
+    karta.querySelector('a')?.addEventListener('click', (e) => {
+      if (pod.matches || karta.classList.contains('is-open')) return;
+      e.preventDefault();
+      karty.forEach((k) => k.classList.toggle('is-open', k === karta));
+    });
+  });
+</script>
+
+<style>
+  /* Hero je kompozice 1440 × 900 z Figmy, která se škáluje podle okna:
+     --u je velikost jednoho pixelu návrhu. Řídí ji výška okna, aby fotka vždy
+     zmizela na spodní hraně, a šířka, aby se fotka vešla vedle textu. */
+  .hero {
+    --u: min(calc(100svh / 900), calc((100vw - 64px) / 1258));
+    position: relative;
+    min-height: calc(893 * var(--u));
+  }
+  .hero__pruhy {
+    position: absolute;
+    right: calc(-200 * var(--u));
+    top: calc(-180 * var(--u));
+    width: calc(1100 * var(--u));
+    height: calc(1100 * var(--u));
+    background: repeating-linear-gradient(111.55deg, rgb(var(--fg-rgb) / 0.018) 0 108px, transparent 108px 216px);
+    -webkit-mask-image: radial-gradient(closest-side, #000, transparent);
+    mask-image: radial-gradient(closest-side, #000, transparent);
+    pointer-events: none;
+  }
+  .hero :global(.hero__portret) {
+    /* Fotka se neořezává, jen zmenší: její vlastní přechod do ztracena (končí v 64,5 % výšky)
+       má skončit přesně na spodní hraně okna (pod menu 101 px). Střed zůstává jako ve Figmě. */
+    --dostupna: calc(100svh - 101px - 79 * var(--u));
+    --sirka: min(calc(var(--dostupna) / 1.3652), calc(592 * var(--u)));
+    position: absolute;
+    left: calc(var(--gutter) + 962 * var(--u) - var(--sirka) / 2);
+    top: calc(79 * var(--u));
+    width: var(--sirka);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .hero__text {
+    position: relative;
+    padding-top: calc(329 * var(--u));
+    max-width: calc(780 * var(--u));
+  }
+  .hero__nadpis {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: calc(96 * var(--u));
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #edeeea;
+  }
+  :global(:root[data-theme='light']) .hero__nadpis {
+    color: var(--fg);
+  }
+  /* Řádky nadpisu: při úvodní animaci vyjíždějí zespodu z masky */
+  .hero__radek {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .hero__radek > span {
+    display: block;
+  }
+  .hero__akce {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: calc(32 * var(--u));
+  }
+
+  /* Vybrané projekty */
+  .vybrane {
+    position: relative;
+    /* nadpis zůstává tam, kde byl; slovo v pozadí je nad ním (Figma) */
+    margin-top: 75px;
+    --fs: clamp(100px, 18.06vw, 260px);
+  }
+  .vybrane__slovo {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--fs);
+    letter-spacing: -0.01em;
+  }
+  .vybrane__nadpis {
+    position: relative;
+    /* nadpis začíná 7 px pod slovem v pozadí (Figma) */
+    margin-top: calc(var(--fs) * 0.027);
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: clamp(36px, 3.4vw, 48px);
+    line-height: 1.1;
+  }
+  .karty {
+    /* Otevřená karta = celá šířka minus tři zavřené karty a tři mezery */
+    --zavrena: 160px;
+    --otevrena: calc(100cqw - 3 * var(--zavrena) - 3 * 8px);
+    container-type: inline-size;
+    display: flex;
+    gap: 8px;
+    height: 450px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .karta {
+    position: relative;
+    flex: none;
+    width: var(--zavrena);
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--tile-bg);
+    transition: width 1.3s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  /* Otevřená karta se rozbalí po kliknutí (skript dole), druhé kliknutí vede na detail */
+  .karta.is-open {
+    width: var(--otevrena);
+  }
+  .karta__odkaz {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  /* Zavřená karta ukazuje fotku na plnou výšku (jako ve Figmě), otevřená na šířku karty.
+     Šířka fotky se animuje stejně jako karta, takže se plynule zvětší bez cuknutí. */
+  .karta :global(.karta__img) {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: calc(450px * var(--pomer, 1.3333));
+    max-width: none;
+    height: 100%;
+    transform: translateX(-50%);
+    /* Neaktivní karta má jako ve Figmě sníženou saturaci a je o něco tmavší */
+    filter: saturate(0.5) brightness(0.85);
+    transition:
+      width 1.3s cubic-bezier(0.45, 0, 0.2, 1),
+      filter 0.9s ease;
+  }
+  .karta.is-open :global(.karta__img) {
+    width: max(var(--otevrena), calc(450px * var(--pomer, 1.3333)));
+    filter: none;
+  }
+  .karta__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(10 11 12 / 0) 45%, rgb(10 11 12 / 0.35) 72%, rgb(10 11 12 / 0.75) 100%);
+  }
+  .karta__popisek {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 28px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  .karta.is-open .karta__popisek {
+    opacity: 1;
+    transition-delay: 0.55s;
+  }
+  .karta__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .karta__nazev {
+    font-size: 32px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .karta__meta {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .karta__sipka {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--accent-5);
+    color: var(--grayscale-10);
+    transition: background-color var(--hover);
+  }
+  .karta.is-open .karta__odkaz:hover .karta__sipka,
+  .karta.is-open .karta__odkaz:focus-visible .karta__sipka {
+    background: var(--accent-3);
+  }
+  .karta__sipka :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
+  .vybrane__pata {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  /* O mně */
+  .omne {
+    position: relative;
+    margin-top: 338px;
+    --fs: clamp(100px, 18.06vw, 260px);
+  }
+  /* Slova v pozadí jsou na hlavní stránce v Nohemi SemiBold (Figma Mainpage) */
+  .omne__slovo,
+  .napis__slovo {
+    font-family: var(--font-heading);
+    font-weight: 600;
+  }
+  .omne__slovo {
+    font-size: var(--fs);
+    letter-spacing: -0.01em;
+  }
+  .omne__obsah {
+    position: relative;
+    /* obsah začíná 16 px pod slovem, nepřekrývá se s ním */
+    margin-top: calc(var(--fs) * 0.0615);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 56px;
+  }
+  .omne__intro {
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .omne__claim {
+    font-weight: 500;
+    font-size: clamp(36px, 4.2vw, 60px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+  .omne__popis {
+    max-width: 760px;
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--fg-70);
+  }
+  .sluzby {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Co dělám: jednoduché sloupce bez čárky a odsazení, název a pod ním štítky */
+  .sluzba {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sluzba__nazev {
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .sluzba__stitky {
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--fg-40);
+    white-space: pre-wrap;
+  }
+
+  /* Napiš mi */
+  .napis {
+    position: relative;
+    margin-top: 399px;
+    padding-bottom: 5px;
+    --fs: clamp(100px, 19.5vw, 280px);
+  }
+  .napis__slovo {
+    font-size: var(--fs);
+    letter-spacing: -0.01em;
+  }
+  /* Vše pod sebou v jednom sloupci zarovnaném vlevo (Figma: Frame 33):
+     úvod 531 px začíná 44 px pod slovem (výška slova 0,9 × 280 px), formulář 821 px začíná 466 px pod vrcholem slova. */
+  .napis__obsah {
+    position: relative;
+    max-width: 821px;
+    margin-top: calc(var(--fs) * 0.157);
+  }
+  .napis__obsah > [data-reveal] {
+    margin-top: 95px;
+  }
+  .napis__intro {
+    max-width: 531px;
+    font-weight: 500;
+    font-size: clamp(24px, 2.1vw, 30px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--fg-90);
+  }
+
+  /* Parallax: horní světlo zůstává v pozadí na místě (Glow, varianta home) a sekce přes něj
+     přijíždějí s delší pauzou navíc (30 % výšky okna). Na mobilu zůstávají mezery z Figmy. */
+  @media (min-width: 901px) {
+    .vybrane {
+      margin-top: calc(75px + 30vh);
+    }
+    .omne {
+      margin-top: calc(338px + 30vh);
+    }
+    .napis {
+      margin-top: calc(399px + 30vh);
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .hero :global(.hero__portret) {
+      left: auto;
+      right: 0;
+      width: 46%;
+    }
+    .hero {
+      --u: min(calc(100svh / 900), 1px);
+      min-height: 760px;
+    }
+    .hero__text {
+      padding-top: 300px;
+      max-width: 780px;
+    }
+    .hero__nadpis {
+      font-size: clamp(52px, 6.7vw, 96px);
+    }
+  }
+  @media (max-width: 900px) {
+    .karty {
+      flex-direction: column;
+      height: auto;
+    }
+    .karta,
+    .karta.is-open {
+      width: auto;
+      height: 280px;
+    }
+    .karta :global(.karta__img),
+    .karta.is-open :global(.karta__img) {
+      left: 0;
+      width: 100%;
+      transform: none;
+    }
+    .karta__popisek {
+      opacity: 1;
+      padding: 20px;
+    }
+    .karta__nazev {
+      font-size: 24px;
+    }
+    .sluzby {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 720px) {
+    .hero {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .hero :global(.hero__portret) {
+      position: relative;
+      left: auto;
+      top: 0;
+      width: 72%;
+      margin: 8px auto -45%;
+      -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
+      mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
+    }
+    .hero__text {
+      padding-top: 0;
+    }
+    .omne,
+    .napis {
+      margin-top: 96px;
+    }
+    .napis__obsah > [data-reveal] {
+      margin-top: 40px;
+    }
+  }
+</style>

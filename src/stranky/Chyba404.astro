@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import { jazykZUrl, odkaz, t } from '../i18n';
+
+const lang = jazykZUrl(Astro.url);
+---
+<Base title={t(lang, 'Stránka nenalezena', 'Page not found')}>
+  <section class="container chyba">
+    <p class="bg-word" aria-hidden="true">404</p>
+    <h1 class="title-xl chyba__nadpis">{t(lang, 'Tahle stránka tu není.', 'This page isn’t here.')}</h1>
+    <p class="lead gradient-text gradient-text--soft chyba__text">{t(lang, 'Možná se přesunula, nebo jsi jen zabloudil.', 'It may have moved, or you just took a wrong turn.')}</p>
+    <div class="chyba__akce">
+      <a class="btn btn--accent" href={odkaz(lang, 'domu')}>{t(lang, 'Zpět na úvod', 'Back to home')}</a>
+      <a class="btn btn--dark" href={odkaz(lang, 'projekty')}>{t(lang, 'Projekty', 'Projects')}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chyba {
+    padding-block: 140px 80px;
+  }
+  .chyba__nadpis {
+    position: relative;
+    margin-top: clamp(-76px, -5.3vw, -36px);
+  }
+  .chyba__text {
+    margin-top: 24px;
+  }
+  .chyba__akce {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 48px;
+  }
+</style>

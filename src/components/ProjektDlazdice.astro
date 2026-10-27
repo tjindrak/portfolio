@@ -3,6 +3,7 @@
 import Obrazek from './Obrazek.astro';
 import Icon from './Icon.astro';
 import { prvniExistujici, type Projekt } from '../lib/projekty';
+import { jazykZUrl, odkazProjektu } from '../i18n';
 
 interface Props {
   projekt: Projekt;
@@ -14,9 +15,10 @@ interface Props {
 
 const { projekt, siroka = false, class: className, style, ...rest } = Astro.props;
 const { nazev, dlazdice, pozadi, typ, rok } = projekt.data;
+const lang = jazykZUrl(Astro.url);
 const src = prvniExistujici(projekt.id, siroka ? ['sirsi.webp', 'cover.webp'] : ['cover.webp']);
 ---
-<a href={`/projekty/${projekt.id}`} class:list={['dlazdice', { 'dlazdice--siroka': siroka }, className]} style={[style, pozadi && `background:${pozadi}`].filter(Boolean).join(';')} {...rest}>
+<a href={odkazProjektu(lang, projekt.id)} class:list={['dlazdice', { 'dlazdice--siroka': siroka }, className]} style={[style, pozadi && `background:${pozadi}`].filter(Boolean).join(';')} {...rest}>
   <Obrazek src={src} alt={nazev} class="dlazdice__img" showCaption={false} />
   <span class="dlazdice__scrim" aria-hidden="true"></span>
   <span class="dlazdice__popisek">
