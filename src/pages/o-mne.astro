@@ -110,6 +110,10 @@ const fotky = [
     top: 169px;
     width: 532px;
   }
+  /* O mně zatím drží černobílý portrét, dokud se stránka nepřevede podle nové Figmy */
+  .hero :global(.hero__portret img) {
+    filter: grayscale(1);
+  }
   .hero__slovo,
   .hero__nazev,
   .hero__shrnuti {
