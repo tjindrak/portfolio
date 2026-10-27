@@ -196,13 +196,11 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
                 <Obrazek src={d.reseni.siroky.src} alt={d.reseni.siroky.popisek} />
               </div>
             )}
-            {d.web && (
-              <p class="web-odkaz subhead" data-reveal>
-                {d.web.url ? (
-                  <a href={d.web.url} target="_blank" rel="noopener" class="gradient-text">{d.web.popisek}</a>
-                ) : (
-                  <span class="gradient-text">{d.web.popisek}</span>
-                )}
+            {d.web?.url && (
+              <p class="web-odkaz" data-reveal>
+                <a href={d.web.url} class="btn btn--accent" target="_blank" rel="noopener">
+                  Navštívit web <Icon name="arrow-up-right" />
+                </a>
               </p>
             )}
           </section>
@@ -518,12 +516,6 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   }
   .obrazovky + .web-odkaz {
     margin-top: 78px;
-  }
-  .web-odkaz a {
-    transition: opacity 0.2s ease;
-  }
-  .web-odkaz a:hover {
-    opacity: 0.8;
   }
 
   .brzy {
