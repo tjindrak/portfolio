@@ -166,7 +166,10 @@ const { class: className, kompaktni = false } = Astro.props;
     gap: 48px;
   }
   .formular--kompaktni .pole--zprava {
-    margin-top: -5px;
+    margin-top: -3px;
+  }
+  .formular--kompaktni .tema span {
+    line-height: normal;
   }
   .formular--kompaktni .pole textarea {
     height: 140px;
@@ -191,7 +194,8 @@ const { class: className, kompaktni = false } = Astro.props;
     gap: 17px;
   }
   .formular--kompaktni .formular__radek {
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 43px;
   }
   .formular--kompaktni .pole input,
   .formular--kompaktni .pole textarea {

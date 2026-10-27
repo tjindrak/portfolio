@@ -445,19 +445,18 @@ const sluzby = [
     font-size: var(--fs);
     letter-spacing: -0.05em;
   }
-  /* Dva sloupce jako na detailech (Figma: Frame 33): vlevo úvod 400 px, vpravo formulář 821 px.
-     Formulář začíná 44 px pod slovem (výška slova 0,9 × 280 px), úvod o 4 px níž. */
+  /* Vše pod sebou v jednom sloupci zarovnaném vlevo (Figma: Frame 33):
+     úvod 465 px začíná 44 px pod slovem (výška slova 0,9 × 280 px), formulář 821 px o 56 px níž. */
   .napis__obsah {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 400px) minmax(0, 821px);
-    justify-content: space-between;
-    align-items: start;
-    gap: 48px;
+    max-width: 821px;
     margin-top: calc(var(--fs) * 0.157);
   }
+  .napis__obsah > [data-reveal] {
+    margin-top: 57px;
+  }
   .napis__intro {
-    margin-top: 4px;
+    max-width: 465px;
     font-weight: 500;
     font-size: clamp(24px, 2.1vw, 30px);
     line-height: 1.25;
@@ -547,8 +546,8 @@ const sluzby = [
     .napis {
       margin-top: 96px;
     }
-    .napis__obsah {
-      grid-template-columns: 1fr;
+    .napis__obsah > [data-reveal] {
+      margin-top: 40px;
     }
   }
 </style>
