@@ -85,7 +85,7 @@ const sluzby = [
     <p class="bg-word napis__slovo" aria-hidden="true">Napiš mi</p>
     <div class="napis__obsah">
       <h2 id="napis-nadpis" class="napis__intro" data-reveal>Máš nápad, který si zaslouží dobrý design? Pojďme ho spolu dotáhnout.</h2>
-      <KontaktFormular class="napis__formular" />
+      <KontaktFormular class="napis__formular" kompaktni />
     </div>
   </section>
 </Base>
@@ -339,10 +339,13 @@ const sluzby = [
   }
   .napis__slovo {
     font-size: var(--fs);
-    text-align: right;
+    text-align: center;
   }
+  /* Úvod i formulář tvoří jeden sloupec 821 px uprostřed (Figma: Frame 33) */
   .napis__obsah {
     position: relative;
+    max-width: 821px;
+    margin-inline: auto;
     /* úvod začíná 156 px pod horním okrajem slova (výška slova 0,9 × 280 px) */
     margin-top: calc(var(--fs) * -0.343);
   }
@@ -356,7 +359,6 @@ const sluzby = [
   }
   .napis :global(.napis__formular) {
     margin-top: 64px;
-    margin-left: var(--col-offset);
   }
 
   @media (max-width: 1200px) {

@@ -6,10 +6,12 @@ import { site } from '../data/site';
 const temata = ['Web', 'Aplikace', 'Identita', 'UX výzkum', 'Něco jiného'];
 interface Props {
   class?: string;
+  // Hustší varianta na hlavní stránce (Figma: Mainpage, Frame 33)
+  kompaktni?: boolean;
 }
-const { class: className } = Astro.props;
+const { class: className, kompaktni = false } = Astro.props;
 ---
-<form class:list={['formular', className]} data-formular data-email={site.email} novalidate>
+<form class:list={['formular', { 'formular--kompaktni': kompaktni }, className]} data-formular data-email={site.email} novalidate>
   <fieldset class="formular__temata">
     <legend class="label">S čím ti můžu pomoct?</legend>
     <div class="formular__chips">
@@ -160,9 +162,26 @@ const { class: className } = Astro.props;
     /* tlačítko je ve Figmě odsazené 28 px od pravého okraje polí */
     padding-right: 28px;
   }
+  .formular--kompaktni {
+    gap: 48px;
+  }
+  .formular--kompaktni .pole--zprava {
+    margin-top: -8px;
+  }
+  .formular--kompaktni .pole textarea {
+    height: 140px;
+    min-height: 140px;
+  }
+  .formular--kompaktni .formular__pata {
+    padding-right: 0;
+  }
   @media (max-width: 720px) {
-    .formular {
+    .formular,
+    .formular--kompaktni {
       gap: 40px;
+    }
+    .formular--kompaktni .pole--zprava {
+      margin-top: 0;
     }
     .formular__radek {
       grid-template-columns: 1fr;
