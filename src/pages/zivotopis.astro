@@ -13,7 +13,7 @@ const vzdelani = [
 ];
 const klienti = [
   { logo: '/img/zivotopis/logo-jardova-mapa.webp', nazev: 'Jarda Havelka', rok: '2026', popis: 'Redesign webové aplikace s mapou a plánovačem výletů do hor' },
-  { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: 'Brand, aplikace, web a tisk pro chytrou hrazdu Pull Up Star' },
+  { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: 'Externí UX/UI designer a grafik, tvorba aplikací a webů' },
   { logo: '/img/zivotopis/logo-laba.webp', nazev: 'Laba', rok: '2024', popis: 'Social media specialist, content creator' },
   { logo: '/img/zivotopis/logo-dike.svg', nazev: 'DIKÉ', rok: '2025', popis: 'Řízení projektu rebrandingu a redesignu webových stránek' },
   { logo: '/img/zivotopis/logo-kreativni-kancl.webp', nazev: 'Kreativní kancl', rok: '2024', popis: 'Tvorba obsahu pro sociální sítě' },
@@ -25,6 +25,19 @@ const dovednosti = [
   { nazev: 'UX výzkum a design', popis: 'Zjišťuju, co lidé opravdu potřebují. Rozhovory, testování a z nich jasná struktura produktu.' },
   { nazev: 'UI design', popis: 'Navrhuju rozhraní pro web, mobil i aplikace. Čistá, přehledná a připravená rovnou do vývoje.' },
   { nazev: 'Vizuální identita a grafika', popis: 'Od loga přes barvy a písmo až po tisk. Brand, který drží pohromadě na webu i v ruce.' },
+  { nazev: 'Motion, foto a video', popis: 'Lehce animuju, fotím a stříhám video. Krátké motion prvky, produktové fotky a střih obsahu pro sociální sítě.' },
+  { nazev: 'Prezentace', popis: 'Umím projekt srozumitelně odprezentovat klientovi i týmu a vysvětlit, proč je řešení právě takové.' },
+];
+// Software ve stejném pořadí jako ve Figmě (Software · ikony)
+const software = [
+  { soubor: 'figma', nazev: 'Figma' },
+  { soubor: 'indesign', nazev: 'Adobe InDesign' },
+  { soubor: 'illustrator', nazev: 'Adobe Illustrator' },
+  { soubor: 'lightroom', nazev: 'Adobe Lightroom' },
+  { soubor: 'photoshop', nazev: 'Adobe Photoshop' },
+  { soubor: 'after-effects', nazev: 'Adobe After Effects' },
+  { soubor: 'premiere', nazev: 'Adobe Premiere Pro' },
+  { soubor: 'slack', nazev: 'Slack' },
 ];
 const jazyky = [
   { nazev: 'Čeština', popis: 'Rodilý mluvčí.' },
@@ -62,7 +75,7 @@ const jazyky = [
     </ul>
   </section>
 
-  <section class="container blok">
+  <section class="container blok blok--klienti">
     <h2 class="blok__nadpis" data-pismena>Klienti</h2>
     <ul class="blok__obsah mrizka klienti">
       {klienti.map((k, i) => (
@@ -97,7 +110,18 @@ const jazyky = [
     </ul>
   </section>
 
-  <section class="container blok">
+  <section class="container blok blok--software">
+    <h2 class="blok__nadpis" data-pismena>Software</h2>
+    <ul class="blok__obsah software">
+      {software.map((sw, i) => (
+        <li class="software__ikona" data-reveal style={`--reveal-delay:${i * 0.05}s`}>
+          <img src={`/img/zivotopis/software/${sw.soubor}.svg`} alt={sw.nazev} title={sw.nazev} width="64" height="64" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container blok blok--jazyky">
     <h2 class="blok__nadpis" data-pismena>Jazyky</h2>
     <ul class="blok__obsah mrizka">
       {jazyky.map((j) => (
@@ -119,9 +143,12 @@ const jazyky = [
     position: relative;
     padding-top: 209px;
   }
+  /* Slovo v pozadí Nohemi SemiBold, texty Delight Regular (Figma Životopis 323:482) */
   .hero__slovo {
     position: absolute;
-    top: 209px;
+    top: 169px;
+    font-family: var(--font-heading);
+    font-weight: 600;
     left: var(--gutter);
   }
   .hero__radek {
@@ -133,6 +160,9 @@ const jazyky = [
   }
   .hero__foto {
     flex: none;
+    /* portrét lícuje se jménem (Figma y 536) */
+    margin-top: 76px;
+    border: 1px solid var(--fg-16);
     width: 168px;
     height: 168px;
     border-radius: 50%;
@@ -149,17 +179,27 @@ const jazyky = [
     /* text začíná 24 px pod slovem Životopis */
     margin-top: 76px;
   }
+  .hero__text :global(h1),
+  .hero__role,
+  .hero__cv,
+  .zaver .btn {
+    font-weight: 400;
+  }
   .hero__role {
     margin-top: 8px;
+    font-size: clamp(22px, 2.23vw, 32px);
   }
   .hero__misto {
-    margin-top: 26px;
+    margin-top: 19px;
     font-size: 17px;
-    font-weight: 500;
+    font-weight: 400;
+    line-height: normal;
     color: var(--fg-40);
   }
   .hero__cv {
     margin-top: 96px;
+    /* Figma: tlačítko končí na x 1371 */
+    margin-right: 5px;
   }
   .blok {
     display: grid;
@@ -167,14 +207,23 @@ const jazyky = [
     margin-top: 360px;
   }
   .blok--vzdelani {
-    margin-top: 359px;
+    margin-top: 367px;
+  }
+  .blok--klienti {
+    margin-top: 354px;
   }
   .blok--dovednosti {
     margin-top: 327px;
   }
+  .blok--software {
+    margin-top: 297px;
+  }
+  .blok--jazyky {
+    margin-top: 320px;
+  }
   .blok__nadpis {
     font-family: var(--font-body);
-    font-weight: 500;
+    font-weight: 400;
     font-size: clamp(40px, 5vw, 72px);
     line-height: 1;
     letter-spacing: -0.02em;
@@ -198,19 +247,20 @@ const jazyky = [
   .skola__nazev {
     margin-top: 2px;
     font-family: var(--font-body);
-    font-weight: 500;
-    font-size: clamp(22px, 1.8vw, 26px);
-    line-height: 1.2;
+    font-weight: 400;
+    font-size: clamp(22px, 1.81vw, 26px);
+    line-height: normal;
   }
   .skola__popis {
-    margin-top: 7px;
+    margin-top: 5px;
     font-size: clamp(18px, 1.4vw, 20px);
     line-height: 1.5;
     color: var(--fg-80);
   }
   .rok {
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 400;
+    line-height: normal;
     color: var(--fg-40);
     white-space: nowrap;
   }
@@ -225,7 +275,7 @@ const jazyky = [
     column-gap: 60px;
   }
   .klienti {
-    row-gap: 63px;
+    row-gap: 64px;
   }
   .logo {
     overflow: hidden;
@@ -259,37 +309,56 @@ const jazyky = [
   .klient__nazev {
     margin-top: 20px;
     font-family: var(--font-body);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 24px;
-    line-height: 1.2;
+    line-height: 30px;
   }
   .klient__rok {
-    margin-top: 4px;
+    margin-top: 3px;
   }
   .klient__popis {
-    margin-top: 6px;
+    margin-top: 9px;
     font-size: 18px;
     line-height: 1.5;
     color: var(--fg-80);
   }
   .klient__popis--bez-roku {
-    margin-top: 32px;
+    margin-top: 31px;
   }
   .dovednosti {
     display: grid;
-    gap: 57px;
+    gap: 56px;
   }
   .dovednost__nazev {
     font-family: var(--font-body);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 28px;
-    line-height: 1.2;
+    line-height: 35px;
+  }
+  /* Ve Figmě mají dovednosti pevný krok 166 px i u jednořádkového popisu */
+  .dovednosti > li {
+    min-height: 110px;
   }
   .dovednost__popis {
-    margin-top: 10px;
+    margin-top: 9px;
     font-size: clamp(18px, 1.55vw, 22px);
     line-height: 1.5;
     color: var(--fg-80);
+  }
+  /* Software: dlaždice 64 × 64 s mezerou 24 (Figma Software · ikony) */
+  .software {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .software__ikona {
+    height: 64px;
+    line-height: 0;
+  }
+  .software__ikona img {
+    display: block;
+    width: 64px;
+    height: 64px;
   }
   .zaver {
     display: flex;
@@ -301,6 +370,7 @@ const jazyky = [
     .hero__radek {
       flex-wrap: wrap;
     }
+    .hero__foto,
     .hero__text,
     .hero__cv {
       margin-top: 0;
@@ -327,7 +397,10 @@ const jazyky = [
     }
     .blok,
     .blok--vzdelani,
-    .blok--dovednosti {
+    .blok--klienti,
+    .blok--dovednosti,
+    .blok--software,
+    .blok--jazyky {
       margin-top: 96px;
     }
     .mrizka {
