@@ -10,6 +10,8 @@ export const site = {
   ico: '21680078',
   linkedin: 'https://www.linkedin.com/in/tom%C3%A1%C5%A1-jindr%C3%A1k-868535301/',
   instagram: 'https://www.instagram.com/tjindrak_design/',
+  // Soukromý Instagram (O mně, Mimo práci)
+  instagramOsobni: 'https://www.instagram.com/tjindrak/',
 };
 
 export const nav = [
