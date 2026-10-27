@@ -342,7 +342,7 @@ h4 {
   background: transparent;
   font-size: 14px;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: normal;
   color: var(--fg-80);
   white-space: nowrap;
 }
@@ -358,7 +358,6 @@ button.chip:hover {
   border-color: var(--fg-40);
 }
 .chip[aria-pressed='true'] {
-  font-weight: 500;
   background: var(--accent-5);
   border-color: var(--accent-5);
   color: var(--grayscale-10);
