@@ -309,11 +309,12 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   .hero__web {
     margin-top: 40px;
   }
+  /* Údaje začínají na úrovni štítků a končí u tlačítka (Figma: Meta y 544) */
   .meta {
     display: flex;
     flex-direction: column;
     gap: 22px;
-    margin: 8px 0 0;
+    margin: -87px 0 0;
   }
   .meta dt {
     font-size: 13px;
@@ -585,6 +586,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     .meta {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      margin-top: 8px;
     }
     .kroky {
       grid-template-columns: repeat(2, 1fr);
