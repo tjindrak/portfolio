@@ -1,5 +1,6 @@
 ---
 nazev: Bistro slunce
+velikostSlova: 214
 stav: brzy
 typ: Vizuální identita – Koncept
 rok: "2026"

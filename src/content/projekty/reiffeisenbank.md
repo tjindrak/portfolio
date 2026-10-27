@@ -1,5 +1,7 @@
 ---
 nazev: Reiffeisenbank aplikace
+slovo: Reiffeisenbank
+velikostSlova: 180
 stav: brzy
 typ: Bankovní aplikace – Koncept
 rok: "2026"

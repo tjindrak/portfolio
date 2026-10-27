@@ -1,5 +1,7 @@
 ---
 nazev: 100 Krále Sýrů
+slovo: Král Sýrů
+velikostSlova: 217
 pozadi: "#dcdcd5"
 stav: brzy
 typ: Packaging – Soutěž

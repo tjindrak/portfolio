@@ -139,6 +139,12 @@ const fotky = [
   .bg-word--vpravo {
     text-align: right;
   }
+  /* Práce přesahuje ve Figmě pravý okraj obsahu až na x 1404 */
+  @media (min-width: 1101px) {
+    .bg-word--vpravo {
+      margin-right: -28px;
+    }
+  }
   .bg-word--odsazene {
     padding-left: 21%;
   }

@@ -1,5 +1,6 @@
 ---
 nazev: enima
+slovo: Enima
 stav: brzy
 typ: Webová aplikace – správa dat
 rok: "2025-2026"

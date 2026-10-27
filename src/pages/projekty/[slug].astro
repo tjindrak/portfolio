@@ -550,14 +550,16 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     position: relative;
     margin-top: 360px;
   }
+  @media (min-width: 1101px) {
+    /* Slovo Proces přesahuje ve Figmě pravý okraj obsahu až na x 1408 */
+    .sekce--proces .bg-word {
+      margin-right: -32px;
+    }
+  }
   /* Jardova mapa: vlastní rozestupy z Figmy (438:414) */
   @media (min-width: 1101px) {
     .detail--jardova-mapa .sekce--proces {
       margin-top: 178px;
-    }
-    /* Slovo Proces přesahuje ve Figmě pravý okraj obsahu (začíná na x 712,5) */
-    .detail--jardova-mapa .sekce--proces .bg-word {
-      margin-right: -31.5px;
     }
     .detail--jardova-mapa .kroky {
       margin-top: 134px;

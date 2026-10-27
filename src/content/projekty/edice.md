@@ -1,5 +1,6 @@
 ---
 nazev: EDICE
+slovo: Sazba
 stav: brzy
 typ: Sazba knihy – Koncept
 rok: "2024"
