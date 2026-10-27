@@ -44,7 +44,8 @@ const sluzby = [
 
   <!-- Vybrané projekty -->
   <section class="vybrane container" aria-labelledby="vybrane-nadpis">
-    <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-pismena>Vybrané projekty</h2>
+    <p class="bg-word vybrane__slovo" aria-hidden="true" data-pismena="zespodu">Projekty</p>
+    <h2 id="vybrane-nadpis" class="vybrane__nadpis" data-pismena>Vybrané ukázky</h2>
     <ul class="karty" data-reveal>
       {karty.map(({ p, src, pomer }, i) => (
         <li class:list={['karta', { 'is-open': i === 0 }]} style={`--pomer: ${pomer.toFixed(4)}`}>
@@ -246,9 +247,20 @@ const sluzby = [
   /* Vybrané projekty */
   .vybrane {
     position: relative;
-    margin-top: 316px;
+    /* nadpis zůstává tam, kde byl; slovo v pozadí je nad ním (Figma) */
+    margin-top: 75px;
+    --fs: clamp(100px, 18.06vw, 260px);
+  }
+  .vybrane__slovo {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: var(--fs);
+    letter-spacing: -0.05em;
   }
   .vybrane__nadpis {
+    position: relative;
+    /* nadpis začíná 7 px pod slovem v pozadí (Figma) */
+    margin-top: calc(var(--fs) * 0.027);
     font-family: var(--font-heading);
     font-weight: 500;
     font-size: clamp(36px, 3.4vw, 48px);
@@ -473,7 +485,7 @@ const sluzby = [
      přijíždějí s delší pauzou navíc (30 % výšky okna). Na mobilu zůstávají mezery z Figmy. */
   @media (min-width: 901px) {
     .vybrane {
-      margin-top: calc(316px + 30vh);
+      margin-top: calc(75px + 30vh);
     }
     .omne {
       margin-top: calc(338px + 30vh);
