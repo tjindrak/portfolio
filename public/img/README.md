@@ -8,8 +8,7 @@ o-mne/houpacka.webp
 o-mne/lyze.webp
 o-mne/na-kole.webp
 o-mne/stelvio.webp
-portret-foto.webp
-portret-maska.svg
+portret.webp
 projekty/100-krale-syru/cover.webp
 projekty/bistro-slunce/cover.webp
 projekty/dike/cover.webp

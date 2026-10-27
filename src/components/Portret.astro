@@ -1,6 +1,7 @@
 ---
 // Vyříznutý portrét z hlavní stránky (Figma: Mask group, IMG_3480).
-// Fotka je maskovaná siluetou a dole se ztrácí do pozadí.
+// Soubor je už oříznutý na rámeček 592 × 1253 s průhledným pozadím,
+// dole se postava ztrácí do pozadí.
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -8,11 +9,10 @@ interface Props {
   class?: string;
 }
 const { class: className } = Astro.props;
-const foto = '/img/portret-foto.webp';
-const maska = '/img/portret-maska.svg';
-const ready = [foto, maska].every((f) => existsSync(join(process.cwd(), 'public', f)));
+const foto = '/img/portret.webp';
+const ready = existsSync(join(process.cwd(), 'public', foto));
 ---
-<div class:list={['portret', { 'portret--placeholder': !ready }, className]} style={ready ? `--maska:url(${maska})` : undefined}>
+<div class:list={['portret', { 'portret--placeholder': !ready }, className]}>
   {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Portrét Tomáše Jindráka (doplní se)"></span>}
 </div>
 
@@ -21,22 +21,15 @@ const ready = [foto, maska].every((f) => existsSync(join(process.cwd(), 'public'
     position: relative;
     aspect-ratio: 592 / 1253;
     overflow: hidden;
-    -webkit-mask-image: var(--maska), linear-gradient(180deg, #000 55%, transparent 92%);
-    mask-image: var(--maska), linear-gradient(180deg, #000 55%, transparent 92%);
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
+    mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
   }
   .portret__foto {
     position: absolute;
-    left: -178.72%;
-    top: -118.51%;
-    width: 405.56%;
-    height: 221.22%;
-    max-width: none;
-    /* Ořez je převzatý z Figmy, kde je fotka roztažená přesně na tyto rozměry */
-    object-fit: fill;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     filter: grayscale(1);
   }
   .portret--placeholder {
