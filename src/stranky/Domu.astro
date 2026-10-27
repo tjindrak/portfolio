@@ -191,6 +191,12 @@ const sluzby = t(
   .hero__radek > span {
     display: block;
   }
+  /* Každý řádek nadpisu zůstane na jednom řádku (anglické „Graphic and UI/UX“ je o 1 px širší než sloupec) */
+  @media (min-width: 721px) {
+    .hero__radek > span {
+      white-space: nowrap;
+    }
+  }
   .hero__akce {
     display: flex;
     flex-wrap: wrap;
