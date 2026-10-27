@@ -387,3 +387,14 @@ button.chip:hover {
     transition: none;
   }
 }
+
+/* Přepnutí motivu: kruh od tlačítka, bez prolínání a bez barevných přechodů uvnitř */
+.motiv-prepina,
+.motiv-prepina * {
+  transition: none !important;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
