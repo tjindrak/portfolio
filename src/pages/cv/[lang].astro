@@ -17,8 +17,7 @@ const kontakty = [
   { text: site.email, href: `mailto:${site.email}` },
   { text: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
   { text: webText, href: web.href },
-  { text: 'LinkedIn', href: site.linkedin },
-  { text: 'Instagram @tjindrak_design', href: site.instagram },
+  { text: '@tjindrak_design', href: site.instagram },
 ];
 ---
 <!doctype html>
@@ -30,13 +29,11 @@ const kontakty = [
   </head>
   <body>
     <main class="list">
-      <p class="slovo" aria-hidden="true">{t(lang, 'Životopis', 'Resume')}</p>
-
       <header class="hlava">
         <div>
           <h1 class="jmeno">{site.fullName}</h1>
           <p class="role">UX/UI designer</p>
-          <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')} · CZ / EN</p>
+          <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
         </div>
         <img class="foto" src="/img/zivotopis/portret.webp" alt="" />
       </header>
@@ -54,45 +51,44 @@ const kontakty = [
       </p>
 
       <div class="sloupce">
-        <div class="sloupec">
-          <section>
-            <h2>{t(lang, 'Klienti a praxe', 'Clients and experience')}</h2>
-            <ul class="polozky">
-              {klienti.map((k) => (
-                <li class="polozka">
-                  <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
-                  <div>
-                    <p class="polozka__hlava"><span class="polozka__nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
-                    <p class="popis">{k.popis}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <p class="dalsi"><span>{t(lang, 'Další klienti', 'Other clients')}</span> {dalsiKlienti.join(', ')}</p>
-          </section>
+        <section>
+          <h2>{t(lang, 'Klienti a praxe', 'Clients and experience')}</h2>
+          <ul class="klienti">
+            {klienti.map((k) => (
+              <li class="klient">
+                <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
+                <div>
+                  <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
+                  <p class="popis">{k.popis}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p class="nazev dalsi-nadpis">{t(lang, 'Další klienti', 'Other clients')}</p>
+          <p class="popis">{dalsiKlienti.join(', ')}</p>
+        </section>
 
-          <section>
-            <h2>{t(lang, 'Dovednosti', 'Skills')}</h2>
-            <ul class="dovednosti">
-              {dovednosti.map((d) => (
-                <li>
-                  <p class="polozka__nazev">{d.nazev}</p>
-                  <p class="popis">{d.popis}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-
-        <div class="sloupec">
+        <div class="pravy">
           <section>
             <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
-            <ul class="polozky">
+            <ul class="seznam">
               {vzdelani.map((v) => (
-                <li class="skola">
+                <li>
+                  <p class="nazev">{v.skola}</p>
                   <p class="rok">{v.roky}</p>
-                  <p class="polozka__nazev">{v.skola}</p>
-                  <p class="popis">{v.obor} · {v.titul}</p>
+                  <p class="popis">{v.obor}, {v.titul}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
+            <ul class="seznam seznam--tesny">
+              {jazyky.map((j) => (
+                <li class="jazyk">
+                  <span class="nazev">{j.nazev}</span>
+                  <span class="popis">{j.popis.replace(/\.$/, '')}</span>
                 </li>
               ))}
             </ul>
@@ -106,55 +102,53 @@ const kontakty = [
               ))}
             </ul>
           </section>
-
-          <section>
-            <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
-            <ul class="polozky polozky--tesne">
-              {jazyky.map((j) => (
-                <li>
-                  <p class="polozka__nazev">{j.nazev}</p>
-                  <p class="popis">{j.popis.replace(/\.$/, '')}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
         </div>
       </div>
 
+      <section class="dovednosti-blok">
+        <h2>{t(lang, 'Dovednosti', 'Skills')}</h2>
+        <ul class="dovednosti">
+          {dovednosti.map((d) => (
+            <li>
+              <p class="nazev">{d.nazev}</p>
+              <p class="popis">{d.popis}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <footer class="pata">
-        <span>{site.fullName} · UX/UI designer</span>
-        <a href={web.href}>{t(lang, 'Portfolio', 'Portfolio')}: {webText}</a>
+        <span>{site.fullName}</span>
+        <a href={web.href}>{webText}</a>
       </footer>
     </main>
   </body>
 </html>
 
 <style is:global>
-  /* Světlá tisková verze barev webu: Ink Charcoal na bílé, akcent Dolomite Sand */
+  /* Světlá tisková verze webu: Ink Charcoal na bílé, všechno v Delightu, bez podtržení a barevných nadpisů */
   @page {
     size: A4;
     margin: 0;
   }
   :root {
     --ink: 20 20 20;
-    --pisek: #b3ae8e;
-    --pisek-tmavy: #8f8b72;
   }
   html,
   body {
     margin: 0;
     background: #fff;
     color: rgb(var(--ink));
-    font-family: var(--font-body);
+    font-family: 'Delight', sans-serif;
+    font-weight: 400;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
   .list {
-    position: relative;
     box-sizing: border-box;
     width: 210mm;
     height: 297mm;
-    padding: 14mm 16mm 12mm;
+    padding: 13mm 18mm 11mm;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -173,196 +167,172 @@ const kontakty = [
     color: inherit;
     text-decoration: none;
   }
-  /* Velké slovo v pozadí jako na webu */
-  .slovo {
-    position: absolute;
-    top: 9mm;
-    left: 13mm;
-    font-family: 'Nohemi', sans-serif;
-    font-weight: 600;
-    font-size: 92pt;
-    line-height: 0.9;
-    letter-spacing: -0.01em;
-    color: rgb(var(--ink) / 0.045);
-    white-space: nowrap;
-    pointer-events: none;
-  }
   .hlava {
-    position: relative;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
-    gap: 8mm;
-    padding-top: 13mm;
+    gap: 10mm;
   }
   .jmeno {
-    font-family: 'Nohemi', sans-serif;
     font-weight: 400;
-    font-size: 34pt;
-    line-height: 1;
+    font-size: 30pt;
+    line-height: 1.05;
     letter-spacing: -0.02em;
   }
   .role {
-    margin-top: 3mm !important;
-    font-size: 15pt;
-    line-height: 1.2;
-    color: var(--pisek-tmavy);
+    margin-top: 2.5mm !important;
+    font-size: 14pt;
+    line-height: 1.3;
+    color: rgb(var(--ink) / 0.6);
   }
   .misto {
-    margin-top: 2mm !important;
+    margin-top: 1.5mm !important;
     font-size: 9pt;
-    color: rgb(var(--ink) / 0.55);
+    color: rgb(var(--ink) / 0.5);
   }
   .foto {
-    width: 30mm;
-    height: 30mm;
+    width: 26mm;
+    height: 26mm;
     border-radius: 50%;
     object-fit: cover;
     object-position: 50% 18%;
-    border: 0.75pt solid rgb(var(--ink) / 0.12);
-    background: #ececea;
+    background: #efefed;
   }
   .kontakty {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5mm 5mm;
-    margin-top: 6mm !important;
-    padding-bottom: 4.5mm !important;
-    border-bottom: 0.75pt solid rgb(var(--ink) / 0.12);
-    font-size: 8.5pt;
+    gap: 1.5mm 9mm;
+    margin-top: 6.5mm !important;
+    font-size: 9pt;
     color: rgb(var(--ink) / 0.75);
   }
-  .kontakty li + li::before {
-    content: '';
-    display: inline-block;
-    width: 3pt;
-    height: 3pt;
-    margin: 0 5mm 1.5pt -2.5mm;
-    border-radius: 50%;
-    background: var(--pisek);
-    transform: translateX(-50%);
-  }
   .profil {
-    margin-top: 5mm !important;
+    max-width: 150mm;
+    margin-top: 6.5mm !important;
     font-size: 10.5pt;
-    line-height: 1.55;
+    line-height: 1.6;
     color: rgb(var(--ink) / 0.8);
+  }
+  h2 {
+    margin-bottom: 5mm !important;
+    font-weight: 400;
+    font-size: 13pt;
+    line-height: 1.2;
+    color: rgb(var(--ink) / 0.45);
   }
   .sloupce {
     display: grid;
-    grid-template-columns: 1.35fr 1fr;
-    gap: 11mm;
-    margin-top: 6.5mm;
-    flex: 1;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 14mm;
+    margin-top: 9mm;
   }
-  .sloupec {
+  .pravy {
     display: flex;
     flex-direction: column;
-    gap: 6mm;
+    gap: 7.5mm;
   }
-  h2 {
-    margin-bottom: 3.5mm !important;
-    font-family: 'Nohemi', sans-serif;
-    font-weight: 500;
-    font-size: 8pt;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--pisek-tmavy);
-  }
-  h2::after {
-    content: '';
-    display: block;
-    width: 8mm;
-    height: 1.5pt;
-    margin-top: 2mm;
-    background: var(--pisek);
-  }
-  .polozky {
-    display: flex;
-    flex-direction: column;
-    gap: 3mm;
-  }
-  .polozky--tesne {
-    gap: 2.5mm;
-  }
-  .polozka {
-    display: grid;
-    grid-template-columns: 9mm 1fr;
-    gap: 3mm;
-    align-items: start;
-  }
-  .logo {
-    width: 9mm;
-    height: 9mm;
-    object-fit: contain;
-    border-radius: 2mm;
-    background: #f3f3f1;
-  }
-  .logo--siroke {
-    background: #fff;
-    border: 0.75pt solid rgb(var(--ink) / 0.08);
-    box-sizing: border-box;
-  }
-  .polozka__hlava {
-    display: flex;
-    justify-content: space-between;
-    gap: 3mm;
-  }
-  .polozka__nazev {
+  .nazev {
     font-size: 10pt;
-    font-weight: 500;
-    line-height: 1.3;
+    line-height: 1.35;
   }
   .rok {
+    margin-top: 0.4mm !important;
     font-size: 8.5pt;
-    color: rgb(var(--ink) / 0.5);
-    white-space: nowrap;
+    color: rgb(var(--ink) / 0.45);
     font-variant-numeric: tabular-nums;
   }
-  .skola .rok {
-    margin-bottom: 0.5mm !important;
-  }
   .popis {
-    margin-top: 0.6mm !important;
-    font-size: 8.5pt;
-    line-height: 1.4;
-    color: rgb(var(--ink) / 0.68);
-  }
-  .dalsi {
-    margin-top: 4mm !important;
+    margin-top: 1mm !important;
     font-size: 8.75pt;
     line-height: 1.45;
     color: rgb(var(--ink) / 0.68);
   }
-  .dalsi span {
-    font-weight: 500;
-    color: rgb(var(--ink));
+  .rok + .popis {
+    margin-top: 1.2mm !important;
   }
-  .dovednosti {
+  .popis + .popis {
+    margin-top: 0 !important;
+  }
+  .klienti {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5mm;
+  }
+  .klient {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3mm 6mm;
+    grid-template-columns: 10mm 1fr;
+    gap: 4mm;
+    align-items: start;
+  }
+  .hlavicka {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+    max-width: 70mm;
+  }
+  .klient .popis {
+    max-width: 62mm;
+  }
+  .logo {
+    width: 10mm;
+    height: 10mm;
+    object-fit: contain;
+    border-radius: 2.5mm;
+    background: #f3f3f1;
+  }
+  .logo--siroke {
+    box-sizing: border-box;
+    background: #fff;
+    border: 0.75pt solid rgb(var(--ink) / 0.08);
+  }
+  .dalsi-nadpis {
+    margin-top: 6mm !important;
+  }
+  .dalsi-nadpis + .popis {
+    max-width: 76mm;
+  }
+  .seznam {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5mm;
+  }
+  .seznam--tesny {
+    gap: 1.5mm;
+  }
+  .jazyk {
+    display: grid;
+    grid-template-columns: 22mm 1fr;
+    align-items: baseline;
+  }
+  .jazyk .popis {
+    margin: 0 !important;
   }
   .software {
     display: flex;
     flex-wrap: wrap;
-    gap: 2.4mm;
+    gap: 1.5mm;
   }
   .software img {
     display: block;
-    width: 9mm;
-    height: 9mm;
+    width: 7.3mm;
+    height: 7.3mm;
+  }
+  .dovednosti-blok {
+    margin-top: 8mm;
+  }
+  .dovednosti {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4mm 8mm;
   }
   .pata {
     display: flex;
     justify-content: space-between;
-    padding-top: 4mm;
-    border-top: 0.75pt solid rgb(var(--ink) / 0.12);
-    font-size: 8pt;
+    margin-top: auto;
+    padding-top: 5mm;
+    font-size: 8.5pt;
     color: rgb(var(--ink) / 0.5);
-  }
-  .pata a {
-    color: var(--pisek-tmavy) !important;
   }
   @media screen {
     body {
