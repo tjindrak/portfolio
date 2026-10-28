@@ -51,61 +51,49 @@ const kontakty = [
         )}
       </p>
 
-      <div class="sloupce">
-        <div class="sloupec">
-          <section>
-            <h2>{t(lang, 'Pracovní zkušenosti', 'Work experience')}</h2>
-            <ul class="klienti">
-              {klienti.map((k) => (
-                <li class="klient">
-                  <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
-                  <div>
-                    <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
-                    <p class="popis">{k.popis}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
+      <section class="blok">
+        <h2>{t(lang, 'Pracovní zkušenosti', 'Work experience')}</h2>
+        <ul class="radek">
+          {klienti.map((k) => (
+            <li class="polozka">
+              <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
+              <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
+              <p class="popis">{k.popis}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-          <section>
-            <h2>{t(lang, 'Moji klienti', 'My clients')}</h2>
-            <p class="popis odstavec">{vsichniKlienti.join(', ')}</p>
-          </section>
-        </div>
+      <section class="blok">
+        <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
+        <ul class="radek">
+          {vzdelani.map((v) => (
+            <li class="polozka">
+              <img class="logo" src={v.logo} alt="" />
+              <p class="nazev">{v.skola}</p>
+              <p class="rok">{v.roky}</p>
+              <p class="popis">{v.obor}, {v.titul}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-        <div class="sloupec">
-          <section>
-            <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
-            <ul class="seznam">
-              {vzdelani.map((v) => (
-                <li class="skola">
-                  <img class="logo" src={v.logo} alt="" />
-                  <p class="nazev">{v.skola}</p>
-                  <p class="rok">{v.roky}</p>
-                  <p class="popis">{v.obor}, {v.titul}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
-            <ul class="seznam seznam--tesny">
-              {jazyky.map((j) => (
-                <li class="jazyk">
-                  <span class="nazev">{j.nazev}</span>
-                  <span class="popis">{j.popis.replace(/\.$/, '')}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2>{t(lang, 'Prezentace projektů', 'Project presentations')}</h2>
-            <p class="popis odstavec">{prezentace}</p>
-          </section>
-        </div>
+      <div class="blok radek">
+        <section class="siroka">
+          <h2>{t(lang, 'Moji klienti', 'My clients')}</h2>
+          <p class="popis odstavec">{vsichniKlienti.join(', ')}</p>
+        </section>
+        <section>
+          <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
+          <ul class="seznam seznam--tesny">
+            {jazyky.map((j) => (
+              <li>
+                <p class="nazev">{j.nazev}</p>
+                <p class="popis">{j.popis.replace(/\.$/, '')}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
 
       <footer class="pata">
@@ -125,6 +113,13 @@ const kontakty = [
             </li>
           ))}
         </ul>
+      </section>
+
+      <section class="blok radek">
+        <div class="siroka">
+          <h2>{t(lang, 'Prezentace projektů', 'Project presentations')}</h2>
+          <p class="popis odstavec">{prezentace}</p>
+        </div>
       </section>
 
       <section class="software-blok">
@@ -197,8 +192,9 @@ const kontakty = [
     gap: 10mm;
   }
   .jmeno {
-    font-weight: 400;
-    font-size: 30pt;
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 600;
+    font-size: 32pt;
     line-height: 1.05;
     letter-spacing: -0.02em;
   }
@@ -236,12 +232,15 @@ const kontakty = [
     line-height: 1.6;
     color: rgb(var(--ink) / 0.8);
   }
+  /* Nadpisy sekcí: Nohemi SemiBold, větší, bez barvy a podtržení */
   h2 {
-    margin-bottom: 5mm !important;
-    font-weight: 400;
-    font-size: 13pt;
-    line-height: 1.2;
-    color: rgb(var(--ink) / 0.45);
+    margin-bottom: 6mm !important;
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 600;
+    font-size: 19pt;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: rgb(var(--ink));
   }
   .sloupce {
     display: grid;
@@ -256,6 +255,7 @@ const kontakty = [
   }
   .nazev {
     font-size: 10pt;
+    font-weight: 500;
     line-height: 1.35;
   }
   .rok {
@@ -339,11 +339,12 @@ const kontakty = [
   }
   .dovednosti {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 9mm 14mm;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9mm 10mm;
   }
   .dovednosti .nazev {
     font-size: 11pt;
+    font-weight: 500;
   }
   .dovednosti .popis {
     margin-top: 1.5mm !important;
@@ -352,6 +353,28 @@ const kontakty = [
   }
   .software-blok {
     margin-top: 14mm;
+  }
+  /* Sekce pod sebou, položky v nich vedle sebe ve třech sloupcích */
+  .blok {
+    margin-top: 11mm;
+  }
+  .radek {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10mm;
+    align-items: start;
+  }
+  .siroka {
+    grid-column: span 2;
+  }
+  .siroka .odstavec {
+    max-width: 105mm;
+  }
+  .polozka .logo {
+    margin-bottom: 3mm;
+  }
+  .polozka .popis {
+    max-width: 52mm;
   }
   .pata {
     display: flex;
