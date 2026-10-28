@@ -56,7 +56,6 @@ const kontakty = [
         <ul class="radek">
           {klienti.map((k) => (
             <li class="polozka">
-              <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
               <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
               <p class="popis">{k.popis}</p>
             </li>
@@ -69,7 +68,6 @@ const kontakty = [
         <ul class="radek">
           {vzdelani.map((v) => (
             <li class="polozka">
-              <img class="logo" src={v.logo} alt="" />
               <p class="nazev">{v.skola}</p>
               <p class="rok">{v.roky}</p>
               <p class="popis">{v.obor}, {v.titul}</p>
@@ -96,6 +94,13 @@ const kontakty = [
         </section>
       </div>
 
+      <section class="blok radek">
+        <div class="siroka">
+          <h2>{t(lang, 'Prezentace projektů', 'Project presentations')}</h2>
+          <p class="popis odstavec">{prezentace}</p>
+        </div>
+      </section>
+
       <footer class="pata">
         <span>{site.fullName}</span>
         <a href={web.href}>{webText}</a>
@@ -113,13 +118,6 @@ const kontakty = [
             </li>
           ))}
         </ul>
-      </section>
-
-      <section class="blok radek">
-        <div class="siroka">
-          <h2>{t(lang, 'Prezentace projektů', 'Project presentations')}</h2>
-          <p class="popis odstavec">{prezentace}</p>
-        </div>
       </section>
 
       <section class="software-blok">
@@ -281,7 +279,6 @@ const kontakty = [
     flex-direction: column;
     gap: 6mm;
   }
-  /* Logo nad názvem, aby se široké logo (Czech IT Academy) vešlo celé */
   .klient {
     display: flex;
     flex-direction: column;
@@ -296,25 +293,10 @@ const kontakty = [
   .klient .popis {
     max-width: 62mm;
   }
-  .logo {
-    display: block;
-    width: 10mm;
-    height: 10mm;
-    object-fit: contain;
-    border-radius: 2.5mm;
-    background: #f3f3f1;
-  }
-  .logo--siroke {
-    width: 35mm;
-    object-fit: cover;
-  }
   .seznam {
     display: flex;
     flex-direction: column;
     gap: 7mm;
-  }
-  .skola .logo {
-    margin-bottom: 2.5mm;
   }
   .seznam--tesny {
     gap: 1.5mm;
@@ -369,9 +351,6 @@ const kontakty = [
   }
   .siroka .odstavec {
     max-width: 105mm;
-  }
-  .polozka .logo {
-    margin-bottom: 3mm;
   }
   .polozka .popis {
     max-width: 52mm;
