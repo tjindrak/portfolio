@@ -43,7 +43,7 @@ const kontakty = [
           <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
         </div>
         <img class="foto" src="/img/portret-cv.webp" alt="" />
-        <a class="qr qr--web" href={web.href}><Fragment set:html={qrWeb} /><span>{webText}</span></a>
+        <a class="qr qr--web" href={web.href}><Fragment set:html={qrWeb} /></a>
       </header>
 
       <ul class="kontakty">
@@ -87,7 +87,7 @@ const kontakty = [
         <section class="siroka">
           <h2>{t(lang, 'Moji klienti', 'My clients')}</h2>
           <p class="popis odstavec">{vsichniKlienti.join(', ')}</p>
-          <a class="qr qr--projekty" href={projektyWeb.href}><Fragment set:html={qrProjekty} /><span>{t(lang, 'Moje projekty', 'My projects')}</span></a>
+          <a class="qr qr--projekty" href={projektyWeb.href}><Fragment set:html={qrProjekty} /></a>
         </section>
         <section>
           <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
@@ -235,7 +235,7 @@ const kontakty = [
   }
   .qr--web {
     position: absolute;
-    top: 80mm;
+    top: 85mm;
     right: 23.5mm;
     align-items: center;
     text-align: center;
