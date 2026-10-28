@@ -40,10 +40,12 @@ const kontakty = [
         <div>
           <h1 class="jmeno">{site.fullName}</h1>
           <p class="role">UX/UI designer</p>
-          <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
+          <div class="misto-radek">
+            <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
+            <a class="qr qr--web" href={web.href}><Fragment set:html={qrWeb} /></a>
+          </div>
         </div>
         <img class="foto" src="/img/portret-cv.webp" alt="" />
-        <a class="qr qr--web" href={web.href}><Fragment set:html={qrWeb} /></a>
       </header>
 
       <ul class="kontakty">
@@ -200,8 +202,10 @@ const kontakty = [
     line-height: 1.3;
     color: rgb(var(--ink) / 0.6);
   }
+  .misto-radek {
+    margin-top: 1.5mm;
+  }
   .misto {
-    margin-top: 1.5mm !important;
     font-size: 9pt;
     color: rgb(var(--ink) / 0.5);
   }
@@ -229,12 +233,21 @@ const kontakty = [
     width: 19mm;
     height: 19mm;
   }
-  .qr--web {
-    position: absolute;
-    top: 85mm;
-    right: 23.5mm;
+  /* Menší QR na web hned za místem bydliště */
+  .misto-radek {
+    display: flex;
     align-items: center;
-    text-align: center;
+    gap: 5mm;
+  }
+  .misto-radek .misto {
+    margin-top: 0 !important;
+  }
+  .qr--web {
+    width: 12mm;
+  }
+  .qr--web svg {
+    width: 12mm;
+    height: 12mm;
   }
   .qr--projekty {
     margin-top: 6mm;
