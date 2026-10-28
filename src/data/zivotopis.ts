@@ -32,14 +32,14 @@ export function zivotopis(lang: Lang) {
       { nazev: 'UI design', popis: 'Navrhuju rozhraní pro web, mobil i aplikace. Čistá, přehledná a připravená rovnou do vývoje.' },
       { nazev: 'Vizuální identita a grafika', popis: 'Od loga přes barvy a písmo až po tisk. Brand, který drží pohromadě na webu i v ruce.' },
       { nazev: 'Motion, foto a video', popis: 'Nebojím se lehce animovat, fotit a stříhat video.' },
-      { nazev: 'Prezentace', popis: 'Prezentoval jsem už mnoho projektů, mimo jiné zástupcům Havas Prague, Českého tenisu a Yellowshapes. Umím srozumitelně vysvětlit, proč je řešení právě takové.' },
+      { nazev: 'Prezentace', popis: 'Prezentoval jsem už mnoho projektů, mimo jiné zástupcům Havas Prague, Českého tenisu, Yellowshapes a vydavatelství Albi a Dino. Umím srozumitelně vysvětlit, proč je řešení právě takové.' },
     ],
     [
       { nazev: 'UX research and design', popis: 'I find out what people really need. Interviews, testing and, out of them, a clear product structure.' },
       { nazev: 'UI design', popis: 'I design interfaces for web, mobile and apps. Clean, clear and ready to go straight into development.' },
       { nazev: 'Visual identity and graphic design', popis: 'From the logo to colours, type and print. A brand that holds together on screen and in your hands.' },
       { nazev: 'Motion, photo and video', popis: 'I’m not afraid to do some light animation, photography and video editing.' },
-      { nazev: 'Presenting', popis: 'I’ve presented many projects, including to representatives of Havas Prague, Český tenis and Yellowshapes. I can explain clearly why a solution is the way it is.' },
+      { nazev: 'Presenting', popis: 'I’ve presented many projects, including to representatives of Havas Prague, Český tenis, Yellowshapes and the publishers Albi and Dino. I can explain clearly why a solution is the way it is.' },
     ],
   );
   // Software ve stejném pořadí jako ve Figmě (Software · ikony)
@@ -68,12 +68,7 @@ export function zivotopis(lang: Lang) {
   const vsichniKlienti = ['Jarda Havelka (Jardova mapa)', 'Martin Burda (Pull Up Star)', 'Zahradní centrum DIKÉ', 'Albi', 'Dino', 'Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
   // Pracovní zkušenosti v CV (ostatní jsou klienti)
   const zamestnani = ['Czech IT Academy', 'Laba', 'Kreativní kancl'];
-  const prezentace = t(
-    lang,
-    'Své projekty jsem prezentoval zástupcům Yellowshapes, Havas Prague, Českého tenisu a vydavatelství Albi a Dino.',
-    'I’ve presented my projects to representatives of Yellowshapes, Havas Prague, Český tenis and the publishers Albi and Dino.',
-  );
-  return { zamestnani, vsichniKlienti, prezentace, vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky };
+  return { zamestnani, vsichniKlienti, vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky };
 }
 
 /** PDF životopisu ke stažení (generuje `npm run cv`). */
