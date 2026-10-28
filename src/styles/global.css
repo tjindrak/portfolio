@@ -417,6 +417,10 @@ button.chip:hover {
 /* Slova v pozadí: písmena vyjíždějí zespodu s plynulým zpožděním */
 .pismena--zespodu .pismeno {
   display: inline-block;
+  /* Box písmena zahrnuje i háčky a čárky nad velkými písmeny (Ž, Ř, É), jinak je Safari
+     při animaci ořízne podle boxu */
+  padding-top: 0.25em;
+  margin-top: -0.25em;
   transform: translateY(0.35em);
   transition:
     opacity 0.9s ease,

@@ -57,11 +57,53 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
       <Footer />
     </div>
     <script>
+      // Postupné najíždění: prvek se objeví, až když text nad ním (dřív v pořadí stránky) dojede.
+      // Každý spuštěný prvek si pamatuje, kdy přestane blokovat ty pod sebou.
+      const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const bezi: { el: Element; konec: number }[] = [];
+      const pred = (a: Element, b: Element) => !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+      const sekundy = (v: string) => (v.trim().endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000) || 0;
+      // Animace po otevření stránky (.nacti, .maska) blokují vše pod sebou
+      document.querySelectorAll('.nacti, .maska > span').forEach((el) => {
+        const cs = getComputedStyle(el);
+        bezi.push({ el, konec: performance.now() + sekundy(cs.animationDelay.split(',')[0]) + sekundy(cs.animationDuration.split(',')[0]) * 0.8 });
+      });
+      const delkaBlokace = (el: HTMLElement) => {
+        if (el.matches('[data-pismena]')) {
+          if (el.dataset.pismena === 'zespodu') return 0; // slova v pozadí nikoho nezdržují
+          const n = Number(el.style.getPropertyValue('--n')) || 1;
+          return (n - 1) * Math.min(28, 1100 / n) + 350;
+        }
+        return sekundy(getComputedStyle(el).transitionDelay.split(',')[0]) + 400;
+      };
+      let cekajici: { el: HTMLElement; trida: string }[] = [];
+      const zpracuj = () => {
+        const davka = cekajici.sort((x, y) => (pred(x.el, y.el) ? -1 : 1));
+        cekajici = [];
+        for (const { el, trida } of davka) {
+          const ted = performance.now();
+          let start = ted;
+          // čeká jen na texty, které jsou ještě vidět (odscrollované nahoru nezdržují)
+          if (!klid)
+            for (const b of bezi)
+              if (b.konec > start && pred(b.el, el) && b.el.getBoundingClientRect().bottom > 0) start = b.konec;
+          bezi.push({ el, konec: start + delkaBlokace(el) });
+          if (start > ted) setTimeout(() => el.classList.add(trida), start - ted);
+          else el.classList.add(trida);
+        }
+      };
+      const ukazat = (el: HTMLElement, trida: string) => {
+        if (!cekajici.length) requestAnimationFrame(zpracuj);
+        cekajici.push({ el, trida });
+      };
+      // Pro vlastní najíždění na stránkách (dlaždice projektů)
+      (window as any).postupne = ukazat;
+
       const io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
+              ukazat(entry.target as HTMLElement, 'is-visible');
               io.unobserve(entry.target);
             }
           }
@@ -73,14 +115,14 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
+              ukazat(entry.target as HTMLElement, 'is-visible');
               ioPozde.unobserve(entry.target);
             }
           }
         },
         { threshold: 0.4 },
       );
-      document.querySelectorAll('[data-reveal]').forEach((el) =>
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) =>
         (el.dataset.reveal === 'pozde' ? ioPozde : io).observe(el),
       );
 
@@ -103,12 +145,12 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
 
       // Texty najíždějí písmeno po písmenu zleva doprava, když se dostanou do okna.
       // Slova zůstávají celá (kvůli zalamování), čtečky dostanou celý text přes aria-label.
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!klid) {
         const pozorovatel = new IntersectionObserver(
           (zaznamy) =>
             zaznamy.forEach((z) => {
               if (!z.isIntersecting) return;
-              z.target.classList.add('is-in');
+              ukazat(z.target as HTMLElement, 'is-in');
               pozorovatel.unobserve(z.target);
             }),
           { rootMargin: '0px 0px -12% 0px' }

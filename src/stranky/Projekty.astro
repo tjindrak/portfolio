@@ -121,7 +121,9 @@ const LIMIT = 12;
         (zaznamy) =>
           zaznamy.forEach((z) => {
             if (!z.isIntersecting) return;
-            z.target.classList.add('is-in');
+            const postupne = (window as any).postupne;
+            if (postupne) postupne(z.target, 'is-in');
+            else z.target.classList.add('is-in');
             io.unobserve(z.target);
           }),
         { rootMargin: '0px 0px -8% 0px' },
@@ -138,7 +140,9 @@ const LIMIT = 12;
   /* Najetí úvodu jako na hlavní stránce: text vyjede zespodu z masky, pak filtr a sloupce gridu */
   .maska {
     display: block;
-    overflow: hidden;
+    /* clip-path místo overflow: hidden – na iPhonu by prvek s přetékajícím obsahem
+       spolkl tah prstem a stránka by se nad ním neposunula */
+    clip-path: inset(-0.5em -0.5em 0 -0.5em);
     padding-bottom: 0.08em;
     margin-bottom: -0.08em;
   }
