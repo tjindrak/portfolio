@@ -121,9 +121,7 @@ const LIMIT = 12;
         (zaznamy) =>
           zaznamy.forEach((z) => {
             if (!z.isIntersecting) return;
-            const postupne = (window as any).postupne;
-            if (postupne) postupne(z.target, 'is-in');
-            else z.target.classList.add('is-in');
+            z.target.classList.add('is-in');
             io.unobserve(z.target);
           }),
         { rootMargin: '0px 0px -8% 0px' },
