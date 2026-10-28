@@ -517,22 +517,42 @@ const sluzby = t(
     }
   }
   @media (max-width: 720px) {
+    /* Úvod se vejde na jednu obrazovku (svh = bez lišt prohlížeče) i s mezerou pod tlačítky:
+       text sedí dole, fotka nad ním se zmenší podle výšky a pod textem se ztratí */
     .hero {
       min-height: 0;
+      height: calc(100svh - 72px);
+      min-height: 440px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
     .hero :global(.hero__portret) {
-      position: relative;
-      left: auto;
-      top: 0;
-      width: 72%;
-      margin: 8px auto -45%;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: calc(100% - 150px);
+      max-width: 80%;
+      margin-inline: auto;
       -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
       mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
     }
     .hero__text {
       padding-top: 0;
+    }
+    .hero__nadpis {
+      font-size: clamp(44px, 13vw, 56px);
+    }
+    .hero__akce {
+      margin-top: 28px;
+      gap: 12px;
+    }
+    .hero__akce .btn {
+      min-height: 56px;
+      padding-inline: 28px;
     }
     .omne,
     .napis {

@@ -51,7 +51,10 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
       gl_FragColor = c;
     }`;
 
+  // Na telefonu je fotka malá a pruhy by ji jen rozbily, zůstane obyčejná ostrá fotka
+  const telefon = matchMedia('(max-width: 720px)').matches;
   document.querySelectorAll<HTMLCanvasElement>('.portret__sklo').forEach((canvas) => {
+    if (telefon) return canvas.remove();
     const img = canvas.parentElement?.querySelector<HTMLImageElement>('.portret__foto');
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true });
     if (!img || !gl) return;
