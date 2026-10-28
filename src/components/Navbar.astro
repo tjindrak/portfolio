@@ -305,7 +305,9 @@ const en = prelozitCestu(path, 'en');
   }
   .mobile-menu__lang {
     display: flex;
+    align-items: center;
     gap: 8px;
+    line-height: 1;
     margin: 0;
     font-size: 16px;
     color: var(--fg-60);
@@ -324,13 +326,15 @@ const en = prelozitCestu(path, 'en');
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 20px;
-    border: 1px solid var(--fg-24);
-    border-radius: 999px;
+    /* bez rámečku, na stejné ose jako CZ / EN; výška 44 px kvůli prstu */
+    min-height: 44px;
+    padding: 0;
+    border: 0;
     background: none;
     font: inherit;
     font-size: 16px;
-    color: var(--fg);
+    line-height: 1;
+    color: var(--fg-60);
     cursor: pointer;
   }
   .mobile-menu__theme :global(svg) {
