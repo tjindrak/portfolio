@@ -65,13 +65,15 @@ export function zivotopis(lang: Lang) {
     ],
   );
   // Všichni klienti jen textem (CV)
-  const vsichniKlienti = ['Jarda Havelka (Jardova mapa)', 'Martin Burda (Pull Up Star)', 'Zahradní centrum DIKÉ', 'Czech IT Academy', 'Skvot', 'Laba', 'robot_dreams', 'Kreativní kancl', 'Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
+  const vsichniKlienti = ['Jarda Havelka (Jardova mapa)', 'Martin Burda (Pull Up Star)', 'Zahradní centrum DIKÉ', 'Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
+  // Pracovní zkušenosti v CV (ostatní jsou klienti)
+  const zamestnani = ['Czech IT Academy', 'Laba', 'Kreativní kancl'];
   const prezentace = t(
     lang,
     'Své projekty jsem prezentoval zástupcům Yellowshapes, Havas Prague, Českého tenisu a vydavatelství Albi a Dino.',
     'I’ve presented my projects to representatives of Yellowshapes, Havas Prague, Český tenis and the publishers Albi and Dino.',
   );
-  return { vsichniKlienti, prezentace, vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky };
+  return { zamestnani, vsichniKlienti, prezentace, vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky };
 }
 
 /** PDF životopisu ke stažení (generuje `npm run cv`). */

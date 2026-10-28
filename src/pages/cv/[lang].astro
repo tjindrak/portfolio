@@ -10,7 +10,8 @@ import { odkaz, t, type Lang } from '../../i18n';
 export const getStaticPaths = (() => [{ params: { lang: 'cs' } }, { params: { lang: 'en' } }]) satisfies GetStaticPaths;
 
 const lang = Astro.params.lang as Lang;
-const { vzdelani, klienti, vsichniKlienti, prezentace, dovednosti, software, jazyky } = zivotopis(lang);
+const { zamestnani, vzdelani, klienti: vsichni, vsichniKlienti, prezentace, dovednosti, software, jazyky } = zivotopis(lang);
+const klienti = vsichni.filter((k) => zamestnani.includes(k.nazev));
 const web = new URL(odkaz(lang, 'domu'), Astro.site);
 const webText = web.host + (web.pathname === '/' ? '' : web.pathname);
 const kontakty = [
