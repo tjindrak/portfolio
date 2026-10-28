@@ -121,12 +121,11 @@ const sluzby = t(
 
 <script>
   // Vybrané projekty: první kliknutí kartu rozbalí, další kliknutí na rozbalenou otevře detail.
-  // Na mobilu (karty pod sebou) vede kliknutí rovnou na detail.
+  // Na mobilu stejně, jen se karty pod sebou rozbalují na výšku.
   const karty = document.querySelectorAll<HTMLElement>('.karta');
-  const pod = matchMedia('(max-width: 900px)');
   karty.forEach((karta) => {
     karta.querySelector('a')?.addEventListener('click', (e) => {
-      if (pod.matches || karta.classList.contains('is-open')) return;
+      if (karta.classList.contains('is-open')) return;
       e.preventDefault();
       karty.forEach((k) => k.classList.toggle('is-open', k === karta));
     });
@@ -473,24 +472,38 @@ const sluzby = t(
       font-size: clamp(52px, 6.7vw, 96px);
     }
   }
+  /* Mobil: stejná galerie jako na desktopu, jen svisle. Zavřené karty jsou nízké pruhy,
+     otevřená karta se rozbalí na výšku. Fotka má pořád výšku otevřené karty, takže se jen odkrývá. */
   @media (max-width: 900px) {
     .karty {
+      --zavrena-v: 96px;
+      --otevrena-v: min(400px, 105vw);
       flex-direction: column;
       height: auto;
     }
     .karta,
     .karta.is-open {
       width: auto;
-      height: 280px;
+    }
+    .karta {
+      height: var(--zavrena-v);
+      transition: height 1.3s cubic-bezier(0.45, 0, 0.2, 1);
+    }
+    .karta.is-open {
+      height: var(--otevrena-v);
     }
     .karta :global(.karta__img),
     .karta.is-open :global(.karta__img) {
+      top: 50%;
       left: 0;
       width: 100%;
-      transform: none;
+      height: var(--otevrena-v);
+      transform: translateY(-50%);
+    }
+    .karta.is-open :global(.karta__img) {
+      top: 50%;
     }
     .karta__popisek {
-      opacity: 1;
       padding: 20px;
     }
     .karta__nazev {

@@ -144,8 +144,8 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
                 {d.proces.kroky.map((k, i) => (
                   <li class="krok" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
                     <span class="krok__linka" aria-hidden="true"></span>
-                    <h3 class="krok__nazev">{k.nazev}</h3>
-                    <p class="krok__popis">{k.popis}</p>
+                    <h3 class="krok__nazev" data-pismena>{k.nazev}</h3>
+                    <p class="krok__popis" data-pismena>{k.popis}</p>
                   </li>
                 ))}
               </ol>
@@ -657,17 +657,21 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
       padding-bottom: 0;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 0;
     }
     .kolaz__velky {
       margin: 0;
       width: 100%;
     }
+    /* Telefon překrývá spodek velké fotky a lícuje s jejím pravým okrajem */
     .kolaz__maly {
       position: relative;
       left: auto;
       top: auto;
-      width: 60%;
+      align-self: flex-end;
+      width: 42%;
+      margin-top: -34%;
+      box-shadow: 0 16px 40px rgb(0 0 0 / 0.35);
     }
     .sekce,
     .sekce--vyzva,

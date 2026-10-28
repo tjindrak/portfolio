@@ -34,10 +34,10 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
         <li class="skola" data-reveal style={`--reveal-delay:${i * 0.08}s`}>
           <div class="logo logo--64"><Obrazek src={v.logo} alt={v.skola} showCaption={false} fit="contain" /></div>
           <div>
-            <h3 class="skola__nazev">{v.skola}</h3>
-            <p class="skola__popis">{v.obor} · {v.titul}</p>
+            <h3 class="skola__nazev" data-pismena>{v.skola}</h3>
+            <p class="skola__popis" data-pismena>{v.obor} · {v.titul}</p>
           </div>
-          <p class="rok skola__rok">{v.roky}</p>
+          <p class="rok skola__rok" data-pismena>{v.roky}</p>
         </li>
       ))}
     </ul>
@@ -49,9 +49,9 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
       {klienti.map((k, i) => (
         <li class="klient" data-reveal style={`--reveal-delay:${(i % 2) * 0.08}s`}>
           <div class:list={['logo logo--56', { 'logo--siroke': k.siroke }]}><Obrazek src={k.logo} alt={k.nazev} showCaption={false} fit={k.siroke ? 'cover' : 'contain'} /></div>
-          <h3 class="klient__nazev">{k.nazev}</h3>
-          <p class="rok klient__rok">{k.rok}</p>
-          <p class="klient__popis">{k.popis}</p>
+          <h3 class="klient__nazev" data-pismena>{k.nazev}</h3>
+          <p class="rok klient__rok" data-pismena>{k.rok}</p>
+          <p class="klient__popis" data-pismena>{k.popis}</p>
         </li>
       ))}
       <li class="klient" data-reveal style="--reveal-delay:0.08s">
@@ -60,8 +60,8 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
             <div class="logo logo--56"><Obrazek src={`/img/zivotopis/${dalsiLoga[i]}`} alt={n} showCaption={false} fit="contain" /></div>
           ))}
         </div>
-        <h3 class="klient__nazev">{t(lang, 'Další klienti', 'Other clients')}</h3>
-        <p class="klient__popis klient__popis--bez-roku">{dalsiKlienti.join(', ')}</p>
+        <h3 class="klient__nazev" data-pismena>{t(lang, 'Další klienti', 'Other clients')}</h3>
+        <p class="klient__popis klient__popis--bez-roku" data-pismena>{dalsiKlienti.join(', ')}</p>
       </li>
     </ul>
   </section>
@@ -71,8 +71,8 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
     <ul class="blok__obsah dovednosti">
       {dovednosti.map((d, i) => (
         <li data-reveal style={`--reveal-delay:${i * 0.08}s`}>
-          <h3 class="dovednost__nazev">{d.nazev}</h3>
-          <p class="dovednost__popis">{d.popis}</p>
+          <h3 class="dovednost__nazev" data-pismena>{d.nazev}</h3>
+          <p class="dovednost__popis" data-pismena>{d.popis}</p>
         </li>
       ))}
     </ul>
@@ -94,8 +94,8 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
     <ul class="blok__obsah mrizka">
       {jazyky.map((j) => (
         <li data-reveal>
-          <h3 class="dovednost__nazev">{j.nazev}</h3>
-          <p class="dovednost__popis">{j.popis}</p>
+          <h3 class="dovednost__nazev" data-pismena>{j.nazev}</h3>
+          <p class="dovednost__popis" data-pismena>{j.popis}</p>
         </li>
       ))}
     </ul>
@@ -353,15 +353,13 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
     }
   }
   @media (max-width: 720px) {
-    .hero,
-    .hero__slovo {
+    .hero {
       padding-top: 40px;
-      top: 0;
     }
     .hero__radek {
       flex-direction: column;
       gap: 24px;
-      padding-top: 64px;
+      padding-top: 0;
     }
     .hero__foto {
       width: 120px;

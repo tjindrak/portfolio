@@ -100,8 +100,8 @@ const fotky = [
       <ul class="smery">
         {smery.map((s, i) => (
           <li data-reveal style={`--reveal-delay:${i * 0.1}s`}>
-            <h3 class="smery__nazev">{s.nazev}</h3>
-            <p class="smery__popis">{s.popis}</p>
+            <h3 class="smery__nazev" data-pismena>{s.nazev}</h3>
+            <p class="smery__popis" data-pismena>{s.popis}</p>
           </li>
         ))}
       </ul>
