@@ -104,8 +104,8 @@ const kontakty = [
       <section>
         <h2>{t(lang, 'Dovednosti', 'Skills')}</h2>
         <ul class="dovednosti">
-          {dovednosti.map((d) => (
-            <li>
+          {dovednosti.map((d, i) => (
+            <li class:list={{ 'dovednost--siroka': i === dovednosti.length - 1 }}>
               <p class="nazev">{d.nazev}</p>
               <p class="popis">{d.popis}</p>
             </li>
@@ -330,6 +330,10 @@ const kontakty = [
     margin-top: 1.5mm !important;
     font-size: 9.5pt;
     line-height: 1.55;
+  }
+  /* Prezentace (poslední dovednost) přes dva sloupce, ať má delší řádky */
+  .dovednost--siroka {
+    grid-column: span 2;
   }
   .software-blok {
     margin-top: 14mm;
