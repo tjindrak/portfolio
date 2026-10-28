@@ -233,16 +233,18 @@ const kontakty = [
     width: 19mm;
     height: 19mm;
   }
-  /* Menší QR na web hned za místem bydliště */
+  /* Menší QR na web hned za místem bydliště, spodní hranou na úrovni textu; výšku řádku nezvětšuje */
   .misto-radek {
-    display: flex;
-    align-items: center;
-    gap: 5mm;
+    position: relative;
+    display: inline-block;
   }
   .misto-radek .misto {
     margin-top: 0 !important;
   }
   .qr--web {
+    position: absolute;
+    left: calc(100% + 5mm);
+    bottom: 1mm;
     width: 12mm;
   }
   .qr--web svg {
