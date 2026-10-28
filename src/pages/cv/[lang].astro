@@ -10,7 +10,7 @@ import { odkaz, t, type Lang } from '../../i18n';
 export const getStaticPaths = (() => [{ params: { lang: 'cs' } }, { params: { lang: 'en' } }]) satisfies GetStaticPaths;
 
 const lang = Astro.params.lang as Lang;
-const { vzdelani, klienti, dalsiKlienti, dovednosti, software, jazyky } = zivotopis(lang);
+const { vzdelani, klienti, vsichniKlienti, prezentace, dovednosti, software, jazyky } = zivotopis(lang);
 const web = new URL(odkaz(lang, 'domu'), Astro.site);
 const webText = web.host + (web.pathname === '/' ? '' : web.pathname);
 const kontakty = [
@@ -51,24 +51,29 @@ const kontakty = [
       </p>
 
       <div class="sloupce">
-        <section>
-          <h2>{t(lang, 'Klienti a praxe', 'Clients and experience')}</h2>
-          <ul class="klienti">
-            {klienti.map((k) => (
-              <li class="klient">
-                <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
-                <div>
-                  <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
-                  <p class="popis">{k.popis}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <p class="nazev dalsi-nadpis">{t(lang, 'Další klienti', 'Other clients')}</p>
-          <p class="popis">{dalsiKlienti.join(', ')}</p>
-        </section>
+        <div class="sloupec">
+          <section>
+            <h2>{t(lang, 'Pracovní zkušenosti', 'Work experience')}</h2>
+            <ul class="klienti">
+              {klienti.map((k) => (
+                <li class="klient">
+                  <img class:list={['logo', { 'logo--siroke': k.siroke }]} src={k.logo} alt="" />
+                  <div>
+                    <p class="hlavicka"><span class="nazev">{k.nazev}</span><span class="rok">{k.rok}</span></p>
+                    <p class="popis">{k.popis}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-        <div class="pravy">
+          <section>
+            <h2>{t(lang, 'Moji klienti', 'My clients')}</h2>
+            <p class="popis odstavec">{vsichniKlienti.join(', ')}</p>
+          </section>
+        </div>
+
+        <div class="sloupec">
           <section>
             <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
             <ul class="seznam">
@@ -95,17 +100,20 @@ const kontakty = [
           </section>
 
           <section>
-            <h2>Software</h2>
-            <ul class="software">
-              {software.map((s) => (
-                <li><img src={`/img/zivotopis/software/${s.soubor}.svg`} alt={s.nazev} title={s.nazev} /></li>
-              ))}
-            </ul>
+            <h2>{t(lang, 'Prezentace projektů', 'Project presentations')}</h2>
+            <p class="popis odstavec">{prezentace}</p>
           </section>
         </div>
       </div>
 
-      <section class="dovednosti-blok">
+      <footer class="pata">
+        <span>{site.fullName}</span>
+        <a href={web.href}>{webText}</a>
+      </footer>
+    </main>
+
+    <main class="list">
+      <section>
         <h2>{t(lang, 'Dovednosti', 'Skills')}</h2>
         <ul class="dovednosti">
           {dovednosti.map((d) => (
@@ -113,6 +121,15 @@ const kontakty = [
               <p class="nazev">{d.nazev}</p>
               <p class="popis">{d.popis}</p>
             </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="software-blok">
+        <h2>Software</h2>
+        <ul class="software">
+          {software.map((s) => (
+            <li><img src={`/img/zivotopis/software/${s.soubor}.svg`} alt={s.nazev} title={s.nazev} /></li>
           ))}
         </ul>
       </section>
@@ -148,10 +165,14 @@ const kontakty = [
     box-sizing: border-box;
     width: 210mm;
     height: 297mm;
-    padding: 13mm 18mm 11mm;
+    padding: 18mm 18mm 12mm;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    break-after: page;
+  }
+  .list:last-of-type {
+    break-after: auto;
   }
   .list p,
   .list h1,
@@ -191,8 +212,8 @@ const kontakty = [
     color: rgb(var(--ink) / 0.5);
   }
   .foto {
-    width: 26mm;
-    height: 26mm;
+    width: 28mm;
+    height: 28mm;
     border-radius: 50%;
     object-fit: cover;
     object-position: 50% 18%;
@@ -202,13 +223,13 @@ const kontakty = [
     display: flex;
     flex-wrap: wrap;
     gap: 1.5mm 9mm;
-    margin-top: 6.5mm !important;
+    margin-top: 8mm !important;
     font-size: 9pt;
     color: rgb(var(--ink) / 0.75);
   }
   .profil {
     max-width: 150mm;
-    margin-top: 6.5mm !important;
+    margin-top: 8mm !important;
     font-size: 10.5pt;
     line-height: 1.6;
     color: rgb(var(--ink) / 0.8);
@@ -224,12 +245,12 @@ const kontakty = [
     display: grid;
     grid-template-columns: 1.15fr 1fr;
     gap: 14mm;
-    margin-top: 9mm;
+    margin-top: 12mm;
   }
-  .pravy {
+  .sloupec {
     display: flex;
     flex-direction: column;
-    gap: 7.5mm;
+    gap: 10mm;
   }
   .nazev {
     font-size: 10pt;
@@ -256,7 +277,7 @@ const kontakty = [
   .klienti {
     display: flex;
     flex-direction: column;
-    gap: 4.5mm;
+    gap: 6mm;
   }
   .klient {
     display: grid;
@@ -286,16 +307,15 @@ const kontakty = [
     background: #fff;
     border: 0.75pt solid rgb(var(--ink) / 0.08);
   }
-  .dalsi-nadpis {
-    margin-top: 6mm !important;
-  }
-  .dalsi-nadpis + .popis {
-    max-width: 76mm;
+  .odstavec {
+    margin: 0 !important;
+    font-size: 9pt;
+    line-height: 1.55;
   }
   .seznam {
     display: flex;
     flex-direction: column;
-    gap: 4.5mm;
+    gap: 5.5mm;
   }
   .seznam--tesny {
     gap: 1.5mm;
@@ -311,20 +331,28 @@ const kontakty = [
   .software {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5mm;
+    gap: 2.5mm;
   }
   .software img {
     display: block;
-    width: 7.3mm;
-    height: 7.3mm;
-  }
-  .dovednosti-blok {
-    margin-top: 8mm;
+    width: 9mm;
+    height: 9mm;
   }
   .dovednosti {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4mm 8mm;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9mm 14mm;
+  }
+  .dovednosti .nazev {
+    font-size: 11pt;
+  }
+  .dovednosti .popis {
+    margin-top: 1.5mm !important;
+    font-size: 9.5pt;
+    line-height: 1.55;
+  }
+  .software-blok {
+    margin-top: 14mm;
   }
   .pata {
     display: flex;
@@ -340,7 +368,7 @@ const kontakty = [
       padding: 24px 0;
     }
     .list {
-      margin: 0 auto;
+      margin: 0 auto 24px;
       background: #fff;
       box-shadow: 0 10px 40px rgb(0 0 0 / 0.12);
     }
