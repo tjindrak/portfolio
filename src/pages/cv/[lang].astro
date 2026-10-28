@@ -36,7 +36,7 @@ const kontakty = [
           <p class="role">UX/UI designer</p>
           <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
         </div>
-        <img class="foto" src="/img/portret.webp" alt="" />
+        <img class="foto" src="/img/portret-cv.webp" alt="" />
       </header>
 
       <ul class="kontakty">
@@ -204,14 +204,13 @@ const kontakty = [
   /* Vyříznutá fotka z hlavní stránky: bez kolečka, dole se ztrácí do bílé */
   .foto {
     position: absolute;
-    top: 7mm;
+    top: 13mm;
     right: 12mm;
     width: 50mm;
-    height: 88mm;
+    height: 84mm;
     object-fit: cover;
     object-position: 50% 0;
-    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 98%);
-    mask-image: linear-gradient(180deg, #000 45%, transparent 98%);
+    /* Prolnutí nahoře i dole je zapečené přímo v portret-cv.webp, CSS maska se v PDF lámala */
   }
   .kontakty {
     display: flex;
