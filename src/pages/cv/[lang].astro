@@ -36,7 +36,7 @@ const kontakty = [
           <p class="role">UX/UI designer</p>
           <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
         </div>
-        <img class="foto" src="/img/zivotopis/portret.webp" alt="" />
+        <img class="foto" src="/img/portret.webp" alt="" />
       </header>
 
       <ul class="kontakty">
@@ -157,6 +157,7 @@ const kontakty = [
     print-color-adjust: exact;
   }
   .list {
+    position: relative;
     box-sizing: border-box;
     width: 210mm;
     height: 297mm;
@@ -207,24 +208,29 @@ const kontakty = [
     font-size: 9pt;
     color: rgb(var(--ink) / 0.5);
   }
+  /* Vyříznutá fotka z hlavní stránky: bez kolečka, dole se ztrácí do bílé */
   .foto {
-    width: 28mm;
-    height: 28mm;
-    border-radius: 50%;
+    position: absolute;
+    top: 7mm;
+    right: 12mm;
+    width: 50mm;
+    height: 88mm;
     object-fit: cover;
-    object-position: 50% 18%;
-    background: #efefed;
+    object-position: 50% 0;
+    -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 98%);
+    mask-image: linear-gradient(180deg, #000 45%, transparent 98%);
   }
   .kontakty {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5mm 9mm;
+    gap: 1.5mm 5mm;
+    max-width: 132mm;
     margin-top: 8mm !important;
     font-size: 9pt;
     color: rgb(var(--ink) / 0.75);
   }
   .profil {
-    max-width: 150mm;
+    max-width: 118mm;
     margin-top: 8mm !important;
     font-size: 10.5pt;
     line-height: 1.6;

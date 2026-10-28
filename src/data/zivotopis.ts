@@ -65,7 +65,7 @@ export function zivotopis(lang: Lang) {
     ],
   );
   // Všichni klienti jen textem (CV)
-  const vsichniKlienti = ['Jarda Havelka (Jardova mapa)', 'Martin Burda (Pull Up Star)', 'Zahradní centrum DIKÉ', 'Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
+  const vsichniKlienti = ['Jarda Havelka (Jardova mapa)', 'Martin Burda (Pull Up Star)', 'Zahradní centrum DIKÉ', 'Albi', 'Dino', 'Český tenisový svaz', 'Tolion Health', 'EnMass', 'Fox&Fellows', 'Zoo Zlín'];
   // Pracovní zkušenosti v CV (ostatní jsou klienti)
   const zamestnani = ['Czech IT Academy', 'Laba', 'Kreativní kancl'];
   const prezentace = t(
