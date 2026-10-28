@@ -5,6 +5,7 @@ import type { GetStaticPaths } from 'astro';
 import '../../styles/global.css';
 import { site } from '../../data/site';
 import { zivotopis } from '../../data/zivotopis';
+import QRCode from 'qrcode';
 import { odkaz, t, type Lang } from '../../i18n';
 
 export const getStaticPaths = (() => [{ params: { lang: 'cs' } }, { params: { lang: 'en' } }]) satisfies GetStaticPaths;
@@ -14,6 +15,11 @@ const { zamestnani, vzdelani, klienti: vsichni, vsichniKlienti, dovednosti, soft
 const klienti = vsichni.filter((k) => zamestnani.includes(k.nazev));
 const web = new URL(odkaz(lang, 'domu'), Astro.site);
 const webText = web.host + (web.pathname === '/' ? '' : web.pathname);
+const projektyWeb = new URL(odkaz(lang, 'projekty'), Astro.site);
+// QR kódy jako SVG přímo ve stránce, tmavé moduly na průhledném pozadí
+const qr = (url: URL) => QRCode.toString(url.href, { type: 'svg', margin: 0, color: { dark: '#141414', light: '#0000' } });
+const qrWeb = await qr(web);
+const qrProjekty = await qr(projektyWeb);
 const kontakty = [
   { text: site.email, href: `mailto:${site.email}` },
   { text: site.phone, href: `tel:${site.phone.replace(/\s/g, '')}` },
@@ -37,6 +43,7 @@ const kontakty = [
           <p class="misto">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}</p>
         </div>
         <img class="foto" src="/img/portret-cv.webp" alt="" />
+        <a class="qr qr--web" href={web.href}><Fragment set:html={qrWeb} /><span>{webText}</span></a>
       </header>
 
       <ul class="kontakty">
@@ -80,6 +87,7 @@ const kontakty = [
         <section class="siroka">
           <h2>{t(lang, 'Moji klienti', 'My clients')}</h2>
           <p class="popis odstavec">{vsichniKlienti.join(', ')}</p>
+          <a class="qr qr--projekty" href={projektyWeb.href}><Fragment set:html={qrProjekty} /><span>{t(lang, 'Moje projekty', 'My projects')}</span></a>
         </section>
         <section>
           <h2>{t(lang, 'Jazyky', 'Languages')}</h2>
@@ -206,11 +214,34 @@ const kontakty = [
     position: absolute;
     top: 13mm;
     right: 12mm;
-    width: 50mm;
-    height: 84mm;
+    width: 42mm;
+    height: 70mm;
     object-fit: cover;
     object-position: 50% 0;
-    /* Prolnutí nahoře i dole je zapečené přímo v portret-cv.webp, CSS maska se v PDF lámala */
+    /* Prolnutí dole je zapečené přímo v portret-cv.webp, CSS maska se v PDF lámala */
+  }
+  .qr {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+    width: 19mm;
+    font-size: 7.5pt;
+    color: rgb(var(--ink) / 0.5);
+  }
+  .qr svg {
+    display: block;
+    width: 19mm;
+    height: 19mm;
+  }
+  .qr--web {
+    position: absolute;
+    top: 80mm;
+    right: 23.5mm;
+    align-items: center;
+    text-align: center;
+  }
+  .qr--projekty {
+    margin-top: 6mm;
   }
   .kontakty {
     display: flex;
