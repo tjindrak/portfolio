@@ -280,11 +280,11 @@ const kontakty = [
     flex-direction: column;
     gap: 6mm;
   }
+  /* Logo nad názvem, aby se široké logo (Czech IT Academy) vešlo celé */
   .klient {
-    display: grid;
-    grid-template-columns: 10mm 1fr;
-    gap: 4mm;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5mm;
   }
   .hlavicka {
     display: flex;
@@ -297,6 +297,7 @@ const kontakty = [
     max-width: 62mm;
   }
   .logo {
+    display: block;
     width: 10mm;
     height: 10mm;
     object-fit: contain;
@@ -304,14 +305,8 @@ const kontakty = [
     background: #f3f3f1;
   }
   .logo--siroke {
-    box-sizing: border-box;
-    background: #fff;
-    border: 0.75pt solid rgb(var(--ink) / 0.08);
-  }
-  .odstavec {
-    margin: 0 !important;
-    font-size: 9pt;
-    line-height: 1.55;
+    width: 35mm;
+    object-fit: cover;
   }
   .seznam {
     display: flex;
