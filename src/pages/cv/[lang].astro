@@ -123,11 +123,7 @@ const kontakty = [
 
       <section class="software-blok">
         <h2>Software</h2>
-        <ul class="software">
-          {software.map((s) => (
-            <li><img src={`/img/zivotopis/software/${s.soubor}.svg`} alt={s.nazev} title={s.nazev} /></li>
-          ))}
-        </ul>
+        <p class="popis software-text">{[...software.map((s) => s.nazev), 'Jira', 'Notion'].join(', ')}</p>
       </section>
 
       <footer class="pata">
@@ -338,16 +334,6 @@ const kontakty = [
   .jazyk .popis {
     margin: 0 !important;
   }
-  .software {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2.5mm;
-  }
-  .software img {
-    display: block;
-    width: 9mm;
-    height: 9mm;
-  }
   .dovednosti {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -365,6 +351,11 @@ const kontakty = [
   /* Prezentace (poslední dovednost) přes dva sloupce, ať má delší řádky */
   .dovednost--siroka {
     grid-column: span 2;
+  }
+  .software-text {
+    max-width: 150mm;
+    font-size: 9.5pt;
+    line-height: 1.55;
   }
   .software-blok {
     margin-top: 14mm;
