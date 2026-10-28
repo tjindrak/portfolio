@@ -23,7 +23,7 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
         <p class="lead gradient-text gradient-text--soft hero__role nacti" style="--d:0.3s">UX/UI designer</p>
         <p class="hero__misto nacti" style="--d:0.4s">{t(lang, 'Praha / Rychnov u Jablonce nad Nisou', 'Prague / Rychnov u Jablonce nad Nisou, Czech Republic')}&nbsp;&nbsp;·&nbsp;&nbsp;CZ / EN</p>
       </div>
-      <a class="btn btn--accent hero__cv nacti" style="--d:0.5s" href={CV} download={cvNazev[lang]}>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
+      <a class="btn btn--accent hero__cv nacti" style="--d:0.5s" href={CV} download={cvNazev[lang]} data-cv>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
     </div>
   </header>
 
@@ -102,9 +102,16 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
   </section>
 
   <div class="container zaver" data-reveal>
-    <a class="btn btn--accent" href={CV} download={cvNazev[lang]}>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
+    <a class="btn btn--accent" href={CV} download={cvNazev[lang]} data-cv>{t(lang, 'Stáhnout CV', 'Download CV')}<Icon name="download" /></a>
   </div>
 </Base>
+
+<script>
+  // Stáhnout CV: soubor se stáhne a zároveň se otevře v nové kartě
+  document.querySelectorAll<HTMLAnchorElement>('a[data-cv]').forEach((a) => {
+    a.addEventListener('click', () => window.open(a.href, '_blank', 'noopener'));
+  });
+</script>
 
 <style>
   .hero {
