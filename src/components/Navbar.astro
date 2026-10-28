@@ -214,13 +214,13 @@ const en = prelozitCestu(path, 'en');
     background: var(--fg);
     transition: transform 0.25s ease;
   }
-  .navbar__burger-line:first-of-type {
+  .navbar__burger-line:nth-of-type(2) {
     top: 17px;
   }
   .navbar__burger-line:last-of-type {
     top: 25px;
   }
-  .navbar__burger[aria-expanded='true'] .navbar__burger-line:first-of-type {
+  .navbar__burger[aria-expanded='true'] .navbar__burger-line:nth-of-type(2) {
     transform: translateY(4px) rotate(45deg);
   }
   .navbar__burger[aria-expanded='true'] .navbar__burger-line:last-of-type {
