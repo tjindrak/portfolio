@@ -79,7 +79,8 @@ const kontakty = [
             <h2>{t(lang, 'Vzdělání', 'Education')}</h2>
             <ul class="seznam">
               {vzdelani.map((v) => (
-                <li>
+                <li class="skola">
+                  <img class="logo" src={v.logo} alt="" />
                   <p class="nazev">{v.skola}</p>
                   <p class="rok">{v.roky}</p>
                   <p class="popis">{v.obor}, {v.titul}</p>
@@ -311,7 +312,10 @@ const kontakty = [
   .seznam {
     display: flex;
     flex-direction: column;
-    gap: 5.5mm;
+    gap: 7mm;
+  }
+  .skola .logo {
+    margin-bottom: 2.5mm;
   }
   .seznam--tesny {
     gap: 1.5mm;
