@@ -305,7 +305,7 @@ h4 {
   line-height: 24px;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color var(--hover), transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.35s ease;
+  transition: background-color var(--hover), transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.2s ease;
 }
 .btn svg {
   width: 20px;
@@ -338,6 +338,17 @@ h4 {
 .btn--accent:focus-visible::before,
 .btn--dark:focus-visible::before {
   clip-path: circle(var(--r, 150%) at var(--x, 0%) var(--y, 50%));
+}
+/* Ořez do tvaru pilulky přes clip-path: Safari při overflow + border-radius někdy kruh výplně
+   neořízne a ukáže hranaté rohy. Obrys fokusu je proto uvnitř tlačítka. */
+.btn--accent,
+.btn--dark {
+  clip-path: inset(0 round 999px);
+}
+.btn--accent:focus-visible,
+.btn--dark:focus-visible {
+  outline-offset: -4px;
+  outline-color: var(--bg);
 }
 /* skript tím na okamžik vypne přechod, když přesouvá střed kruhu */
 .btn.bez-prechodu::before {
