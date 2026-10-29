@@ -321,7 +321,9 @@ h4 {
   inset: 0;
   z-index: -1;
   background: var(--fg);
-  clip-path: inset(0 100% 0 0 round 999px);
+  /* Kruh roste z bodu, kudy do tlačítka vjel kurzor (--x, --y nastavuje skript v Base.astro),
+     a po odjetí se stáhne do bodu, kudy kurzor vyjel. Bez myši se plní zleva. */
+  clip-path: circle(0 at var(--x, 0%) var(--y, 50%));
   /* ease-out expo: rozjede se hned a naplno, ke konci se dlouze dobrzdí */
   transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -335,7 +337,7 @@ h4 {
 .btn--dark:hover::before,
 .btn--accent:focus-visible::before,
 .btn--dark:focus-visible::before {
-  clip-path: inset(0 0 0 0 round 999px);
+  clip-path: circle(var(--r, 150%) at var(--x, 0%) var(--y, 50%));
 }
 .btn--accent:active,
 .btn--dark:active {
@@ -371,7 +373,8 @@ h4 {
 }
 .sipka-projede svg {
   grid-area: 1 / 1;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  /* stálá vrstva: po doběhnutí přechodu se šipka nepřekresluje a neblikne */
+  will-change: transform;
 }
 .sipka-projede svg + svg {
   transform: translate(-28px, 28px);
@@ -379,8 +382,11 @@ h4 {
 a:is(:hover, :focus-visible) .sipka-projede {
   background: var(--grayscale-0);
 }
+/* Animuje se jen najetí. Po sjetí se šipky bez animace vrátí na místo (obě vypadají stejně),
+   takže se nikdy nepotkají uprostřed kruhu */
 a:is(:hover, :focus-visible) .sipka-projede svg {
   transform: translate(28px, -28px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 a:is(:hover, :focus-visible) .sipka-projede svg + svg {
   transform: translate(0, 0);
