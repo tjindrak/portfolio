@@ -6,6 +6,9 @@ export const site = {
     en: 'Tomáš Jindrák, graphic and UI/UX designer. Websites, apps, UX research and visual identities.',
   },
   email: 'tomasjindrak@seznam.cz',
+  // Přístupový klíč Web3Forms pro kontaktní formulář (veřejný, patří do kódu stránky).
+  // Bez klíče formulář jen otevře e-mail s připravenou zprávou.
+  web3formsKey: 'fe216a49-3880-45b7-87a6-69feecf769e5',
   phone: '+420 775 038 062',
   ico: '21680078',
   linkedin: 'https://www.linkedin.com/in/tom%C3%A1%C5%A1-jindr%C3%A1k-868535301/',
