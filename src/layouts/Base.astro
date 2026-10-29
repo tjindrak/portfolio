@@ -51,6 +51,23 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
         const t = localStorage.getItem('theme');
         if (t) document.documentElement.dataset.theme = t;
       } catch {}
+      // Safari na iPhonu otevíral stránku kousek odscrollovanou (obnova pozice / posun při úvodu).
+      // Nová stránka i obnovení začínají nahoře, zpět/vpřed si pozici nechává.
+      (() => {
+        const nav = performance.getEntriesByType('navigation')[0];
+        if (location.hash || nav?.type === 'back_forward') return;
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        let sahl = false;
+        const ruka = () => (sahl = true);
+        ['wheel', 'touchstart', 'keydown'].forEach((e) => addEventListener(e, ruka, { once: true, passive: true }));
+        const nahoru = () => sahl || scrollTo(0, 0);
+        addEventListener('DOMContentLoaded', nahoru, { once: true });
+        addEventListener('load', () => {
+          nahoru();
+          setTimeout(nahoru, 300);
+        }, { once: true });
+        addEventListener('intro-konec', nahoru, { once: true });
+      })();
     </script>
     <slot name="head" />
   </head>

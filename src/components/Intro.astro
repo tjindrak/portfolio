@@ -58,6 +58,7 @@ const pismena = [...site.name];
       setTimeout(() => {
         intro!.remove();
         root.classList.remove('intro-bezi', 'intro-odhal');
+        dispatchEvent(new Event('intro-konec'));
       }, 3200);
     }
   }
