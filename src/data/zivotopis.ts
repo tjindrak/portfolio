@@ -17,7 +17,7 @@ export function zivotopis(lang: Lang) {
   );
   const klienti = [
     { logo: '/img/zivotopis/logo-jardova-mapa.webp', nazev: 'Jarda Havelka', rok: '2026', popis: t(lang, 'Redesign webové aplikace s mapou a plánovačem výletů do hor', 'Redesign of a web app with a map and a mountain trip planner') },
-    { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: '2025 – 2026', popis: t(lang, 'Externí UX/UI designer a grafik, tvorba aplikací a webů', 'Freelance UX/UI and graphic designer for apps and websites') },
+    { logo: '/img/zivotopis/logo-czechitacademy.webp', siroke: true, nazev: 'Czech IT Academy', rok: t(lang, '2025 – současnost', '2025 – present'), popis: t(lang, 'Externí UX/UI designer a grafik, tvorba aplikací a webů', 'Freelance UX/UI and graphic designer for apps and websites') },
     { logo: '/img/zivotopis/logo-laba.webp', nazev: 'Laba', rok: '2024', popis: t(lang, 'Social media specialist a content creator pro Skvot, Laba a robot_dreams', 'Social media specialist and content creator for Skvot, Laba and robot_dreams') },
     { logo: '/img/zivotopis/logo-dike.svg', nazev: 'DIKÉ', rok: '2025', popis: t(lang, 'Řízení projektu rebrandingu a redesignu webových stránek', 'Project management of the rebrand and website redesign') },
     { logo: '/img/zivotopis/logo-kreativni-kancl.webp', nazev: 'Kreativní kancl', rok: '2024', popis: t(lang, 'Tvorba obsahu pro sociální sítě', 'Social media content creation') },
