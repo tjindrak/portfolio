@@ -203,14 +203,14 @@ h4 {
   line-height: 0.9;
   /* jen jemné prostrkání (Figma −1 %), aby se písmena nepřekrývala */
   letter-spacing: -0.01em;
-  color: var(--fg-4);
+  color: rgb(var(--fg-rgb) / 0.08);
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
 }
 /* Ve světlém motivu jsou slova v pozadí lehce tmavší, jinak by zanikla */
 :root[data-theme='light'] .bg-word {
-  color: rgb(var(--fg-rgb) / 0.07);
+  color: rgb(var(--fg-rgb) / 0.1);
 }
 
 .title-xl {
