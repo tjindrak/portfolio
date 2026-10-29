@@ -1,5 +1,1 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<style>path{fill:#141414}@media (prefers-color-scheme:dark){path{fill:#f5f5f5}}</style>
-<path d="M43.3487 12.0299V17.3197H38.8318V12.0299H43.3487ZM43.2424 20.0176V42.3936C43.2424 48.8261 40.2666 52 34.2618 52H33.5816V48.1278H34.2618C38.8531 48.1278 38.9381 44.3191 38.9381 42.3936V20.0176H43.2424Z"/>
-<path d="M35.9025 43.1342C34.0957 43.6705 32.4803 43.9333 31.0561 43.9333C26.3904 43.9333 23.8397 41.0838 23.8397 35.637V23.7026H20.6513V20.1275H23.8397V12.01L28.144 12V20.1275H35.9025V23.7026H28.144V35.6475C28.144 38.7179 29.2706 40.148 31.7788 40.148C32.7566 40.148 34.1063 39.9271 35.9025 39.454V43.1342Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#141414"/><text x="32" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="34" fill="#b3ae8e">tj</text></svg>
