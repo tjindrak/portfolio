@@ -42,7 +42,7 @@ const sluzby = t(
   <!-- Hero -->
   <section class="hero container">
     <div class="hero__pruhy" aria-hidden="true"></div>
-    <Portret class="hero__portret" sklo />
+    <Portret class="hero__portret" foto="/img/portret-domu.webp" pomer="592 / 1267" sklo />
     <div class="hero__text">
       <h1 class="hero__nadpis"><span class="hero__radek"><span>{t(lang, 'Grafický a UI/UX', 'Graphic and UI/UX')}</span></span> <span class="hero__radek"><span>designer.</span></span></h1>
       <div class="hero__akce">
@@ -154,10 +154,10 @@ const sluzby = t(
     pointer-events: none;
   }
   .hero :global(.hero__portret) {
-    /* Fotka se neořezává, jen zmenší: její vlastní přechod do ztracena (končí v 64,5 % výšky)
+    /* Fotka se neořezává, jen zmenší: její vlastní přechod do ztracena (končí v 65,1 % výšky)
        má skončit přesně na spodní hraně okna (pod menu 101 px). Střed zůstává jako ve Figmě. */
     --dostupna: calc(100svh - 101px - 79 * var(--u));
-    --sirka: min(calc(var(--dostupna) / 1.3652), calc(592 * var(--u)));
+    --sirka: min(calc(var(--dostupna) / 1.3924), calc(592 * var(--u)));
     position: absolute;
     left: calc(var(--gutter) + 962 * var(--u) - var(--sirka) / 2);
     top: calc(79 * var(--u));
