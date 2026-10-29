@@ -1,6 +1,6 @@
 ---
 // Svislá časová osa (Figma: Osa · Studium / Práce). Poslední bod svítí,
-// linka se kreslí se scrollem a milníky se rozsvěcují, když k nim dojede.
+// linka se kreslí se scrollem a milníky se rozsvěcují, když k nim dojede. Zpátky necouvá.
 interface Polozka {
   roky?: string;
   nazev: string;
@@ -174,7 +174,9 @@ const { polozky } = Astro.props;
       const stredy: number[] = (osa as any)._stredy;
       const delka = stredy[stredy.length - 1] - stredy[0];
       const hrot = innerHeight * 0.66 - (osa.getBoundingClientRect().top + stredy[0]);
-      const p = Math.min(1, Math.max(0, hrot / (delka || 1)));
+      // Linka jen přibývá: co už jednou dojela, zůstane jako milníky (při scrollu nahoru necouvá)
+      const p = Math.max((osa as any)._p ?? 0, Math.min(1, Math.max(0, hrot / (delka || 1))));
+      (osa as any)._p = p;
       osa.style.setProperty('--p', String(p));
       osa.querySelectorAll('.osa__polozka').forEach((li, i) => {
         // první milník se ukáže, jakmile se k němu doscrolluje, další až je linka u nich

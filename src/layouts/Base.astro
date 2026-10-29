@@ -65,6 +65,7 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
       <Footer />
     </div>
     <script>
+      const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
@@ -88,13 +89,30 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
         },
         { threshold: 0.4 },
       );
-      document.querySelectorAll('[data-reveal]').forEach((el) =>
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) =>
         (el.dataset.reveal === 'pozde' ? ioPozde : io).observe(el),
       );
 
+      // Mobil: velká slova v pozadí se zmenší tak, aby nepřetékala přes okraj
+      const slova = [...document.querySelectorAll<HTMLElement>('.bg-word')];
+      const vejitSlova = () =>
+        slova.forEach((el) => {
+          el.style.fontSize = '';
+          if (innerWidth > 720 || !el.clientWidth) return;
+          const sirka = el.scrollWidth;
+          if (sirka > el.clientWidth) {
+            el.style.fontSize = `${Math.floor((parseFloat(getComputedStyle(el).fontSize) * el.clientWidth) / sirka)}px`;
+          }
+        });
+      let cekaniSlova = 0;
+      addEventListener('resize', () => {
+        clearTimeout(cekaniSlova);
+        cekaniSlova = window.setTimeout(vejitSlova, 150);
+      });
+
       // Texty najíždějí písmeno po písmenu zleva doprava, když se dostanou do okna.
       // Slova zůstávají celá (kvůli zalamování), čtečky dostanou celý text přes aria-label.
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!klid) {
         const pozorovatel = new IntersectionObserver(
           (zaznamy) =>
             zaznamy.forEach((z) => {
@@ -153,6 +171,8 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
           cekani = window.setTimeout(umistit, 150);
         });
       }
+      vejitSlova();
+      document.fonts?.ready.then(vejitSlova);
     </script>
     <style>
       .page {

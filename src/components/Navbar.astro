@@ -44,20 +44,27 @@ const en = prelozitCestu(path, 'en');
   </button>
 </header>
 
-<div class="mobile-menu" id="mobile-menu" hidden>
+<div class="mobile-menu" id="mobile-menu" inert>
   <ul>
-    {polozky.map((item) => (
-      <li>
+    {polozky.map((item, i) => (
+      <li style={`--i:${i}`}>
         <a href={item.href} class:list={{ 'is-active': isActive(item.href) }}>{item.label}</a>
       </li>
     ))}
   </ul>
-  <p class="mobile-menu__lang">
-    <a href={cz} hreflang="cs" lang="cs" class:list={{ 'is-active': lang === 'cs' }}>CZ</a>
-    <span aria-hidden="true">/</span>
-    <a href={en} hreflang="en" lang="en" class:list={{ 'is-active': lang === 'en' }}>EN</a>
-  </p>
-  <button type="button" class="mobile-menu__theme" data-theme-toggle>{t(lang, 'Přepnout motiv', 'Switch theme')}</button>
+  <div class="mobile-menu__dole" style={`--i:${polozky.length}`}>
+    <p class="mobile-menu__lang">
+      <a href={cz} hreflang="cs" lang="cs" class:list={{ 'is-active': lang === 'cs' }}>CZ</a>
+      <span aria-hidden="true">/</span>
+      <a href={en} hreflang="en" lang="en" class:list={{ 'is-active': lang === 'en' }}>EN</a>
+    </p>
+    <button type="button" class="mobile-menu__theme" data-theme-toggle>
+      <Icon name="moon" class="icon-moon" />
+      <Icon name="sun" class="icon-sun" />
+      <span class="icon-moon">{t(lang, 'Tmavý režim', 'Dark mode')}</span>
+      <span class="icon-sun">{t(lang, 'Světlý režim', 'Light mode')}</span>
+    </button>
+  </div>
 </div>
 
 <script>
@@ -94,7 +101,10 @@ const en = prelozitCestu(path, 'en');
   burger?.addEventListener('click', () => {
     const open = burger.getAttribute('aria-expanded') !== 'true';
     burger.setAttribute('aria-expanded', String(open));
-    if (menu) menu.hidden = !open;
+    if (menu) {
+      menu.classList.toggle('is-open', open);
+      menu.inert = !open;
+    }
     document.body.classList.toggle('menu-open', open);
   });
 </script>
@@ -212,26 +222,63 @@ const en = prelozitCestu(path, 'en');
     width: 22px;
     height: 2px;
     background: var(--fg);
-    transition: transform 0.25s ease;
+    /* Easy ease: čáry se nejdřív sjedou k sobě a pak se otočí do křížku (zavření obráceně) */
+    transition:
+      translate 0.22s cubic-bezier(0.42, 0, 0.58, 1) 0.2s,
+      rotate 0.22s cubic-bezier(0.42, 0, 0.58, 1);
   }
-  .navbar__burger-line:first-of-type {
-    top: 17px;
+  .navbar__burger-line:nth-of-type(2) {
+    top: 16px;
   }
   .navbar__burger-line:last-of-type {
-    top: 25px;
+    top: 26px;
   }
-  .navbar__burger[aria-expanded='true'] .navbar__burger-line:first-of-type {
-    transform: translateY(4px) rotate(45deg);
+  .navbar__burger[aria-expanded='true'] .navbar__burger-line {
+    transition:
+      translate 0.22s cubic-bezier(0.42, 0, 0.58, 1),
+      rotate 0.22s cubic-bezier(0.42, 0, 0.58, 1) 0.2s;
+  }
+  .navbar__burger[aria-expanded='true'] .navbar__burger-line:nth-of-type(2) {
+    translate: 0 5px;
+    rotate: 45deg;
   }
   .navbar__burger[aria-expanded='true'] .navbar__burger-line:last-of-type {
-    transform: translateY(-4px) rotate(-45deg);
+    translate: 0 -5px;
+    rotate: -45deg;
   }
   .mobile-menu {
     position: fixed;
     inset: 0;
     z-index: 15;
-    padding: 140px var(--gutter) 40px;
+    display: flex;
+    flex-direction: column;
+    padding: 120px var(--gutter) 40px;
     background: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1),
+      visibility 0s linear 0.3s;
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  /* Položky najedou zespodu jedna po druhé, celé to trvá do půl vteřiny */
+  .mobile-menu li,
+  .mobile-menu__dole {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.35s cubic-bezier(0.42, 0, 0.58, 1),
+      transform 0.35s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  .mobile-menu.is-open li,
+  .mobile-menu.is-open .mobile-menu__dole {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(0.08s + var(--i) * 0.04s);
   }
   .mobile-menu ul {
     margin: 0;
@@ -248,10 +295,20 @@ const en = prelozitCestu(path, 'en');
   .mobile-menu a.is-active {
     color: var(--accent);
   }
+  .mobile-menu__dole {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--fg-8);
+  }
   .mobile-menu__lang {
     display: flex;
+    align-items: center;
     gap: 8px;
-    margin-top: 32px;
+    line-height: 1;
+    margin: 0;
     font-size: 16px;
     color: var(--fg-60);
   }
@@ -266,12 +323,42 @@ const en = prelozitCestu(path, 'en');
     color: var(--accent);
   }
   .mobile-menu__theme {
-    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* bez rámečku, na stejné ose jako CZ / EN; výška 44 px kvůli prstu */
+    min-height: 44px;
     padding: 0;
     border: 0;
     background: none;
+    font: inherit;
+    font-size: 16px;
+    line-height: 1;
     color: var(--fg-60);
     cursor: pointer;
+  }
+  .mobile-menu__theme :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+  /* V tmavém motivu nabízí světlý a naopak */
+  .mobile-menu__theme :global(.icon-moon) {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .mobile-menu__theme :global(.icon-moon) {
+    display: block;
+  }
+  :global(:root[data-theme='light']) .mobile-menu__theme :global(.icon-sun) {
+    display: none;
+  }
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu li,
+    .mobile-menu__dole {
+      transform: none;
+    }
   }
   @media (max-width: 900px) {
     .navbar {
