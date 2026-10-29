@@ -13,7 +13,8 @@
     "cv": "astro build && node scripts/cv.mjs"
   },
   "dependencies": {
-    "astro": "^5.18.2"
+    "astro": "^5.18.2",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "qrcode": "^1.5.4"

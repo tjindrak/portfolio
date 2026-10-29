@@ -1,6 +1,6 @@
 # Obrázky
 
-Web hledá obrázky přesně pod těmito cestami (relativně k `public/img/`). Dokud soubor chybí, zobrazí se na jeho místě šedý zástupný obrázek, takže je můžeš doplňovat postupně. Ukládej je jako WebP (delší strana max. 2400 px, loga 256 px), aby web zůstal rychlý.
+Web hledá obrázky přesně pod těmito cestami (relativně k `public/img/`). Dokud soubor chybí, zobrazí se na jeho místě šedý zástupný obrázek, takže je můžeš doplňovat postupně. Ukládej je jako WebP (delší strana max. 2400 px, loga 256 px), aby web zůstal rychlý. Menší varianty pro mobily (`-480w`, `-800w`, `-1200w`, `-1600w`) se z WebP vytvoří samy při buildu, do repozitáře je nenahrávej.
 
 ```
 o-mne/hory.webp

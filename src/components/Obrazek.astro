@@ -4,6 +4,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import Icon from './Icon.astro';
+import { srcset } from '../lib/obrazky';
 
 interface Props {
   src?: string;
@@ -16,10 +17,14 @@ interface Props {
   // Výřez z Figmy: "šířka výška vlevo nahoře" v % rámečku, např. "163.49 100 -34.04 0".
   // Rodič musí mít position: relative a overflow: hidden.
   vyrez?: string;
+  // Šířka obrázku na stránce pro výběr varianty ze srcset. Líně načítané obrázky
+  // ji v moderních prohlížečích zjistí samy (auto), jinak se počítá s celou šířkou okna.
+  sizes?: string;
 }
 
-const { src, alt, class: className, fit = 'cover', position = 'center', eager = false, showCaption = true, vyrez } = Astro.props;
+const { src, alt, class: className, fit = 'cover', position = 'center', eager = false, showCaption = true, vyrez, sizes } = Astro.props;
 const exists = !!src && existsSync(join(process.cwd(), 'public', src));
+const varianty = exists ? await srcset(src) : undefined;
 const [w, h, l, t] = vyrez ? vyrez.split(/\s+/).map(Number) : [];
 const styl = vyrez
   ? `position:absolute;width:${w}%;height:${h}%;left:${l}%;top:${t}%;max-width:none;object-fit:fill`
@@ -29,6 +34,8 @@ const styl = vyrez
   <img
     class:list={['obrazek', className]}
     src={src}
+    srcset={varianty}
+    sizes={varianty && (sizes ?? (eager ? '100vw' : 'auto, 100vw'))}
     alt={alt}
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"

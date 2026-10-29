@@ -4,6 +4,7 @@
 // dole se postava ztrácí do pozadí.
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { srcset } from '../lib/obrazky';
 
 interface Props {
   class?: string;
@@ -13,9 +14,10 @@ interface Props {
 const { class: className, sklo = false } = Astro.props;
 const foto = '/img/portret.webp';
 const ready = existsSync(join(process.cwd(), 'public', foto));
+const varianty = ready ? await srcset(foto) : undefined;
 ---
 <div class:list={['portret', { 'portret--placeholder': !ready }, className]}>
-  {ready ? <img src={foto} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Tomáš Jindrák"></span>}
+  {ready ? <img src={foto} srcset={varianty} sizes={varianty && 'min(592px, 100vw)'} alt="Tomáš Jindrák" class="portret__foto" fetchpriority="high" /> : <span class="portret__silueta" role="img" aria-label="Tomáš Jindrák"></span>}
   {ready && sklo && <canvas class="portret__sklo" aria-hidden="true"></canvas>}
 </div>
 
@@ -46,7 +48,25 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
       gl_FragColor = c;
     }`;
 
-  document.querySelectorAll<HTMLCanvasElement>('.portret__sklo').forEach((canvas) => {
+  // Sestavení WebGL (shadery, nahrání fotky do textury) je na slabších telefonech drahé,
+  // proto se spouští až po načtení stránky, po skončení intra a ve volné chvíli.
+  const poNacteni = new Promise<void>((ok) =>
+    document.readyState === 'complete' ? ok() : addEventListener('load', () => ok(), { once: true }),
+  );
+  const poIntru = new Promise<void>((ok) => {
+    const root = document.documentElement;
+    if (!root.classList.contains('intro-bezi')) return ok();
+    const mo = new MutationObserver(() => {
+      if (root.classList.contains('intro-bezi')) return;
+      mo.disconnect();
+      ok();
+    });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+  });
+  const volno = () =>
+    new Promise<void>((ok) => ('requestIdleCallback' in window ? requestIdleCallback(() => ok(), { timeout: 1500 }) : setTimeout(ok, 300)));
+
+  Promise.all([poNacteni, poIntru]).then(volno).then(() => document.querySelectorAll<HTMLCanvasElement>('.portret__sklo').forEach((canvas) => {
     const img = canvas.parentElement?.querySelector<HTMLImageElement>('.portret__foto');
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true });
     if (!img || !gl) return;
@@ -95,23 +115,33 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
       velikost();
       new ResizeObserver(velikost).observe(canvas);
 
+      // Mimo okno se nekreslí vůbec, smyčka se znovu rozběhne, až se portrét vrátí
       let viditelne = true;
-      new IntersectionObserver(([e]) => (viditelne = e.isIntersecting)).observe(canvas);
+      let bezi = false;
       const t0 = performance.now();
       const kresli = (cas: number) => {
-        if (viditelne) {
-          gl.uniform2f(uSize, w, h);
-          gl.uniform1f(uT, klid ? 0 : (cas - t0) / 1000);
-          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-          canvas.classList.add('is-ready');
-        }
-        if (!klid) requestAnimationFrame(kresli);
+        bezi = false;
+        if (!viditelne) return;
+        gl.uniform2f(uSize, w, h);
+        gl.uniform1f(uT, klid ? 0 : (cas - t0) / 1000);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        canvas.classList.add('is-ready');
+        if (!klid) spust();
       };
-      requestAnimationFrame(kresli);
+      const spust = () => {
+        if (bezi) return;
+        bezi = true;
+        requestAnimationFrame(kresli);
+      };
+      new IntersectionObserver(([e]) => {
+        viditelne = e.isIntersecting;
+        if (viditelne) spust();
+      }).observe(canvas);
+      spust();
     };
     if (img.complete && img.naturalWidth) start();
     else img.addEventListener('load', start, { once: true });
-  });
+  }));
 </script>
 
 <style>
@@ -135,6 +165,8 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
     width: 100%;
     height: 100%;
     opacity: 0;
+    /* sklo se zapíná až po intru, proto plynule přes fotku */
+    transition: opacity 0.8s ease;
   }
   .portret__sklo.is-ready {
     opacity: 1;
@@ -142,6 +174,7 @@ const ready = existsSync(join(process.cwd(), 'public', foto));
   .portret__sklo.is-ready ~ .portret__foto,
   .portret:has(.portret__sklo.is-ready) .portret__foto {
     visibility: hidden;
+    transition: visibility 0s 0.8s;
   }
   .portret--placeholder {
     -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 85%);
