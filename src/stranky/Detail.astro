@@ -28,6 +28,11 @@ const metaPolozky = [
   [t(lang, 'Spolupráce', 'Collaboration'), d.meta?.spoluprace],
 ].filter((m): m is [string, string] => !!m[1]);
 
+// Spolupracovníci s vlastním webem: v údajích se jejich jméno stane odkazem
+const spolupracovnici: Record<string, string> = { 'Filip Kovalský': 'https://www.filipkovalsky.com/' };
+const castiSOdkazy = (text: string) =>
+  text.split(new RegExp(`(${Object.keys(spolupracovnici).join('|')})`)).filter(Boolean);
+
 const jeCitat = (t: string) => t.startsWith('> ');
 const bezCitace = (t: string) => t.replace(/^>\s*/, '');
 // Vrstevnice v pozadí stránky (Jardova mapa), když projekt má vrstevnice.svg
@@ -68,7 +73,11 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
                 {metaPolozky.map(([k, v]) => (
                   <div class="meta__polozka">
                     <dt>{k}</dt>
-                    <dd>{v}</dd>
+                    <dd>
+                      {castiSOdkazy(v).map((cast) =>
+                        spolupracovnici[cast] ? <a href={spolupracovnici[cast]} class="meta__odkaz" target="_blank" rel="noopener">{cast}</a> : cast,
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -327,6 +336,18 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     font-weight: 400;
     line-height: normal;
     color: var(--fg);
+  }
+
+  .meta__odkaz {
+    text-decoration: underline;
+    text-decoration-color: var(--fg-30);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color var(--hover), text-decoration-color var(--hover);
+  }
+  .meta__odkaz:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
 
   /* Hlavní obrázek */

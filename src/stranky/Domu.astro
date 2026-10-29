@@ -67,7 +67,7 @@ const sluzby = t(
                 <span class="karta__nazev">{p.data.nazev === 'Zahradní centrum DIKÉ' ? 'DIKÉ' : p.data.nazev}</span>
                 <span class="karta__meta">{p.data.rok} · {p.data.typ}</span>
               </span>
-              <span class="karta__sipka" aria-hidden="true"><Icon name="arrow-up-right" /></span>
+              <span class="karta__sipka sipka-projede" aria-hidden="true"><Icon name="arrow-up-right" /><Icon name="arrow-up-right" /></span>
             </span>
           </a>
         </li>
@@ -272,11 +272,16 @@ const sluzby = t(
     filter: saturate(0.5) brightness(0.85);
     transition:
       width 1.3s cubic-bezier(0.45, 0, 0.2, 1),
-      filter 0.9s ease;
+      filter 0.9s ease,
+      scale 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
   .karta.is-open :global(.karta__img) {
     width: max(var(--otevrena), calc(450px * var(--pomer, 1.3333)));
     filter: none;
+  }
+  /* Rozbalená karta při najetí fotku přiblíží (scale se skládá s posunem v transform) */
+  .karta.is-open .karta__odkaz:hover :global(.karta__img) {
+    scale: 1.08;
   }
   .karta__scrim {
     position: absolute;
@@ -324,11 +329,6 @@ const sluzby = t(
     border-radius: 50%;
     background: var(--accent-5);
     color: var(--grayscale-10);
-    transition: background-color var(--hover);
-  }
-  .karta.is-open .karta__odkaz:hover .karta__sipka,
-  .karta.is-open .karta__odkaz:focus-visible .karta__sipka {
-    background: var(--accent-3);
   }
   .karta__sipka :global(svg) {
     width: 20px;
