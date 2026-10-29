@@ -1,6 +1,6 @@
 ---
-// Typografický formulář (Figma: Formulář, Kontakt – v2). Bez backendu:
-// odeslání otevře e-mail s předvyplněnou zprávou.
+// Typografický formulář (Figma: Formulář, Kontakt – v2). Zprávy odesílá přes
+// Web3Forms na site.email; bez klíče nebo při chybě otevře e-mail s předvyplněnou zprávou.
 import { site } from '../data/site';
 import { jazykZUrl, t } from '../i18n';
 
@@ -9,8 +9,22 @@ const temata = t(lang, ['Web', 'Aplikace', 'Identita', 'UX výzkum', 'Něco jin�
 // Hlášky pro skript (podle jazyka stránky)
 const hlasky = t(
   lang,
-  { chyba: 'Vyplň prosím jméno, e-mail a zprávu.', predmet: 'Poptávka z webu', hotovo: 'Otevírám e-mail s připravenou zprávou.' },
-  { chyba: 'Please fill in your name, email and message.', predmet: 'Enquiry from the website', hotovo: 'Opening your email with the message ready.' },
+  {
+    chyba: 'Vyplň prosím jméno, e-mail a zprávu.',
+    predmet: 'Poptávka z webu',
+    hotovo: 'Otevírám e-mail s připravenou zprávou.',
+    odesilam: 'Odesílám…',
+    odeslano: 'Díky, zpráva odešla. Ozvu se co nejdřív.',
+    selhalo: 'Zprávu se nepodařilo odeslat, otevírám e-mail s připravenou zprávou.',
+  },
+  {
+    chyba: 'Please fill in your name, email and message.',
+    predmet: 'Enquiry from the website',
+    hotovo: 'Opening your email with the message ready.',
+    odesilam: 'Sending…',
+    odeslano: 'Thanks, your message is on its way. I’ll get back to you soon.',
+    selhalo: 'The message couldn’t be sent, opening your email with the message ready.',
+  },
 );
 interface Props {
   class?: string;
@@ -19,7 +33,7 @@ interface Props {
 }
 const { class: className, kompaktni = false } = Astro.props;
 ---
-<form class:list={['formular', { 'formular--kompaktni': kompaktni }, className]} data-formular data-email={site.email} data-hlasky={JSON.stringify(hlasky)} novalidate>
+<form class:list={['formular', { 'formular--kompaktni': kompaktni }, className]} data-formular data-email={site.email} data-klic={site.web3formsKey} data-hlasky={JSON.stringify(hlasky)} novalidate>
   <fieldset class="formular__temata">
     <legend class="label">{t(lang, 'S čím ti můžu pomoct?', 'What can I help you with?')}</legend>
     <div class="formular__chips">
@@ -48,6 +62,9 @@ const { class: className, kompaktni = false } = Astro.props;
     <textarea name="zprava" rows="5" placeholder={t(lang, 'Napiš mi pár vět o projektu…', 'Tell me a few words about your project…')} required></textarea>
   </label>
 
+  <!-- past na roboty (Web3Forms botcheck), lidé ji nevidí -->
+  <input type="checkbox" name="botcheck" class="formular__past" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
   <div class="formular__pata">
     <p class="label" data-formular-stav aria-live="polite">{t(lang, 'Údaje použiju jen k odpovědi.', 'I’ll only use your details to reply.')}</p>
     <button type="submit" class="btn btn--accent">{t(lang, 'Odeslat zprávu', 'Send message')}</button>
@@ -56,10 +73,12 @@ const { class: className, kompaktni = false } = Astro.props;
 
 <script>
   document.querySelectorAll<HTMLFormElement>('[data-formular]').forEach((form) => {
-    form.addEventListener('submit', (e) => {
+    const stav = form.querySelector('[data-formular-stav]');
+    const tlacitko = form.querySelector<HTMLButtonElement>('button[type=submit]');
+    const hlasky = JSON.parse(form.dataset.hlasky ?? '{}');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const stav = form.querySelector('[data-formular-stav]');
-      const hlasky = JSON.parse(form.dataset.hlasky ?? '{}');
       if (!form.checkValidity()) {
         if (stav) stav.textContent = hlasky.chyba;
         form.reportValidity();
@@ -67,9 +86,42 @@ const { class: className, kompaktni = false } = Astro.props;
       }
       const d = new FormData(form);
       const subject = `${hlasky.predmet}: ${d.get('tema')}`;
-      const body = `${d.get('zprava')}\n\n${d.get('jmeno')}\n${d.get('email')}`;
-      window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      if (stav) stav.textContent = hlasky.hotovo;
+      const otevriEmail = (hlaska: string) => {
+        const body = `${d.get('zprava')}\n\n${d.get('jmeno')}\n${d.get('email')}`;
+        window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        if (stav) stav.textContent = hlaska;
+      };
+
+      if (!form.dataset.klic) {
+        otevriEmail(hlasky.hotovo);
+        return;
+      }
+      if (stav) stav.textContent = hlasky.odesilam;
+      if (tlacitko) tlacitko.disabled = true;
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.dataset.klic,
+            subject,
+            from_name: d.get('jmeno'),
+            name: d.get('jmeno'),
+            email: d.get('email'),
+            tema: d.get('tema'),
+            message: d.get('zprava'),
+            botcheck: d.get('botcheck') ? true : '',
+          }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) throw new Error(json.message ?? res.statusText);
+        form.reset();
+        if (stav) stav.textContent = hlasky.odeslano;
+      } catch {
+        otevriEmail(hlasky.selhalo);
+      } finally {
+        if (tlacitko) tlacitko.disabled = false;
+      }
     });
   });
 </script>
@@ -162,6 +214,10 @@ const { class: className, kompaktni = false } = Astro.props;
     outline: none;
     border-bottom-color: var(--accent);
   }
+  .formular__past {
+    position: absolute;
+    left: -9999px;
+  }
   .formular__pata {
     display: flex;
     align-items: center;
@@ -170,6 +226,10 @@ const { class: className, kompaktni = false } = Astro.props;
     margin-top: -8px;
     /* tlačítko je ve Figmě odsazené 28 px od pravého okraje polí */
     padding-right: 28px;
+  }
+  .formular__pata :global(.btn:disabled) {
+    opacity: 0.5;
+    cursor: progress;
   }
   .formular--kompaktni {
     gap: 48px;
