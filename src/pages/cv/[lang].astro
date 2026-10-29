@@ -327,8 +327,13 @@ const kontakty = [
   /* Rok hned za názvem práce */
   .hlavicka {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 3mm;
+    column-gap: 3mm;
+  }
+  /* Delší rok (např. „2025 – současnost“) se nezalomí, radši spadne celý pod název */
+  .hlavicka .rok {
+    white-space: nowrap;
   }
   .klient .popis {
     max-width: 62mm;
