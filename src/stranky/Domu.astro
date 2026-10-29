@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Intro from '../components/Intro.astro';
 import Portret from '../components/Portret.astro';
 import Obrazek from '../components/Obrazek.astro';
-import Icon from '../components/Icon.astro';
 import KontaktFormular from '../components/KontaktFormular.astro';
 import sharp from 'sharp';
 import { join } from 'node:path';
@@ -67,7 +66,7 @@ const sluzby = t(
                 <span class="karta__nazev">{p.data.nazev === 'Zahradní centrum DIKÉ' ? 'DIKÉ' : p.data.nazev}</span>
                 <span class="karta__meta">{p.data.rok} · {p.data.typ}</span>
               </span>
-              <span class="karta__sipka sipka-projede" aria-hidden="true"><Icon name="arrow-up-right" /></span>
+              <span class="karta__sipka sipka-projede" aria-hidden="true"></span>
             </span>
           </a>
         </li>
@@ -327,12 +326,8 @@ const sluzby = t(
     height: 44px;
     flex: none;
     border-radius: 50%;
-    background: var(--accent-5);
+    background-color: var(--accent-5);
     color: var(--grayscale-10);
-  }
-  .karta__sipka :global(svg) {
-    width: 20px;
-    height: 20px;
   }
   .vybrane__pata {
     display: flex;

@@ -380,39 +380,32 @@ h4 {
   }
 }
 
-/* Šipka v kruhu na kartách projektů: při najetí vyjede vpravo nahoru, vrátí se zleva zdola
-   a kruh zbělá. Je to jediná šipka s jednorázovou animací, po ní stojí přesně tam, kde bez
-   najetí, takže mezi stavy nic nepřeskakuje ani neblikne (dřív se Safari občas na jeden snímek
-   vrátilo ke staré podobě dvou posunutých šipek). Kruh ořezává clip-path místo overflow. */
+/* Šipka v kruhu na kartách projektů: při najetí vyjede vpravo nahoru a zleva zdola přijede
+   nová, kruh zbělá. Obě šipky jsou obrázky na pozadí kruhu (posouvá se background-position),
+   takže nejsou na samostatných vrstvách a prohlížeč je nemůže na snímek vykreslit ve starém
+   stavu. Animuje se jen najetí: po sjetí se šipky vrátí okamžitě, obě vypadají stejně. */
 .sipka-projede {
-  clip-path: circle(50%);
+  --sipka: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23141414' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E");
+  background-image: var(--sipka), var(--sipka);
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position:
+    50% 50%,
+    calc(50% - 30px) calc(50% + 30px);
   transition: background-color 0.35s ease;
 }
 a:is(:hover, :focus-visible) .sipka-projede {
-  background: var(--grayscale-0);
-}
-a:is(:hover, :focus-visible) .sipka-projede svg {
-  animation: sipka-projede 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-@keyframes sipka-projede {
-  0% {
-    transform: translate(0, 0);
-    animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
-  }
-  35% {
-    transform: translate(28px, -28px);
-  }
-  35.01% {
-    transform: translate(-28px, 28px);
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+  background-color: var(--grayscale-0);
+  background-position:
+    calc(50% + 30px) calc(50% - 30px),
+    50% 50%;
+  transition:
+    background-color 0.35s ease,
+    background-position 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (prefers-reduced-motion: reduce) {
-  a:is(:hover, :focus-visible) .sipka-projede svg {
-    animation: none;
+  a:is(:hover, :focus-visible) .sipka-projede {
+    background-position: 50% 50%, calc(50% - 30px) calc(50% + 30px);
   }
 }
 
