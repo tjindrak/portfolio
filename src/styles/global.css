@@ -313,7 +313,7 @@ h4 {
   flex: none;
 }
 /* Hover u CTA: zleva se přes tlačítko přelije kontrastní barva motivu (ve tmavém bílá,
-   ve světlém černá), text se přebarví a tlačítko se lehce nadzvedne */
+   ve světlém černá) a text se přebarví */
 .btn--accent::before,
 .btn--dark::before {
   content: '';
@@ -322,14 +322,14 @@ h4 {
   z-index: -1;
   background: var(--fg);
   clip-path: inset(0 100% 0 0 round 999px);
-  transition: clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  /* ease-out expo: rozjede se hned a naplno, ke konci se dlouze dobrzdí */
+  transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .btn--accent:hover,
 .btn--dark:hover,
 .btn--accent:focus-visible,
 .btn--dark:focus-visible {
   color: var(--bg);
-  transform: translateY(-2px);
 }
 .btn--accent:hover::before,
 .btn--dark:hover::before,
@@ -339,7 +339,7 @@ h4 {
 }
 .btn--accent:active,
 .btn--dark:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
 .btn--accent {
   background: var(--accent-5);
@@ -361,9 +361,6 @@ h4 {
   .btn::before {
     transition-duration: 0.01s;
   }
-  .btn:hover {
-    transform: none;
-  }
 }
 
 /* Šipka v kruhu na kartách projektů: při najetí vyjede vpravo nahoru, nová přijede zleva
@@ -374,7 +371,7 @@ h4 {
 }
 .sipka-projede svg {
   grid-area: 1 / 1;
-  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .sipka-projede svg + svg {
   transform: translate(-28px, 28px);
