@@ -89,20 +89,47 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
         },
         { threshold: 0.4 },
       );
-      // CTA tlačítka: výplň při najetí roste z bodu, kudy vjel kurzor, a stáhne se tam, kudy vyjel
-      const bodKurzoru = (e: PointerEvent) => {
-        const btn = e.currentTarget as HTMLElement;
+      // CTA tlačítka: výplň při najetí roste jako kruh z bodu, kudy vjel kurzor. Po odjetí se
+      // stáhne do bodu, kudy vyjel, ale střed se přesouvá jen tehdy, když je tlačítko celé
+      // zaplněné (přesun je pak neviditelný). Jinak by se uprostřed animace objevila rovná hrana.
+      const PLNENI_MS = 700;
+      const nastavKruh = (btn: HTMLElement, x: number, y: number) => {
         const r = btn.getBoundingClientRect();
-        const x = e.clientX - r.left;
-        const y = e.clientY - r.top;
         btn.style.setProperty('--x', `${x}px`);
         btn.style.setProperty('--y', `${y}px`);
         // poloměr, který z toho bodu dosáhne do nejvzdálenějšího rohu
         btn.style.setProperty('--r', `${Math.hypot(Math.max(x, r.width - x), Math.max(y, r.height - y)) + 2}px`);
       };
+      const bezPrechodu = (btn: HTMLElement, zmena: () => void) => {
+        btn.classList.add('bez-prechodu');
+        zmena();
+        void btn.offsetWidth;
+        btn.classList.remove('bez-prechodu');
+      };
       document.querySelectorAll<HTMLElement>('.btn--accent, .btn--dark').forEach((btn) => {
-        btn.addEventListener('pointerenter', bodKurzoru);
-        btn.addEventListener('pointerleave', bodKurzoru);
+        let najeto = 0;
+        let odjeto = -Infinity;
+        btn.addEventListener('pointerenter', (e) => {
+          const r = btn.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          if (performance.now() - odjeto < PLNENI_MS) {
+            // výplň ještě nezmizela: roste znovu ze stejného středu
+            nastavKruh(btn, parseFloat(btn.style.getPropertyValue('--x')) || 0, parseFloat(btn.style.getPropertyValue('--y')) || 0);
+          } else {
+            bezPrechodu(btn, () => nastavKruh(btn, x, y));
+          }
+          najeto = performance.now();
+          btn.classList.add('je-plne');
+        });
+        btn.addEventListener('pointerleave', (e) => {
+          if (performance.now() - najeto >= PLNENI_MS) {
+            const r = btn.getBoundingClientRect();
+            bezPrechodu(btn, () => nastavKruh(btn, e.clientX - r.left, e.clientY - r.top));
+          }
+          odjeto = performance.now();
+          btn.classList.remove('je-plne');
+        });
       });
 
       document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) =>

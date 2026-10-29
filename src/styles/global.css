@@ -305,7 +305,7 @@ h4 {
   line-height: 24px;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color var(--hover), transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.35s ease;
+  transition: background-color var(--hover), transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.2s ease;
 }
 .btn svg {
   width: 20px;
@@ -333,11 +333,26 @@ h4 {
 .btn--dark:focus-visible {
   color: var(--bg);
 }
-.btn--accent:hover::before,
-.btn--dark:hover::before,
+.btn--accent.je-plne::before,
+.btn--dark.je-plne::before,
 .btn--accent:focus-visible::before,
 .btn--dark:focus-visible::before {
   clip-path: circle(var(--r, 150%) at var(--x, 0%) var(--y, 50%));
+}
+/* Ořez do tvaru pilulky přes clip-path: Safari při overflow + border-radius někdy kruh výplně
+   neořízne a ukáže hranaté rohy. Obrys fokusu je proto uvnitř tlačítka. */
+.btn--accent,
+.btn--dark {
+  clip-path: inset(0 round 999px);
+}
+.btn--accent:focus-visible,
+.btn--dark:focus-visible {
+  outline-offset: -4px;
+  outline-color: var(--bg);
+}
+/* skript tím na okamžik vypne přechod, když přesouvá střed kruhu */
+.btn.bez-prechodu::before {
+  transition: none;
 }
 .btn--accent:active,
 .btn--dark:active {
@@ -365,31 +380,40 @@ h4 {
   }
 }
 
-/* Šipka v kruhu na kartách projektů: při najetí vyjede vpravo nahoru, nová přijede zleva
-   zdola a kruh změní barvu */
+/* Šipka v kruhu na kartách projektů: při najetí vyjede vpravo nahoru, vrátí se zleva zdola
+   a kruh zbělá. Je to jediná šipka s jednorázovou animací, po ní stojí přesně tam, kde bez
+   najetí, takže mezi stavy nic nepřeskakuje ani neblikne (dřív se Safari občas na jeden snímek
+   vrátilo ke staré podobě dvou posunutých šipek). Kruh ořezává clip-path místo overflow. */
 .sipka-projede {
-  overflow: hidden;
+  clip-path: circle(50%);
   transition: background-color 0.35s ease;
-}
-.sipka-projede svg {
-  grid-area: 1 / 1;
-  /* stálá vrstva: po doběhnutí přechodu se šipka nepřekresluje a neblikne */
-  will-change: transform;
-}
-.sipka-projede svg + svg {
-  transform: translate(-28px, 28px);
 }
 a:is(:hover, :focus-visible) .sipka-projede {
   background: var(--grayscale-0);
 }
-/* Animuje se jen najetí. Po sjetí se šipky bez animace vrátí na místo (obě vypadají stejně),
-   takže se nikdy nepotkají uprostřed kruhu */
 a:is(:hover, :focus-visible) .sipka-projede svg {
-  transform: translate(28px, -28px);
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: sipka-projede 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
-a:is(:hover, :focus-visible) .sipka-projede svg + svg {
-  transform: translate(0, 0);
+@keyframes sipka-projede {
+  0% {
+    transform: translate(0, 0);
+    animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
+  }
+  35% {
+    transform: translate(28px, -28px);
+  }
+  35.01% {
+    transform: translate(-28px, 28px);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  a:is(:hover, :focus-visible) .sipka-projede svg {
+    animation: none;
+  }
 }
 
 .btn--text {
