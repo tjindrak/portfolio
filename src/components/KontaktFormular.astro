@@ -151,13 +151,10 @@ const { class: className, kompaktni = false } = Astro.props;
     right: 24px;
     bottom: 24px;
     z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 10px;
     padding: 14px 22px;
-    border: 1px solid var(--fg-16);
     border-radius: 999px;
-    background: var(--bg);
+    /* bez rámečku, proto o kousek světlejší než stránka */
+    background: color-mix(in srgb, var(--fg) 10%, var(--bg));
     color: var(--fg);
     font-size: 17px;
     line-height: 1.2;
@@ -165,13 +162,6 @@ const { class: className, kompaktni = false } = Astro.props;
     transform: translateY(16px);
     transition: opacity var(--hover), transform var(--hover);
     pointer-events: none;
-  }
-  :global(.formular-popup)::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
   }
   :global(.formular-popup--videt) {
     opacity: 1;
