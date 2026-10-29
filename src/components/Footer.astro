@@ -64,13 +64,25 @@ const year = new Date().getFullYear();
     .footer {
       margin-top: 140px;
     }
+    /* Mobil: kontakty nahoře, pod nimi copy s verzí vlevo a Nahoru vpravo */
     .footer__inner {
-      flex-direction: column;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px 24px;
     }
     .footer__contacts {
+      grid-column: 1 / -1;
+      grid-row: 1;
       flex-wrap: wrap;
       gap: 12px 24px;
+    }
+    .footer__copy {
+      grid-row: 2;
+      margin: 0;
+    }
+    .footer__top {
+      grid-row: 2;
+      justify-self: end;
     }
   }
 </style>

@@ -121,12 +121,11 @@ const sluzby = t(
 
 <script>
   // Vybrané projekty: první kliknutí kartu rozbalí, další kliknutí na rozbalenou otevře detail.
-  // Na mobilu (karty pod sebou) vede kliknutí rovnou na detail.
+  // Na mobilu stejně, jen se karty pod sebou rozbalují na výšku.
   const karty = document.querySelectorAll<HTMLElement>('.karta');
-  const pod = matchMedia('(max-width: 900px)');
   karty.forEach((karta) => {
     karta.querySelector('a')?.addEventListener('click', (e) => {
-      if (pod.matches || karta.classList.contains('is-open')) return;
+      if (karta.classList.contains('is-open')) return;
       e.preventDefault();
       karty.forEach((k) => k.classList.toggle('is-open', k === karta));
     });
@@ -184,7 +183,9 @@ const sluzby = t(
   /* Řádky nadpisu: při úvodní animaci vyjíždějí zespodu z masky */
   .hero__radek {
     display: block;
-    overflow: hidden;
+    /* clip-path místo overflow: hidden – na iPhonu by prvek s přetékajícím obsahem
+       spolkl tah prstem a stránka by se nad ním neposunula */
+    clip-path: inset(-0.5em -0.5em 0 -0.5em);
     padding-bottom: 0.08em;
     margin-bottom: -0.08em;
   }
@@ -473,24 +474,38 @@ const sluzby = t(
       font-size: clamp(52px, 6.7vw, 96px);
     }
   }
+  /* Mobil: stejná galerie jako na desktopu, jen svisle. Zavřené karty jsou nízké pruhy,
+     otevřená karta se rozbalí na výšku. Fotka má pořád výšku otevřené karty, takže se jen odkrývá. */
   @media (max-width: 900px) {
     .karty {
+      --zavrena-v: 96px;
+      --otevrena-v: min(400px, 105vw);
       flex-direction: column;
       height: auto;
     }
     .karta,
     .karta.is-open {
       width: auto;
-      height: 280px;
+    }
+    .karta {
+      height: var(--zavrena-v);
+      transition: height 1.3s cubic-bezier(0.45, 0, 0.2, 1);
+    }
+    .karta.is-open {
+      height: var(--otevrena-v);
     }
     .karta :global(.karta__img),
     .karta.is-open :global(.karta__img) {
+      top: 50%;
       left: 0;
       width: 100%;
-      transform: none;
+      height: var(--otevrena-v);
+      transform: translateY(-50%);
+    }
+    .karta.is-open :global(.karta__img) {
+      top: 50%;
     }
     .karta__popisek {
-      opacity: 1;
       padding: 20px;
     }
     .karta__nazev {
@@ -502,22 +517,42 @@ const sluzby = t(
     }
   }
   @media (max-width: 720px) {
+    /* Úvod se vejde na jednu obrazovku (svh = bez lišt prohlížeče) i s mezerou pod tlačítky:
+       text sedí dole, fotka nad ním se zmenší podle výšky a pod textem se ztratí */
     .hero {
       min-height: 0;
+      height: calc(100svh - 72px);
+      min-height: 440px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
     }
     .hero :global(.hero__portret) {
-      position: relative;
-      left: auto;
-      top: 0;
-      width: 72%;
-      margin: 8px auto -45%;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: calc(100% - 150px);
+      max-width: 80%;
+      margin-inline: auto;
       -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
       mask-image: linear-gradient(180deg, #000 55%, transparent 92%);
     }
     .hero__text {
       padding-top: 0;
+    }
+    .hero__nadpis {
+      font-size: clamp(44px, 13vw, 56px);
+    }
+    .hero__akce {
+      margin-top: 28px;
+      gap: 12px;
+    }
+    .hero__akce .btn {
+      min-height: 56px;
+      padding-inline: 28px;
     }
     .omne,
     .napis {

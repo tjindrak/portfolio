@@ -28,7 +28,12 @@ const varianty = ready ? await srcset(foto) : undefined;
   // ji posune o kousek do strany. Pruhy se pomalu posouvají a lom jemně dýchá.
   // Bez WebGL nebo při omezeném pohybu zůstane obyčejná fotka.
   const VS = `attribute vec2 p; varying vec2 uv; void main(){ uv = p * 0.5 + 0.5; uv.y = 1.0 - uv.y; gl_Position = vec4(p, 0.0, 1.0); }`;
-  const FS = `precision mediump float;
+  // highp: na telefonech je mediump jen 16bitový a souřadnice v textuře by skákaly po celých pixelech (rozpixelovaná fotka)
+  const FS = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #else
+    precision mediump float;
+    #endif
     varying vec2 uv;
     uniform sampler2D tex;
     uniform vec2 size;
@@ -37,7 +42,7 @@ const varianty = ready ? await srcset(foto) : undefined;
     const float sirka = 108.0;
     void main() {
       vec2 px = uv * size;
-      float u = dot(px, dir) + t * 6.0;
+      float u = dot(px, dir) + mod(t * 6.0, sirka);
       float s = fract(u / sirka);
       // lom: uvnitř pruhu se obraz posune podle polohy v pruhu, síla pomalu kolísá
       float sila = 7.0 + 2.5 * sin(t * 0.25);
@@ -68,7 +73,10 @@ const varianty = ready ? await srcset(foto) : undefined;
   const volno = () =>
     new Promise<void>((ok) => ('requestIdleCallback' in window ? requestIdleCallback(() => ok(), { timeout: 1500 }) : setTimeout(ok, 300)));
 
+  // Na telefonu je fotka malá a pruhy by ji jen rozbily, zůstane obyčejná ostrá fotka
+  const telefon = matchMedia('(max-width: 720px)').matches;
   Promise.all([poNacteni, poIntru]).then(volno).then(() => document.querySelectorAll<HTMLCanvasElement>('.portret__sklo').forEach((canvas) => {
+    if (telefon) return canvas.remove();
     const img = canvas.parentElement?.querySelector<HTMLImageElement>('.portret__foto');
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: true });
     if (!img || !gl) return;
@@ -101,18 +109,31 @@ const varianty = ready ? await srcset(foto) : undefined;
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
 
+      // Fotka se do textury nahraje už zmenšená prohlížečem na velikost plátna. WebGL bez mipmap
+      // by ji při zmenšování (hlavně na mobilu) zubatě převzorkoval.
+      const zmensena = document.createElement('canvas');
+      const ctx = zmensena.getContext('2d');
       let w = 0;
       let h = 0;
       const velikost = () => {
         const r = canvas.getBoundingClientRect();
-        const dpr = Math.min(devicePixelRatio || 1, 2);
+        const dpr = Math.min(devicePixelRatio || 1, 3);
         w = r.width;
         h = r.height;
         canvas.width = Math.round(w * dpr);
         canvas.height = Math.round(h * dpr);
         gl.viewport(0, 0, canvas.width, canvas.height);
+        if (ctx && canvas.width && canvas.width < img.naturalWidth) {
+          zmensena.width = canvas.width;
+          zmensena.height = canvas.height;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.clearRect(0, 0, zmensena.width, zmensena.height);
+          ctx.drawImage(img, 0, 0, zmensena.width, zmensena.height);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, zmensena);
+        } else {
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        }
       };
       velikost();
       new ResizeObserver(velikost).observe(canvas);
