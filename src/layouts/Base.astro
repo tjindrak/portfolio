@@ -92,7 +92,7 @@ const adresa = (c: string) => new URL(c, Astro.site).href;
             }
           }
         },
-        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+        { rootMargin: '0px 0px -5% 0px', threshold: 0.05 },
       );
       // data-reveal="pozde": objeví se až když je prvek z velké části v okně
       const ioPozde = new IntersectionObserver(

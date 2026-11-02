@@ -93,15 +93,15 @@ const { polozky } = Astro.props;
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity 0.7s ease,
-      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 0.45s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
   :global(.js) .osa[data-pripraveno] .osa__bod {
     transform: scale(0.4);
     opacity: 0;
     transition:
-      opacity 0.4s ease,
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.3s ease,
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.8s ease;
   }
   :global(.js) .osa[data-pripraveno] .osa__polozka.is-on > * {
@@ -154,7 +154,7 @@ const { polozky } = Astro.props;
 </style>
 
 <script>
-  // Linka časové osy se kreslí podle scrollu: konec linky drží zhruba ve 2/3 výšky okna.
+  // Linka časové osy se kreslí podle scrollu: konec linky drží ve 3/4 výšky okna (na mobilu níž, ať milníky nečekají).
   const osy = [...document.querySelectorAll<HTMLElement>('[data-osa]')];
   const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const zmerit = () =>
@@ -173,7 +173,7 @@ const { polozky } = Astro.props;
     osy.forEach((osa) => {
       const stredy: number[] = (osa as any)._stredy;
       const delka = stredy[stredy.length - 1] - stredy[0];
-      const hrot = innerHeight * 0.66 - (osa.getBoundingClientRect().top + stredy[0]);
+      const hrot = innerHeight * (innerWidth <= 720 ? 0.85 : 0.75) - (osa.getBoundingClientRect().top + stredy[0]);
       // Linka jen přibývá: co už jednou dojela, zůstane jako milníky (při scrollu nahoru necouvá)
       const p = Math.max((osa as any)._p ?? 0, Math.min(1, Math.max(0, hrot / (delka || 1))));
       (osa as any)._p = p;
