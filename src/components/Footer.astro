@@ -24,7 +24,7 @@ const year = new Date().getFullYear();
     position: relative;
     z-index: 1;
     /* Stejná mezera nad patičkou na všech stránkách (Figma: 260 px) */
-    margin-top: 260px;
+    margin-top: calc(260px * var(--mezery));
     padding-bottom: 40px;
   }
   .footer__inner {

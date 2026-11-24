@@ -338,7 +338,7 @@ const sluzby = t(
   /* O mně */
   .omne {
     position: relative;
-    margin-top: 338px;
+    margin-top: calc(338px * var(--mezery));
     --fs: clamp(100px, 18.06vw, 260px);
   }
   /* Slova v pozadí jsou na hlavní stránce v Nohemi SemiBold (Figma Mainpage) */
@@ -410,7 +410,7 @@ const sluzby = t(
   /* Napiš mi */
   .napis {
     position: relative;
-    margin-top: 399px;
+    margin-top: calc(399px * var(--mezery));
     padding-bottom: 5px;
     --fs: clamp(100px, 19.5vw, 280px);
   }
@@ -441,13 +441,13 @@ const sluzby = t(
      přijíždějí s delší pauzou navíc (30 % výšky okna). Na mobilu zůstávají mezery z Figmy. */
   @media (min-width: 901px) {
     .vybrane {
-      margin-top: calc(75px + 30vh);
+      margin-top: calc(75px * var(--mezery) + 15vh);
     }
     .omne {
-      margin-top: calc(338px + 30vh);
+      margin-top: calc(338px * var(--mezery) + 15vh);
     }
     .napis {
-      margin-top: calc(399px + 30vh);
+      margin-top: calc(399px * var(--mezery) + 15vh);
     }
   }
 

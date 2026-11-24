@@ -179,22 +179,22 @@ const { vzdelani, klienti, dalsiKlienti, dalsiLoga, dovednosti, software, jazyky
   .blok {
     display: grid;
     grid-template-columns: var(--col-offset) 1fr;
-    margin-top: 360px;
+    margin-top: calc(360px * var(--mezery));
   }
   .blok--vzdelani {
-    margin-top: 367px;
+    margin-top: calc(367px * var(--mezery));
   }
   .blok--klienti {
-    margin-top: 354px;
+    margin-top: calc(354px * var(--mezery));
   }
   .blok--dovednosti {
-    margin-top: 327px;
+    margin-top: calc(327px * var(--mezery));
   }
   .blok--software {
-    margin-top: 298px;
+    margin-top: calc(298px * var(--mezery));
   }
   .blok--jazyky {
-    margin-top: 320px;
+    margin-top: calc(320px * var(--mezery));
   }
   .blok__nadpis {
     font-family: var(--font-body);
