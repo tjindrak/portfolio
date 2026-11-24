@@ -403,19 +403,19 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   /* Sekce s velkým slovem v pozadí */
   .sekce {
     position: relative;
-    margin-top: 300px;
+    margin-top: calc(300px * var(--mezery));
   }
   .sekce--vyzva {
-    margin-top: 340px;
+    margin-top: calc(340px * var(--mezery));
   }
   .kolaz + .sekce--vyzva {
-    margin-top: 360px;
+    margin-top: calc(360px * var(--mezery));
   }
   .sekce--s-obrazkem + .sekce {
-    margin-top: 240px;
+    margin-top: calc(240px * var(--mezery));
   }
   .sekce--reseni {
-    margin-top: 360px;
+    margin-top: calc(360px * var(--mezery));
   }
   .sekce .bg-word,
   .dalsi .bg-word {
@@ -439,7 +439,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     width: 441px;
     max-width: calc(100% - 48px);
     aspect-ratio: 441 / 640;
-    margin-top: 270px;
+    margin-top: calc(270px * var(--mezery));
   }
   .sloupec {
     position: relative;
@@ -532,7 +532,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   }
   .galerie--jardova-mapa .galerie__item:nth-child(2) {
     aspect-ratio: 662 / 509;
-    margin-top: 251px;
+    margin-top: calc(251px * var(--mezery));
   }
   .siroky {
     margin-top: 200px;
@@ -557,7 +557,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
     text-align: center;
   }
   .galerie + .web-odkaz {
-    margin-top: 340px;
+    margin-top: calc(340px * var(--mezery));
   }
   .obrazovky + .web-odkaz {
     margin-top: 140px;
@@ -570,7 +570,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
 
   .dalsi {
     position: relative;
-    margin-top: 360px;
+    margin-top: calc(360px * var(--mezery));
   }
   @media (min-width: 1101px) {
     /* Slovo Proces přesahuje ve Figmě pravý okraj obsahu až na x 1408 */
@@ -581,13 +581,13 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
   /* Jardova mapa: vlastní rozestupy z Figmy (438:414) */
   @media (min-width: 1101px) {
     .detail--jardova-mapa .sekce--proces {
-      margin-top: 300px;
+      margin-top: calc(300px * var(--mezery));
     }
     .detail--jardova-mapa .kroky {
       margin-top: 180px;
     }
     .detail--jardova-mapa .sekce--reseni {
-      margin-top: 360px;
+      margin-top: calc(360px * var(--mezery));
     }
   }
   .dalsi :global(.dalsi__dlazdice) {
@@ -624,7 +624,7 @@ const heroSrc = brzy ? prvniExistujici(id, ['hero.webp', 'cover.webp']) : obraze
       margin-top: 35px;
     }
     .detail--ein-berliner .galerie {
-      margin-top: 241px;
+      margin-top: calc(241px * var(--mezery));
     }
     .detail--ein-berliner .dalsi :global(.dalsi__dlazdice) {
       margin-top: 54px;

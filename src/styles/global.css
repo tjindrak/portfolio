@@ -42,6 +42,8 @@
    Tokeny (Figma: Colors / Grayscale, Accent, Danger)
 ------------------------------------------------------------------ */
 :root {
+  /* Velké mezery mezi sekcemi (hodnoty z Figmy) se násobí tímto koeficientem */
+  --mezery: 0.75;
   --font-heading: 'Nohemi', 'Delight', system-ui, sans-serif;
   --font-body: 'Delight', system-ui, sans-serif;
 
